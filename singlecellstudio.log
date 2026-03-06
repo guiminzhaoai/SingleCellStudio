@@ -1,0 +1,921 @@
+2025-06-22 09:23:10,574 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 09:23:10,597 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 09:23:11,645 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 09:23:11,645 - __main__ - INFO - Environment setup completed
+2025-06-22 09:23:11,894 - __main__ - INFO - GUI application created successfully
+2025-06-22 09:23:12,547 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-22 09:23:12,548 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-22 09:23:30,564 - __main__ - INFO - Main window created and shown
+2025-06-22 09:23:44,719 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 09:23:48,108 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 09:23:48,110 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 09:23:48,110 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 09:23:53,149 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-22 09:23:53,150 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-22 09:23:59,436 - gui.analysis_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_092359
+2025-06-22 09:24:04,007 - analysis.pipeline - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_092359
+2025-06-22 09:24:04,008 - analysis.pipeline - INFO - Starting pipeline execution: Standard Single Cell Analysis Pipeline
+2025-06-22 09:24:04,008 - analysis.pipeline - INFO - Output directory: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_092359
+2025-06-22 09:24:04,009 - analysis.pipeline - INFO - Executing step 1/10: calculate_qc_metrics
+2025-06-22 09:24:04,009 - analysis.quality_control - INFO - Calculating quality control metrics...
+2025-06-22 09:24:04,773 - analysis.quality_control - INFO - QC metrics calculated for 12047 cells and 38606 genes
+2025-06-22 09:24:04,773 - analysis.pipeline - WARNING - Failed to save metadata for calculate_qc_metrics: "['pct_counts_mt'] not in index"
+2025-06-22 09:24:04,774 - analysis.pipeline - INFO - Step 'calculate_qc_metrics' completed in 0.76s
+2025-06-22 09:24:04,774 - analysis.pipeline - INFO - Executing step 2/10: filter_cells
+2025-06-22 09:24:05,124 - analysis.quality_control - INFO - Filtering cells based on QC metrics...
+2025-06-22 09:24:05,126 - analysis.quality_control - INFO - Min genes filter: 12037 cells pass
+2025-06-22 09:24:05,132 - analysis.quality_control - INFO - Cell filtering complete: 12037 cells kept, 10 removed
+2025-06-22 09:24:05,142 - analysis.pipeline - INFO - Step 'filter_cells' completed in 0.37s
+2025-06-22 09:24:05,143 - analysis.pipeline - INFO - Executing step 3/10: filter_genes
+2025-06-22 09:24:05,360 - analysis.quality_control - INFO - Filtering genes based on expression criteria...
+2025-06-22 09:24:05,361 - analysis.quality_control - INFO - Min cells filter: 28086 genes pass
+2025-06-22 09:24:05,365 - analysis.quality_control - INFO - Gene filtering complete: 28086 genes kept, 10520 removed
+2025-06-22 09:24:05,367 - analysis.pipeline - INFO - Step 'filter_genes' completed in 0.22s
+2025-06-22 09:24:05,367 - analysis.pipeline - INFO - Executing step 4/10: normalize_data
+2025-06-22 09:24:05,367 - analysis.normalization - INFO - Performing log normalization with target sum 10000.0
+2025-06-22 09:24:06,029 - analysis.normalization - INFO - Log normalization completed
+2025-06-22 09:24:07,040 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_092359/intermediate_data/normalize_data.h5ad
+2025-06-22 09:24:07,040 - analysis.pipeline - INFO - Step 'normalize_data' completed in 1.67s
+2025-06-22 09:24:07,041 - analysis.pipeline - INFO - Executing step 5/10: find_variable_genes
+2025-06-22 09:24:07,041 - analysis.pipeline - INFO - Finding 2000 highly variable genes
+2025-06-22 09:24:08,724 - analysis.pipeline - INFO - Found 2000 highly variable genes
+2025-06-22 09:24:08,756 - analysis.pipeline - INFO - Step 'find_variable_genes' completed in 1.72s
+2025-06-22 09:24:08,756 - analysis.pipeline - INFO - Executing step 6/10: scale_data
+2025-06-22 09:24:08,756 - analysis.normalization - INFO - Scaling data to unit variance
+2025-06-22 09:24:18,103 - analysis.normalization - INFO - Data scaling completed
+2025-06-22 09:24:18,104 - analysis.pipeline - INFO - Step 'scale_data' completed in 9.35s
+2025-06-22 09:24:18,104 - analysis.pipeline - INFO - Executing step 7/10: run_pca
+2025-06-22 09:24:18,104 - analysis.dimensionality_reduction - INFO - Running PCA with 40 components
+2025-06-22 09:24:27,414 - analysis.dimensionality_reduction - INFO - PCA completed. Variance explained by first 10 PCs: 0.155
+2025-06-22 09:24:27,930 - analysis.pipeline - INFO - Step 'run_pca' completed in 9.83s
+2025-06-22 09:24:27,930 - analysis.pipeline - INFO - Executing step 8/10: compute_neighbors
+2025-06-22 09:24:27,930 - analysis.pipeline - INFO - Computing neighborhood graph with 10 neighbors
+2025-06-22 09:25:01,969 - analysis.pipeline - INFO - Step 'compute_neighbors' completed in 34.04s
+2025-06-22 09:25:01,969 - analysis.pipeline - INFO - Executing step 9/10: run_umap
+2025-06-22 09:25:01,969 - analysis.dimensionality_reduction - INFO - Running UMAP with 15 neighbors, 2 components
+2025-06-22 09:25:23,891 - analysis.dimensionality_reduction - INFO - UMAP completed
+2025-06-22 09:25:23,914 - analysis.pipeline - INFO - Step 'run_umap' completed in 21.95s
+2025-06-22 09:25:23,915 - analysis.pipeline - INFO - Executing step 10/10: clustering
+2025-06-22 09:25:23,915 - analysis.clustering - INFO - Running Leiden clustering with resolution 0.5
+2025-06-22 09:25:28,512 - analysis.clustering - INFO - Leiden clustering completed: 36 clusters found
+2025-06-22 09:25:32,862 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_092359/intermediate_data/clustering.h5ad
+2025-06-22 09:25:32,875 - analysis.pipeline - INFO - Step 'clustering' completed in 8.96s
+2025-06-22 09:25:33,285 - analysis.pipeline - INFO - Final metadata saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_092359/metadata
+2025-06-22 09:25:33,288 - analysis.pipeline - INFO - Execution log saved: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_092359/logs/execution_log.csv
+2025-06-22 09:25:33,288 - analysis.pipeline - INFO - Pipeline completed: 10/10 steps successful in 88.87s
+2025-06-22 09:25:33,288 - analysis.pipeline - INFO - Results saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_092359
+2025-06-22 09:25:33,412 - visualization.matplotlib_backend - INFO - Plots output directory: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_092359/plots
+2025-06-22 09:25:33,421 - gui.analysis_window - INFO - Visualization plots created successfully
+2025-06-22 09:25:33,421 - gui.analysis_window - INFO - Plots will be saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_092359/plots
+2025-06-22 09:25:33,423 - visualization.matplotlib_backend - INFO - Started generating summary plot with kwargs: {}
+2025-06-22 09:25:37,260 - visualization.matplotlib_backend - INFO - Plot saved: 3 formats - summary_20250622_092533
+2025-06-22 09:25:37,266 - visualization.matplotlib_backend - INFO - Generated and saved summary plot: 3 formats
+2025-06-22 09:25:37,271 - visualization.matplotlib_backend - INFO - Started generating umap plot with kwargs: {'color_by': 'leiden'}
+2025-06-22 09:25:37,277 - visualization.matplotlib_backend - INFO - Started generating qc plot with kwargs: {}
+2025-06-22 09:25:39,498 - visualization.matplotlib_backend - INFO - Plot saved: 3 formats - qc_20250622_092538
+2025-06-22 09:25:39,502 - visualization.matplotlib_backend - INFO - Generated and saved qc plot: 3 formats
+2025-06-22 09:25:40,983 - visualization.matplotlib_backend - INFO - Plot saved: 3 formats - umap_20250622_092539
+2025-06-22 09:25:40,988 - visualization.matplotlib_backend - INFO - Generated and saved umap plot: 3 formats
+2025-06-22 09:25:50,112 - visualization.matplotlib_backend - INFO - Started generating pca plot with kwargs: {'color_by': 'leiden'}
+2025-06-22 09:25:51,885 - visualization.matplotlib_backend - INFO - Plot saved: 3 formats - pca_20250622_092550_colorby_leiden
+2025-06-22 09:25:51,889 - visualization.matplotlib_backend - INFO - Generated and saved pca plot: 3 formats
+2025-06-22 09:25:56,133 - visualization.matplotlib_backend - INFO - Started generating pca plot with kwargs: {'color_by': 'doublet_score'}
+2025-06-22 09:25:58,015 - visualization.matplotlib_backend - INFO - Plot saved: 3 formats - pca_20250622_092556_colorby_doublet_score
+2025-06-22 09:25:58,277 - visualization.matplotlib_backend - INFO - Generated and saved pca plot: 3 formats
+2025-06-22 09:26:04,268 - visualization.matplotlib_backend - INFO - Started generating clusters plot with kwargs: {'cluster_key': 'doublet_score'}
+2025-06-22 15:50:40,664 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 15:50:40,667 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 15:50:40,932 - main - INFO - Using qtagg matplotlib backend
+2025-06-22 15:50:40,932 - main - INFO - Environment setup completed
+2025-06-22 15:50:41,069 - main - INFO - GUI application created successfully
+2025-06-22 15:50:43,734 - main - INFO - Professional main window created and shown
+2025-06-22 15:50:47,768 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-22 15:51:03,867 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-22 15:51:07,069 - gui.professional_main_window - INFO - Found 9 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_102921/plots
+2025-06-22 15:51:07,069 - gui.professional_main_window - INFO - Available plots: ['custom_UMAP_-_leiden_20250622_103058.png', 'custom_UMAP_-_doublet_score_20250622_103056.png', 'custom_PCA_-_leiden_20250622_103053.png', 'qc_20250622_102954.png', 'summary_20250622_102953.png', 'custom_QC_Metrics_20250622_103049.png', 'umap_20250622_102954.png', 'pca_20250622_102955.png', 'custom_UMAP_-_doublet_score_20250622_103031.png']
+2025-06-22 15:51:07,692 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_102953.png
+2025-06-22 15:51:07,891 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_102954.png
+2025-06-22 15:51:08,060 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_102954.png
+2025-06-22 15:51:08,270 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_102955.png
+2025-06-22 15:51:08,271 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 15:51:08,271 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250622_102921
+2025-06-22 15:51:21,698 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:21,709 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:21,710 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:22,199 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:22,206 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:22,207 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:22,440 - gui.professional_main_window - INFO - Plot saved: custom_Violin_Plot_-_CD3D_by_leiden_20250622_155122.png
+2025-06-22 15:51:22,441 - gui.professional_main_window - INFO - Generated plot: Violin Plot - CD3D by leiden
+2025-06-22 15:51:35,014 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:35,022 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:35,023 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:35,362 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:35,369 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:35,371 - matplotlib.category - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-22 15:51:35,585 - gui.professional_main_window - INFO - Plot saved: custom_Violin_Plot_-_CD3D_by_leiden_20250622_155135.png
+2025-06-22 15:51:35,585 - gui.professional_main_window - INFO - Generated plot: Violin Plot - CD3D by leiden
+2025-06-22 15:51:48,305 - gui.professional_main_window - INFO - Plot saved: custom_UMAP_-_leiden_20250622_155148.png
+2025-06-22 15:51:48,307 - gui.professional_main_window - INFO - Generated plot: UMAP - leiden
+2025-06-22 15:51:52,008 - gui.professional_main_window - INFO - Plot saved: custom_QC_Metrics_20250622_155151.png
+2025-06-22 15:51:52,008 - gui.professional_main_window - INFO - Generated plot: QC Metrics
+2025-06-22 15:51:54,006 - gui.professional_main_window - INFO - Plot saved: custom_PCA_-_leiden_20250622_155153.png
+2025-06-22 15:51:54,007 - gui.professional_main_window - INFO - Generated plot: PCA - leiden
+2025-06-22 15:52:00,421 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 15:52:06,562 - gui.professional_main_window - INFO - Creating new project...
+2025-06-22 15:52:09,509 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 15:52:13,513 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 15:52:15,927 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 15:52:15,928 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 15:52:15,928 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 15:52:16,859 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-22 15:52:16,859 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-22 15:52:19,670 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-22 15:52:19,671 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_155219
+2025-06-22 15:52:21,655 - gui.professional_main_window - INFO - Starting standard analysis pipeline...
+2025-06-22 15:52:21,662 - analysis.pipeline - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_155219
+2025-06-22 15:52:21,662 - analysis.pipeline - INFO - Starting pipeline execution: Standard Single Cell Analysis Pipeline
+2025-06-22 15:52:21,662 - analysis.pipeline - INFO - Output directory: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_155219
+2025-06-22 15:52:21,662 - analysis.pipeline - INFO - Executing step 1/10: calculate_qc_metrics
+2025-06-22 15:52:21,662 - analysis.quality_control - INFO - Calculating quality control metrics...
+2025-06-22 15:52:22,250 - analysis.quality_control - INFO - QC metrics calculated for 12047 cells and 38606 genes
+2025-06-22 15:52:22,251 - analysis.pipeline - WARNING - Failed to save metadata for calculate_qc_metrics: "['pct_counts_mt'] not in index"
+2025-06-22 15:52:22,251 - analysis.pipeline - INFO - Step 'calculate_qc_metrics' completed in 0.59s
+2025-06-22 15:52:22,251 - analysis.pipeline - INFO - Executing step 2/10: filter_cells
+2025-06-22 15:52:22,283 - analysis.quality_control - INFO - Filtering cells based on QC metrics...
+2025-06-22 15:52:22,285 - analysis.quality_control - INFO - Min genes filter: 12037 cells pass
+2025-06-22 15:52:22,286 - analysis.quality_control - INFO - Cell filtering complete: 12037 cells kept, 10 removed
+2025-06-22 15:52:22,289 - analysis.pipeline - INFO - Step 'filter_cells' completed in 0.04s
+2025-06-22 15:52:22,289 - analysis.pipeline - INFO - Executing step 3/10: filter_genes
+2025-06-22 15:52:22,323 - analysis.quality_control - INFO - Filtering genes based on expression criteria...
+2025-06-22 15:52:22,324 - analysis.quality_control - INFO - Min cells filter: 28086 genes pass
+2025-06-22 15:52:22,326 - analysis.quality_control - INFO - Gene filtering complete: 28086 genes kept, 10520 removed
+2025-06-22 15:52:22,327 - analysis.pipeline - INFO - Step 'filter_genes' completed in 0.04s
+2025-06-22 15:52:22,327 - analysis.pipeline - INFO - Executing step 4/10: normalize_data
+2025-06-22 15:52:22,327 - analysis.normalization - INFO - Performing log normalization with target sum 10000
+2025-06-22 15:52:22,552 - analysis.normalization - INFO - Log normalization completed
+2025-06-22 15:52:22,886 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_155219/intermediate_data/normalize_data.h5ad
+2025-06-22 15:52:22,886 - analysis.pipeline - INFO - Step 'normalize_data' completed in 0.56s
+2025-06-22 15:52:22,886 - analysis.pipeline - INFO - Executing step 5/10: find_variable_genes
+2025-06-22 15:52:22,886 - analysis.pipeline - INFO - Finding 2000 highly variable genes
+2025-06-22 15:52:23,168 - analysis.pipeline - INFO - Found 2000 highly variable genes
+2025-06-22 15:52:23,185 - analysis.pipeline - INFO - Step 'find_variable_genes' completed in 0.30s
+2025-06-22 15:52:23,185 - analysis.pipeline - INFO - Executing step 6/10: scale_data
+2025-06-22 15:52:23,185 - analysis.normalization - INFO - Scaling data to unit variance
+2025-06-22 15:52:26,418 - analysis.normalization - INFO - Data scaling completed
+2025-06-22 15:52:26,418 - analysis.pipeline - INFO - Step 'scale_data' completed in 3.23s
+2025-06-22 15:52:26,418 - analysis.pipeline - INFO - Executing step 7/10: run_pca
+2025-06-22 15:52:26,418 - analysis.dimensionality_reduction - INFO - Running PCA with 40 components
+2025-06-22 15:52:27,517 - analysis.dimensionality_reduction - INFO - PCA completed. Variance explained by first 10 PCs: 0.155
+2025-06-22 15:52:27,915 - analysis.pipeline - INFO - Step 'run_pca' completed in 1.50s
+2025-06-22 15:52:27,915 - analysis.pipeline - INFO - Executing step 8/10: compute_neighbors
+2025-06-22 15:52:27,915 - analysis.pipeline - INFO - Computing neighborhood graph with 10 neighbors
+2025-06-22 15:52:46,282 - analysis.pipeline - INFO - Step 'compute_neighbors' completed in 18.37s
+2025-06-22 15:52:46,283 - analysis.pipeline - INFO - Executing step 9/10: run_umap
+2025-06-22 15:52:46,283 - analysis.dimensionality_reduction - INFO - Running UMAP with 15 neighbors, 2 components
+2025-06-22 15:52:51,258 - analysis.dimensionality_reduction - INFO - UMAP completed
+2025-06-22 15:52:51,280 - analysis.pipeline - INFO - Step 'run_umap' completed in 5.00s
+2025-06-22 15:52:51,280 - analysis.pipeline - INFO - Executing step 10/10: clustering
+2025-06-22 15:52:51,280 - analysis.clustering - INFO - Running Leiden clustering with resolution 0.5
+2025-06-22 15:52:53,568 - analysis.clustering - INFO - Leiden clustering completed: 35 clusters found
+2025-06-22 15:52:56,034 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_155219/intermediate_data/clustering.h5ad
+2025-06-22 15:52:56,040 - analysis.pipeline - INFO - Step 'clustering' completed in 4.76s
+2025-06-22 15:52:56,447 - analysis.pipeline - INFO - Final metadata saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_155219/metadata
+2025-06-22 15:52:56,452 - analysis.pipeline - INFO - Execution log saved: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_155219/logs/execution_log.csv
+2025-06-22 15:52:56,452 - analysis.pipeline - INFO - Pipeline completed: 10/10 steps successful in 34.38s
+2025-06-22 15:52:56,452 - analysis.pipeline - INFO - Results saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_155219
+2025-06-22 15:52:56,454 - gui.professional_main_window - INFO - Analysis completed successfully!
+2025-06-22 15:52:56,457 - gui.professional_main_window - INFO - Generating standard analysis plots...
+2025-06-22 15:52:58,427 - gui.professional_main_window - INFO - Generated 4 standard analysis plots
+2025-06-22 15:52:58,428 - gui.professional_main_window - INFO - Standard plots: summary_20250622_155256.png, umap_20250622_155257.png, qc_20250622_155257.png, pca_20250622_155258.png
+2025-06-22 15:52:58,429 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_155219/plots
+2025-06-22 15:52:58,429 - gui.professional_main_window - INFO - Available plots: ['umap_20250622_155257.png', 'pca_20250622_155258.png', 'qc_20250622_155257.png', 'summary_20250622_155256.png']
+2025-06-22 15:52:58,911 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_155256.png
+2025-06-22 15:52:59,123 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_155257.png
+2025-06-22 15:52:59,295 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_155257.png
+2025-06-22 15:52:59,498 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_155258.png
+2025-06-22 15:52:59,499 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 15:52:59,501 - gui.professional_main_window - INFO - Debug: Plots directory has 4 files
+2025-06-22 15:52:59,502 - gui.professional_main_window - INFO - Debug: Sample files: ['umap_20250622_155257.png', 'pca_20250622_155258.png', 'qc_20250622_155257.png', 'summary_20250622_155256.png']
+2025-06-22 16:28:07,939 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 16:28:07,941 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 16:28:08,224 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 16:28:08,224 - __main__ - INFO - Environment setup completed
+2025-06-22 16:28:08,382 - __main__ - INFO - GUI application created successfully
+2025-06-22 16:28:10,936 - gui.professional_main_window - INFO - Cell annotation module loaded successfully
+2025-06-22 16:28:10,979 - __main__ - INFO - Professional main window created and shown
+2025-06-22 16:28:19,012 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-22 16:28:40,437 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-22 16:28:43,750 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_155219/plots
+2025-06-22 16:28:43,750 - gui.professional_main_window - INFO - Available plots: ['umap_20250622_155257.png', 'pca_20250622_155258.png', 'qc_20250622_155257.png', 'summary_20250622_155256.png']
+2025-06-22 16:28:44,398 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_155256.png
+2025-06-22 16:28:44,618 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_155257.png
+2025-06-22 16:28:44,810 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_155257.png
+2025-06-22 16:28:45,032 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_155258.png
+2025-06-22 16:28:45,033 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 16:28:45,034 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250622_155219
+2025-06-22 16:28:45,035 - gui.professional_main_window - INFO - Annotation widget updated with new data
+2025-06-22 16:28:50,494 - gui.professional_main_window - INFO - ❌ Analysis failed: 'NoneType' object has no attribute 'setEnabled'
+2025-06-22 16:28:55,296 - gui.professional_main_window - INFO - ❌ Analysis failed: 'NoneType' object has no attribute 'setEnabled'
+2025-06-22 16:33:32,444 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 16:33:32,446 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 16:33:32,601 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 16:33:32,601 - __main__ - INFO - Environment setup completed
+2025-06-22 16:33:32,661 - __main__ - INFO - GUI application created successfully
+2025-06-22 16:33:33,742 - gui.professional_main_window - INFO - Cell annotation module loaded successfully
+2025-06-22 16:33:33,780 - __main__ - INFO - Professional main window created and shown
+2025-06-22 16:33:35,479 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-22 16:33:50,774 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-22 16:33:53,886 - gui.professional_main_window - INFO - Found 14 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_102921/plots
+2025-06-22 16:33:53,886 - gui.professional_main_window - INFO - Available plots: ['custom_UMAP_-_leiden_20250622_103058.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155135.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155122.png', 'custom_UMAP_-_doublet_score_20250622_103056.png', 'custom_PCA_-_leiden_20250622_155153.png', 'custom_UMAP_-_leiden_20250622_155148.png', 'custom_PCA_-_leiden_20250622_103053.png', 'qc_20250622_102954.png', 'summary_20250622_102953.png', 'custom_QC_Metrics_20250622_103049.png']...
+2025-06-22 16:33:54,496 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_102953.png
+2025-06-22 16:33:54,699 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_102954.png
+2025-06-22 16:33:54,884 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_102954.png
+2025-06-22 16:33:55,089 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_102955.png
+2025-06-22 16:33:55,089 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 16:33:55,090 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250622_102921
+2025-06-22 16:33:55,091 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 16:33:55,091 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 16:33:55,091 - gui.professional_main_window - INFO - Annotation widget updated with new data
+2025-06-22 16:34:00,520 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 16:34:00,520 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 16:34:00,559 - gui.professional_main_window - INFO - ✅ Cell annotation completed using basic
+2025-06-22 16:34:00,560 - gui.professional_main_window - INFO -    Annotated 12047 cells into 36 cell types
+2025-06-22 16:34:58,046 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 16:34:58,048 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 16:34:58,061 - gui.professional_main_window - INFO - ✅ Cell annotation completed using marker_based
+2025-06-22 16:34:58,061 - gui.professional_main_window - INFO -    Annotated 12047 cells into 4 cell types
+2025-06-22 16:35:56,227 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 16:35:56,227 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 16:35:56,252 - gui.professional_main_window - INFO - ✅ Cell annotation completed using basic
+2025-06-22 16:35:56,254 - gui.professional_main_window - INFO -    Annotated 12047 cells into 36 cell types
+2025-06-22 16:42:26,134 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 16:42:26,137 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 16:42:26,409 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 16:42:26,409 - __main__ - INFO - Environment setup completed
+2025-06-22 16:42:26,557 - __main__ - INFO - GUI application created successfully
+2025-06-22 16:42:28,815 - gui.professional_main_window - INFO - Cell annotation module loaded successfully
+2025-06-22 16:42:28,856 - __main__ - INFO - Professional main window created and shown
+2025-06-22 16:42:31,098 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-22 16:42:43,374 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-22 16:42:46,659 - gui.professional_main_window - INFO - Found 14 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_102921/plots
+2025-06-22 16:42:46,659 - gui.professional_main_window - INFO - Available plots: ['custom_UMAP_-_leiden_20250622_103058.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155135.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155122.png', 'custom_UMAP_-_doublet_score_20250622_103056.png', 'custom_PCA_-_leiden_20250622_155153.png', 'custom_UMAP_-_leiden_20250622_155148.png', 'custom_PCA_-_leiden_20250622_103053.png', 'qc_20250622_102954.png', 'summary_20250622_102953.png', 'custom_QC_Metrics_20250622_103049.png']...
+2025-06-22 16:42:47,291 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_102953.png
+2025-06-22 16:42:47,505 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_102954.png
+2025-06-22 16:42:47,695 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_102954.png
+2025-06-22 16:42:47,916 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_102955.png
+2025-06-22 16:42:47,917 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 16:42:47,918 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250622_102921
+2025-06-22 16:42:47,918 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 16:42:47,918 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 16:42:47,919 - gui.professional_main_window - INFO - Annotation widget updated with new data
+2025-06-22 16:43:03,850 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 16:43:03,851 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 16:43:03,869 - SingleCellStudio.CellAnnotation - INFO - Using custom marker genes: ['T cells', 'B cells', 'NK cells', 'Monocytes']
+2025-06-22 16:43:04,829 - gui.professional_main_window - INFO - ✅ Cell annotation completed using marker_based
+2025-06-22 16:43:04,829 - gui.professional_main_window - INFO -    Annotated 12047 cells into 11 cell types
+2025-06-22 16:43:32,883 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 16:43:32,883 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 16:43:32,908 - gui.professional_main_window - INFO - ✅ Cell annotation completed using basic
+2025-06-22 16:43:32,909 - gui.professional_main_window - INFO -    Annotated 12047 cells into 36 cell types
+2025-06-22 16:49:17,756 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 16:49:17,758 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 16:49:17,887 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 16:49:17,887 - __main__ - INFO - Environment setup completed
+2025-06-22 16:49:18,052 - __main__ - INFO - GUI application created successfully
+2025-06-22 16:49:19,269 - gui.professional_main_window - INFO - Cell annotation module loaded successfully
+2025-06-22 16:49:19,316 - __main__ - INFO - Professional main window created and shown
+2025-06-22 16:49:21,487 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-22 16:49:34,398 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-22 16:49:37,522 - gui.professional_main_window - INFO - Found 14 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_102921/plots
+2025-06-22 16:49:37,522 - gui.professional_main_window - INFO - Available plots: ['custom_UMAP_-_leiden_20250622_103058.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155135.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155122.png', 'custom_UMAP_-_doublet_score_20250622_103056.png', 'custom_PCA_-_leiden_20250622_155153.png', 'custom_UMAP_-_leiden_20250622_155148.png', 'custom_PCA_-_leiden_20250622_103053.png', 'qc_20250622_102954.png', 'summary_20250622_102953.png', 'custom_QC_Metrics_20250622_103049.png']...
+2025-06-22 16:49:38,135 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_102953.png
+2025-06-22 16:49:38,335 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_102954.png
+2025-06-22 16:49:38,506 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_102954.png
+2025-06-22 16:49:38,724 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_102955.png
+2025-06-22 16:49:38,724 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 16:49:38,725 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250622_102921
+2025-06-22 16:49:38,726 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 16:49:38,726 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 16:49:38,726 - gui.professional_main_window - INFO - Annotation widget updated with new data
+2025-06-22 16:49:52,618 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 16:49:52,619 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 16:49:55,086 - gui.professional_main_window - INFO - ✅ Cell annotation completed using reference_based
+2025-06-22 16:49:55,087 - gui.professional_main_window - INFO -    Annotated 12047 cells into 14 cell types
+2025-06-22 16:51:15,331 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 16:51:15,332 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 16:51:15,350 - SingleCellStudio.CellAnnotation - INFO - Using custom marker genes: ['T cells', 'B cells', 'NK cells', 'Monocytes']
+2025-06-22 16:51:16,178 - gui.professional_main_window - INFO - ✅ Cell annotation completed using marker_based
+2025-06-22 16:51:16,179 - gui.professional_main_window - INFO -    Annotated 12047 cells into 11 cell types
+2025-06-22 16:52:44,854 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 16:52:44,855 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 16:52:45,020 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 16:52:45,020 - __main__ - INFO - Environment setup completed
+2025-06-22 16:52:45,084 - __main__ - INFO - GUI application created successfully
+2025-06-22 16:52:46,412 - gui.professional_main_window - INFO - Cell annotation module loaded successfully
+2025-06-22 16:52:46,437 - __main__ - INFO - Professional main window created and shown
+2025-06-22 16:52:47,927 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-22 16:53:02,269 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-22 16:53:04,312 - gui.professional_main_window - INFO - Found 14 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_102921/plots
+2025-06-22 16:53:04,313 - gui.professional_main_window - INFO - Available plots: ['custom_UMAP_-_leiden_20250622_103058.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155135.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155122.png', 'custom_UMAP_-_doublet_score_20250622_103056.png', 'custom_PCA_-_leiden_20250622_155153.png', 'custom_UMAP_-_leiden_20250622_155148.png', 'custom_PCA_-_leiden_20250622_103053.png', 'qc_20250622_102954.png', 'summary_20250622_102953.png', 'custom_QC_Metrics_20250622_103049.png']...
+2025-06-22 16:53:04,923 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_102953.png
+2025-06-22 16:53:05,132 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_102954.png
+2025-06-22 16:53:05,303 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_102954.png
+2025-06-22 16:53:05,508 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_102955.png
+2025-06-22 16:53:05,509 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 16:53:05,509 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250622_102921
+2025-06-22 16:53:05,510 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 16:53:05,510 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 16:53:05,511 - gui.professional_main_window - INFO - Annotation widget updated with new data
+2025-06-22 16:53:13,362 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 16:53:13,363 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 16:53:13,381 - SingleCellStudio.CellAnnotation - INFO - Running CellTypist annotation...
+2025-06-22 16:53:13,381 - SingleCellStudio.CellAnnotation - INFO - CellTypist requires specific data preprocessing. Using reference-based method instead.
+2025-06-22 16:53:15,647 - gui.professional_main_window - INFO - ✅ Cell annotation completed using celltypist
+2025-06-22 16:53:15,648 - gui.professional_main_window - INFO -    Annotated 12047 cells into 14 cell types
+2025-06-22 17:02:51,732 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 17:02:51,735 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 17:02:52,050 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 17:02:52,050 - __main__ - INFO - Environment setup completed
+2025-06-22 17:02:52,224 - __main__ - INFO - GUI application created successfully
+2025-06-22 17:02:54,848 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 17:02:54,885 - __main__ - INFO - Professional main window created and shown
+2025-06-22 17:02:56,315 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-22 17:03:07,612 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-22 17:03:10,709 - gui.professional_main_window - INFO - Found 14 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_102921/plots
+2025-06-22 17:03:10,710 - gui.professional_main_window - INFO - Available plots: ['custom_UMAP_-_leiden_20250622_103058.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155135.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155122.png', 'custom_UMAP_-_doublet_score_20250622_103056.png', 'custom_PCA_-_leiden_20250622_155153.png', 'custom_UMAP_-_leiden_20250622_155148.png', 'custom_PCA_-_leiden_20250622_103053.png', 'qc_20250622_102954.png', 'summary_20250622_102953.png', 'custom_QC_Metrics_20250622_103049.png']...
+2025-06-22 17:03:11,308 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_102953.png
+2025-06-22 17:03:11,513 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_102954.png
+2025-06-22 17:03:11,685 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_102954.png
+2025-06-22 17:03:11,908 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_102955.png
+2025-06-22 17:03:11,909 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 17:03:11,909 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250622_102921
+2025-06-22 17:03:11,910 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 17:03:11,910 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 17:03:11,911 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 17:15:40,506 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 17:15:40,508 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 17:15:40,516 - SingleCellStudio.CellAnnotation - INFO - Running CellTypist annotation...
+2025-06-22 17:15:40,516 - SingleCellStudio.CellAnnotation - INFO - CellTypist requires specific data preprocessing. Using reference-based method instead.
+2025-06-22 17:15:42,965 - gui.professional_main_window - INFO - ✅ Cell annotation completed using celltypist
+2025-06-22 17:15:42,966 - gui.professional_main_window - INFO -    Annotated 12047 cells into 14 cell types
+2025-06-22 17:16:58,098 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 17:16:58,100 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 17:16:58,416 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 17:16:58,416 - __main__ - INFO - Environment setup completed
+2025-06-22 17:16:58,600 - __main__ - INFO - GUI application created successfully
+2025-06-22 17:17:01,285 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 17:17:01,316 - __main__ - INFO - Professional main window created and shown
+2025-06-22 17:17:06,764 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-22 17:17:18,091 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-22 17:17:21,247 - gui.professional_main_window - INFO - Found 14 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_102921/plots
+2025-06-22 17:17:21,247 - gui.professional_main_window - INFO - Available plots: ['custom_UMAP_-_leiden_20250622_103058.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155135.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155122.png', 'custom_UMAP_-_doublet_score_20250622_103056.png', 'custom_PCA_-_leiden_20250622_155153.png', 'custom_UMAP_-_leiden_20250622_155148.png', 'custom_PCA_-_leiden_20250622_103053.png', 'qc_20250622_102954.png', 'summary_20250622_102953.png', 'custom_QC_Metrics_20250622_103049.png']...
+2025-06-22 17:17:21,865 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_102953.png
+2025-06-22 17:17:22,068 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_102954.png
+2025-06-22 17:17:22,250 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_102954.png
+2025-06-22 17:17:22,472 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_102955.png
+2025-06-22 17:17:22,473 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 17:17:22,473 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250622_102921
+2025-06-22 17:17:22,474 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 17:17:22,474 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 17:17:22,474 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 17:17:33,480 - gui.professional_main_window - INFO - Plot generation failed: Axes.imshow() got multiple values for argument 'ax'
+2025-06-22 17:18:06,907 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 17:18:06,908 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 17:18:06,921 - SingleCellStudio.CellAnnotation - INFO - Running CellTypist annotation...
+2025-06-22 17:18:06,922 - SingleCellStudio.CellAnnotation - INFO - CellTypist requires specific data preprocessing. Using reference-based method instead.
+2025-06-22 17:18:09,202 - gui.professional_main_window - INFO - ✅ Cell annotation completed using celltypist
+2025-06-22 17:18:09,203 - gui.professional_main_window - INFO -    Annotated 12047 cells into 14 cell types
+2025-06-22 18:01:09,415 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 18:01:09,417 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 18:01:09,664 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 18:01:09,665 - __main__ - INFO - Environment setup completed
+2025-06-22 18:01:09,831 - __main__ - INFO - GUI application created successfully
+2025-06-22 18:01:12,525 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 18:01:12,557 - __main__ - INFO - Professional main window created and shown
+2025-06-22 18:01:15,442 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-22 18:01:35,440 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-22 18:01:38,574 - gui.professional_main_window - INFO - Found 14 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_102921/plots
+2025-06-22 18:01:38,574 - gui.professional_main_window - INFO - Available plots: ['custom_UMAP_-_leiden_20250622_103058.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155135.png', 'custom_Violin_Plot_-_CD3D_by_leiden_20250622_155122.png', 'custom_UMAP_-_doublet_score_20250622_103056.png', 'custom_PCA_-_leiden_20250622_155153.png', 'custom_UMAP_-_leiden_20250622_155148.png', 'custom_PCA_-_leiden_20250622_103053.png', 'qc_20250622_102954.png', 'summary_20250622_102953.png', 'custom_QC_Metrics_20250622_103049.png']...
+2025-06-22 18:01:39,211 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_102953.png
+2025-06-22 18:01:39,430 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_102954.png
+2025-06-22 18:01:39,602 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_102954.png
+2025-06-22 18:01:39,823 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_102955.png
+2025-06-22 18:01:39,824 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 18:01:39,824 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250622_102921
+2025-06-22 18:01:39,825 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 18:01:39,825 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 18:01:39,825 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 18:01:59,612 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 18:01:59,613 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 18:01:59,624 - SingleCellStudio.CellAnnotation - INFO - Running CellTypist annotation...
+2025-06-22 18:01:59,624 - SingleCellStudio.CellAnnotation - INFO - CellTypist requires specific data preprocessing. Using reference-based method instead.
+2025-06-22 18:02:01,946 - gui.professional_main_window - INFO - ✅ Cell annotation completed using celltypist
+2025-06-22 18:02:01,947 - gui.professional_main_window - INFO -    Annotated 12047 cells into 14 cell types
+2025-06-22 18:02:27,765 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 18:02:35,021 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:02:38,105 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:02:38,105 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:02:38,106 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:02:39,024 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-22 18:02:39,024 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-22 18:02:40,593 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-22 18:02:40,596 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_180240
+2025-06-22 18:02:40,599 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 18:02:40,599 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 18:02:40,601 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 18:02:46,487 - gui.professional_main_window - INFO - Starting standard analysis pipeline...
+2025-06-22 18:05:40,469 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 18:05:40,472 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 18:05:40,696 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 18:05:40,696 - __main__ - INFO - Environment setup completed
+2025-06-22 18:05:40,793 - __main__ - INFO - GUI application created successfully
+2025-06-22 18:05:42,986 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 18:05:43,014 - __main__ - INFO - Professional main window created and shown
+2025-06-22 18:05:46,134 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 18:05:52,493 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:05:54,165 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:05:54,165 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:05:54,165 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:05:55,121 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-22 18:05:55,121 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-22 18:05:58,046 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-22 18:05:58,047 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_180558
+2025-06-22 18:05:58,062 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 18:05:58,063 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 18:05:58,063 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 18:06:00,235 - gui.professional_main_window - INFO - Starting standard analysis pipeline...
+2025-06-22 18:06:00,236 - gui.professional_main_window - INFO - Analysis parameters: {'min_genes': 200, 'min_cells': 3, 'target_sum': 10000, 'n_top_genes': 2000, 'n_pcs': 40, 'resolution': 0.5}
+2025-06-22 18:06:00,244 - analysis.pipeline - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_180558
+2025-06-22 18:06:00,245 - analysis.pipeline - INFO - Starting pipeline execution: Standard Single Cell Analysis Pipeline
+2025-06-22 18:06:00,245 - analysis.pipeline - INFO - Output directory: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_180558
+2025-06-22 18:06:00,245 - analysis.pipeline - INFO - Executing step 1/10: calculate_qc_metrics
+2025-06-22 18:06:00,245 - analysis.quality_control - INFO - Calculating quality control metrics...
+2025-06-22 18:06:00,788 - analysis.quality_control - INFO - QC metrics calculated for 12047 cells and 38606 genes
+2025-06-22 18:06:00,788 - analysis.pipeline - WARNING - Failed to save metadata for calculate_qc_metrics: "['pct_counts_mt'] not in index"
+2025-06-22 18:06:00,788 - analysis.pipeline - INFO - Step 'calculate_qc_metrics' completed in 0.54s
+2025-06-22 18:06:00,788 - analysis.pipeline - INFO - Executing step 2/10: filter_cells
+2025-06-22 18:06:00,821 - analysis.quality_control - INFO - Filtering cells based on QC metrics...
+2025-06-22 18:06:00,823 - analysis.quality_control - INFO - Min genes filter: 12037 cells pass
+2025-06-22 18:06:00,824 - analysis.quality_control - INFO - Cell filtering complete: 12037 cells kept, 10 removed
+2025-06-22 18:06:00,826 - analysis.pipeline - INFO - Step 'filter_cells' completed in 0.04s
+2025-06-22 18:06:00,826 - analysis.pipeline - INFO - Executing step 3/10: filter_genes
+2025-06-22 18:06:00,880 - analysis.quality_control - INFO - Filtering genes based on expression criteria...
+2025-06-22 18:06:00,880 - analysis.quality_control - INFO - Min cells filter: 28086 genes pass
+2025-06-22 18:06:00,886 - analysis.quality_control - INFO - Gene filtering complete: 28086 genes kept, 10520 removed
+2025-06-22 18:06:00,887 - analysis.pipeline - INFO - Step 'filter_genes' completed in 0.06s
+2025-06-22 18:06:00,887 - analysis.pipeline - INFO - Executing step 4/10: normalize_data
+2025-06-22 18:06:00,887 - analysis.normalization - INFO - Performing log normalization with target sum 10000
+2025-06-22 18:06:01,142 - analysis.normalization - INFO - Log normalization completed
+2025-06-22 18:06:01,596 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_180558/intermediate_data/normalize_data.h5ad
+2025-06-22 18:06:01,596 - analysis.pipeline - INFO - Step 'normalize_data' completed in 0.71s
+2025-06-22 18:06:01,596 - analysis.pipeline - INFO - Executing step 5/10: find_variable_genes
+2025-06-22 18:06:01,596 - analysis.pipeline - INFO - Finding 2000 highly variable genes
+2025-06-22 18:06:01,985 - analysis.pipeline - INFO - Found 2000 highly variable genes
+2025-06-22 18:06:02,002 - analysis.pipeline - INFO - Step 'find_variable_genes' completed in 0.41s
+2025-06-22 18:06:02,002 - analysis.pipeline - INFO - Executing step 6/10: scale_data
+2025-06-22 18:06:02,002 - analysis.normalization - INFO - Scaling data to unit variance
+2025-06-22 18:06:05,531 - analysis.normalization - INFO - Data scaling completed
+2025-06-22 18:06:05,532 - analysis.pipeline - INFO - Step 'scale_data' completed in 3.53s
+2025-06-22 18:06:05,532 - analysis.pipeline - INFO - Executing step 7/10: run_pca
+2025-06-22 18:06:05,532 - analysis.dimensionality_reduction - INFO - Running PCA with 40 components
+2025-06-22 18:06:06,582 - analysis.dimensionality_reduction - INFO - PCA completed. Variance explained by first 10 PCs: 0.155
+2025-06-22 18:06:06,979 - analysis.pipeline - INFO - Step 'run_pca' completed in 1.45s
+2025-06-22 18:06:06,979 - analysis.pipeline - INFO - Executing step 8/10: compute_neighbors
+2025-06-22 18:06:06,979 - analysis.pipeline - INFO - Computing neighborhood graph with 10 neighbors
+2025-06-22 18:06:23,071 - analysis.pipeline - INFO - Step 'compute_neighbors' completed in 16.09s
+2025-06-22 18:06:23,071 - analysis.pipeline - INFO - Executing step 9/10: run_umap
+2025-06-22 18:06:23,071 - analysis.dimensionality_reduction - INFO - Running UMAP with 15 neighbors, 2 components
+2025-06-22 18:06:27,954 - analysis.dimensionality_reduction - INFO - UMAP completed
+2025-06-22 18:06:27,976 - analysis.pipeline - INFO - Step 'run_umap' completed in 4.91s
+2025-06-22 18:06:27,976 - analysis.pipeline - INFO - Executing step 10/10: clustering
+2025-06-22 18:06:27,977 - analysis.clustering - INFO - Running Leiden clustering with resolution 0.5
+2025-06-22 18:06:30,518 - analysis.clustering - INFO - Leiden clustering completed: 35 clusters found
+2025-06-22 18:06:32,879 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_180558/intermediate_data/clustering.h5ad
+2025-06-22 18:06:32,885 - analysis.pipeline - INFO - Step 'clustering' completed in 4.91s
+2025-06-22 18:06:33,333 - analysis.pipeline - INFO - Final metadata saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_180558/metadata
+2025-06-22 18:06:33,337 - analysis.pipeline - INFO - Execution log saved: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_180558/logs/execution_log.csv
+2025-06-22 18:06:33,337 - analysis.pipeline - INFO - Pipeline completed: 10/10 steps successful in 32.64s
+2025-06-22 18:06:33,337 - analysis.pipeline - INFO - Results saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_180558
+2025-06-22 18:06:33,339 - gui.professional_main_window - INFO - Analysis completed successfully!
+2025-06-22 18:06:33,344 - gui.professional_main_window - INFO - Generating standard analysis plots...
+2025-06-22 18:06:35,682 - gui.professional_main_window - INFO - Generated 4 standard analysis plots
+2025-06-22 18:06:35,683 - gui.professional_main_window - INFO - Standard plots: summary_20250622_180633.png, umap_20250622_180634.png, qc_20250622_180635.png, pca_20250622_180635.png
+2025-06-22 18:06:35,683 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_180558/plots
+2025-06-22 18:06:35,684 - gui.professional_main_window - INFO - Available plots: ['qc_20250622_180635.png', 'summary_20250622_180633.png', 'pca_20250622_180635.png', 'umap_20250622_180634.png']
+2025-06-22 18:06:36,136 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_180633.png
+2025-06-22 18:06:36,329 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_180634.png
+2025-06-22 18:06:36,505 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_180635.png
+2025-06-22 18:06:36,699 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_180635.png
+2025-06-22 18:06:36,700 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 18:06:36,701 - gui.professional_main_window - INFO - Debug: Plots directory has 4 files
+2025-06-22 18:06:36,701 - gui.professional_main_window - INFO - Debug: Sample files: ['qc_20250622_180635.png', 'summary_20250622_180633.png', 'pca_20250622_180635.png', 'umap_20250622_180634.png']
+2025-06-22 18:11:03,362 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 18:11:03,363 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 18:11:03,500 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 18:11:03,501 - __main__ - INFO - Environment setup completed
+2025-06-22 18:11:03,561 - __main__ - INFO - GUI application created successfully
+2025-06-22 18:11:04,718 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 18:11:04,741 - __main__ - INFO - Professional main window created and shown
+2025-06-22 18:11:12,822 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 18:11:19,485 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:11:20,900 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:11:20,901 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:11:20,901 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:11:21,758 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-22 18:11:21,758 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-22 18:11:23,132 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-22 18:11:23,133 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_181123
+2025-06-22 18:11:23,148 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 18:11:23,149 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 18:11:23,149 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 18:11:24,877 - gui.professional_main_window - INFO - Starting QC to Cluster pipeline...
+2025-06-22 18:11:24,878 - gui.professional_main_window - INFO - Analysis parameters: {'min_genes': 200, 'min_cells': 3, 'target_sum': 10000, 'n_top_genes': 2000, 'n_pcs': 40, 'resolution': 0.5}
+2025-06-22 18:11:24,900 - gui.professional_main_window - INFO - Analysis failed: name 'quality_control' is not defined
+2025-06-22 18:12:35,540 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 18:12:35,541 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 18:12:35,693 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 18:12:35,693 - __main__ - INFO - Environment setup completed
+2025-06-22 18:12:35,754 - __main__ - INFO - GUI application created successfully
+2025-06-22 18:12:36,853 - __main__ - ERROR - Unexpected error: 'ProfessionalMainWindow' object has no attribute 'logger'
+2025-06-22 18:13:27,761 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 18:13:27,762 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 18:13:27,915 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 18:13:27,915 - __main__ - INFO - Environment setup completed
+2025-06-22 18:13:27,978 - __main__ - INFO - GUI application created successfully
+2025-06-22 18:13:29,297 - gui.professional_main_window - WARNING - Could not load advanced cell annotation module: cannot import name 'feature_selection' from partially initialized module 'analysis' (most likely due to a circular import) (/home/minzhao/xiamen/web/SingleCellStudio/src/gui/../analysis/__init__.py)
+2025-06-22 18:13:29,298 - gui.professional_main_window - INFO - Advanced cell annotation module failed to load: cannot import name 'feature_selection' from partially initialized module 'analysis' (most likely due to a circular import) (/home/minzhao/xiamen/web/SingleCellStudio/src/gui/../analysis/__init__.py)
+2025-06-22 18:13:29,317 - __main__ - INFO - Professional main window created and shown
+2025-06-22 18:13:32,257 - gui.professional_main_window - INFO - Creating new project...
+2025-06-22 18:13:34,841 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 18:13:41,981 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:13:43,803 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:13:43,804 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:13:43,804 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:13:44,688 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-22 18:13:44,689 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-22 18:13:45,969 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-22 18:13:45,970 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_181345
+2025-06-22 18:13:47,385 - gui.professional_main_window - INFO - Starting QC to Cluster pipeline...
+2025-06-22 18:13:47,386 - gui.professional_main_window - INFO - Analysis parameters: {'min_genes': 200, 'min_cells': 3, 'target_sum': 10000, 'n_top_genes': 2000, 'n_pcs': 40, 'resolution': 0.5}
+2025-06-22 18:13:47,399 - gui.professional_main_window - INFO - Analysis failed: Analysis modules not available
+2025-06-22 18:16:13,445 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 18:16:13,446 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 18:16:13,605 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 18:16:13,605 - __main__ - INFO - Environment setup completed
+2025-06-22 18:16:13,668 - __main__ - INFO - GUI application created successfully
+2025-06-22 18:16:14,981 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 18:16:15,003 - __main__ - INFO - Professional main window created and shown
+2025-06-22 18:16:19,795 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 18:16:25,810 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:16:27,091 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:16:27,091 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:16:27,091 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:16:27,980 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-22 18:16:27,980 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-22 18:16:29,782 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-22 18:16:29,784 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_181629
+2025-06-22 18:16:29,805 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 18:16:29,806 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 18:16:29,807 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 18:16:31,628 - gui.professional_main_window - INFO - Starting QC to Cluster pipeline...
+2025-06-22 18:16:31,629 - gui.professional_main_window - INFO - Analysis parameters: {'min_genes': 200, 'min_cells': 3, 'target_sum': 10000, 'n_top_genes': 2000, 'n_pcs': 40, 'resolution': 0.5}
+2025-06-22 18:16:31,651 - gui.professional_main_window - INFO - Analysis failed: module 'analysis.quality_control' has no attribute 'filter_cells'
+2025-06-22 18:20:29,649 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 18:20:29,650 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 18:20:29,789 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 18:20:29,789 - __main__ - INFO - Environment setup completed
+2025-06-22 18:20:29,851 - __main__ - INFO - GUI application created successfully
+2025-06-22 18:20:31,183 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 18:20:31,204 - __main__ - INFO - Professional main window created and shown
+2025-06-22 18:20:36,847 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 18:23:51,437 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 18:23:51,440 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 18:23:51,813 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 18:23:51,813 - __main__ - INFO - Environment setup completed
+2025-06-22 18:23:52,008 - __main__ - INFO - GUI application created successfully
+2025-06-22 18:23:54,944 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 18:23:54,977 - __main__ - INFO - Professional main window created and shown
+2025-06-22 18:23:56,933 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 18:28:08,992 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 18:28:08,995 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 18:28:09,282 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 18:28:09,282 - __main__ - INFO - Environment setup completed
+2025-06-22 18:28:09,425 - __main__ - INFO - GUI application created successfully
+2025-06-22 18:28:11,984 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 18:28:12,019 - __main__ - INFO - Professional main window created and shown
+2025-06-22 18:28:13,710 - gui.professional_main_window - INFO - Creating new project...
+2025-06-22 18:28:17,844 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 18:28:30,083 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:28:31,684 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:28:31,685 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:28:31,685 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:28:32,671 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-22 18:28:32,672 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-22 18:28:34,603 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-22 18:28:34,604 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834
+2025-06-22 18:28:34,617 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 18:28:34,617 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 18:28:34,617 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 18:28:36,970 - gui.professional_main_window - INFO - Starting QC to Cluster pipeline...
+2025-06-22 18:28:36,970 - gui.professional_main_window - INFO - Analysis parameters: {'min_genes': 200, 'min_cells': 3, 'target_sum': 10000, 'n_top_genes': 2000, 'n_pcs': 40, 'resolution': 0.5}
+2025-06-22 18:28:36,982 - analysis.pipeline - INFO - Starting standard analysis pipeline with 10 steps.
+2025-06-22 18:28:36,982 - analysis.pipeline - INFO - Executing step 1/10: calculate_qc
+2025-06-22 18:28:36,982 - analysis.quality_control - INFO - Calculating quality control metrics...
+2025-06-22 18:28:37,480 - analysis.quality_control - INFO - QC metrics calculated for 12047 cells and 38606 genes
+2025-06-22 18:28:37,480 - analysis.pipeline - INFO - Step 'calculate_qc' completed in 0.50s
+2025-06-22 18:28:37,626 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/intermediate_data/calculate_qc.h5ad
+2025-06-22 18:28:37,626 - analysis.pipeline - INFO - Executing step 2/10: filter_cells
+2025-06-22 18:28:37,663 - analysis.quality_control - INFO - Filtering cells based on QC metrics...
+2025-06-22 18:28:37,666 - analysis.quality_control - INFO - Min genes filter: 12037 cells pass
+2025-06-22 18:28:37,671 - analysis.quality_control - INFO - Cell filtering complete: 12037 cells kept, 10 removed
+2025-06-22 18:28:37,671 - analysis.pipeline - INFO - Step 'filter_cells' completed in 0.04s
+2025-06-22 18:28:37,805 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/intermediate_data/filter_cells.h5ad
+2025-06-22 18:28:37,806 - analysis.pipeline - INFO - Executing step 3/10: filter_genes
+2025-06-22 18:28:37,881 - analysis.quality_control - INFO - Filtering genes based on expression criteria...
+2025-06-22 18:28:37,881 - analysis.quality_control - INFO - Min cells filter: 28086 genes pass
+2025-06-22 18:28:37,886 - analysis.quality_control - INFO - Gene filtering complete: 28086 genes kept, 10520 removed
+2025-06-22 18:28:37,886 - analysis.pipeline - INFO - Step 'filter_genes' completed in 0.08s
+2025-06-22 18:28:38,076 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/intermediate_data/filter_genes.h5ad
+2025-06-22 18:28:38,076 - analysis.pipeline - INFO - Executing step 4/10: normalize_data
+2025-06-22 18:28:38,076 - analysis.normalization - INFO - Performing log normalization with target sum 10000
+2025-06-22 18:28:38,343 - analysis.normalization - INFO - Log normalization completed
+2025-06-22 18:28:38,343 - analysis.pipeline - INFO - Step 'normalize_data' completed in 0.27s
+2025-06-22 18:28:38,606 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/intermediate_data/normalize_data.h5ad
+2025-06-22 18:28:38,606 - analysis.pipeline - INFO - Executing step 5/10: find_variable_genes
+2025-06-22 18:28:38,606 - analysis.pipeline - INFO - Finding 2000 highly variable genes
+2025-06-22 18:28:39,014 - analysis.pipeline - INFO - Found 2000 highly variable genes
+2025-06-22 18:28:39,014 - analysis.pipeline - INFO - Step 'find_variable_genes' completed in 0.41s
+2025-06-22 18:28:39,286 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/intermediate_data/find_variable_genes.h5ad
+2025-06-22 18:28:39,286 - analysis.pipeline - INFO - Executing step 6/10: scale_data
+2025-06-22 18:28:39,286 - analysis.normalization - INFO - Scaling data to unit variance
+2025-06-22 18:28:42,717 - analysis.normalization - INFO - Data scaling completed
+2025-06-22 18:28:42,717 - analysis.pipeline - INFO - Step 'scale_data' completed in 3.43s
+2025-06-22 18:28:43,816 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/intermediate_data/scale_data.h5ad
+2025-06-22 18:28:43,816 - analysis.pipeline - INFO - Executing step 7/10: run_pca
+2025-06-22 18:28:43,816 - analysis.dimensionality_reduction - INFO - Running PCA with 40 components
+2025-06-22 18:28:45,583 - analysis.dimensionality_reduction - INFO - PCA completed. Variance explained by first 10 PCs: 0.081
+2025-06-22 18:28:45,583 - analysis.pipeline - INFO - Step 'run_pca' completed in 1.77s
+2025-06-22 18:28:47,041 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/intermediate_data/run_pca.h5ad
+2025-06-22 18:28:47,041 - analysis.pipeline - INFO - Executing step 8/10: compute_neighbors
+2025-06-22 18:28:47,041 - analysis.clustering - INFO - Computing neighborhood graph with 15 neighbors
+2025-06-22 18:29:03,463 - analysis.clustering - INFO - Neighborhood graph computation completed
+2025-06-22 18:29:03,463 - analysis.pipeline - INFO - Step 'compute_neighbors' completed in 16.42s
+2025-06-22 18:29:04,858 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/intermediate_data/compute_neighbors.h5ad
+2025-06-22 18:29:04,858 - analysis.pipeline - INFO - Executing step 9/10: run_umap
+2025-06-22 18:29:04,858 - analysis.dimensionality_reduction - INFO - Running UMAP with 15 neighbors, 2 components
+2025-06-22 18:29:09,929 - analysis.dimensionality_reduction - INFO - UMAP completed
+2025-06-22 18:29:09,929 - analysis.pipeline - INFO - Step 'run_umap' completed in 5.07s
+2025-06-22 18:29:11,220 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/intermediate_data/run_umap.h5ad
+2025-06-22 18:29:11,220 - analysis.pipeline - INFO - Executing step 10/10: clustering
+2025-06-22 18:29:11,220 - analysis.clustering - INFO - Running Leiden clustering with resolution 0.5
+2025-06-22 18:29:13,000 - analysis.clustering - INFO - Leiden clustering completed: 29 clusters found
+2025-06-22 18:29:13,000 - analysis.pipeline - INFO - Step 'clustering' completed in 1.78s
+2025-06-22 18:29:13,920 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/intermediate_data/clustering.h5ad
+2025-06-22 18:29:13,920 - analysis.pipeline - INFO - Pipeline completed: 10/10 steps successful in 36.94s
+2025-06-22 18:29:14,823 - analysis.pipeline - INFO - Final metadata saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/metadata
+2025-06-22 18:29:14,823 - analysis.pipeline - INFO - Execution log saved: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/logs/execution_log.csv
+2025-06-22 18:29:14,823 - analysis.pipeline - INFO - Results saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834
+2025-06-22 18:29:14,824 - gui.professional_main_window - INFO - Analysis completed successfully!
+2025-06-22 18:29:14,830 - gui.professional_main_window - INFO - Generating standard analysis plots...
+2025-06-22 18:29:17,099 - gui.professional_main_window - INFO - Generated 4 standard analysis plots
+2025-06-22 18:29:17,099 - gui.professional_main_window - INFO - Standard plots: summary_20250622_182915.png, umap_20250622_182915.png, qc_20250622_182916.png, pca_20250622_182916.png
+2025-06-22 18:29:17,100 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/plots
+2025-06-22 18:29:17,100 - gui.professional_main_window - INFO - Available plots: ['pca_20250622_182916.png', 'qc_20250622_182916.png', 'umap_20250622_182915.png', 'summary_20250622_182915.png']
+2025-06-22 18:29:17,571 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_182915.png
+2025-06-22 18:29:17,750 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_182915.png
+2025-06-22 18:29:17,913 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_182916.png
+2025-06-22 18:29:18,105 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_182916.png
+2025-06-22 18:29:18,106 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 18:29:18,107 - gui.professional_main_window - INFO - Debug: Plots directory has 4 files
+2025-06-22 18:29:18,108 - gui.professional_main_window - INFO - Debug: Sample files: ['pca_20250622_182916.png', 'qc_20250622_182916.png', 'umap_20250622_182915.png', 'summary_20250622_182915.png']
+2025-06-22 18:34:33,973 - __main__ - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 18:34:33,975 - __main__ - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 18:34:34,186 - __main__ - INFO - Using qtagg matplotlib backend
+2025-06-22 18:34:34,186 - __main__ - INFO - Environment setup completed
+2025-06-22 18:34:34,275 - __main__ - INFO - GUI application created successfully
+2025-06-22 18:34:36,373 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 18:34:36,398 - __main__ - INFO - Professional main window created and shown
+2025-06-22 18:34:39,662 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-22 18:34:51,136 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-22 18:34:53,285 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_182834/plots
+2025-06-22 18:34:53,285 - gui.professional_main_window - INFO - Available plots: ['pca_20250622_182916.png', 'qc_20250622_182916.png', 'umap_20250622_182915.png', 'summary_20250622_182915.png']
+2025-06-22 18:34:53,824 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_182915.png
+2025-06-22 18:34:54,022 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_182915.png
+2025-06-22 18:34:54,201 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_182916.png
+2025-06-22 18:34:54,400 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_182916.png
+2025-06-22 18:34:54,401 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 18:34:54,401 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250622_182834
+2025-06-22 18:34:54,402 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 18:34:54,402 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 18:34:54,403 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 18:35:03,447 - gui.professional_main_window - INFO - Creating new project...
+2025-06-22 18:35:04,703 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 18:35:10,885 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:35:12,643 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:35:12,643 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:35:12,643 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 18:35:13,607 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-22 18:35:13,607 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-22 18:35:15,463 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-22 18:35:15,464 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515
+2025-06-22 18:35:15,465 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 18:35:15,465 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 18:35:15,465 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 18:35:17,112 - gui.professional_main_window - INFO - Starting QC to Cluster pipeline...
+2025-06-22 18:35:17,114 - gui.professional_main_window - INFO - Analysis parameters: {'min_genes': 200, 'min_cells': 3, 'target_sum': 10000, 'n_top_genes': 2000, 'n_pcs': 40, 'resolution': 0.5}
+2025-06-22 18:35:17,372 - analysis.pipeline - INFO - Starting standard analysis pipeline with 10 steps.
+2025-06-22 18:35:17,372 - analysis.pipeline - INFO - Executing step 1/10: calculate_qc
+2025-06-22 18:35:17,372 - analysis.quality_control - INFO - Calculating quality control metrics...
+2025-06-22 18:35:17,709 - analysis.quality_control - INFO - QC metrics calculated for 12047 cells and 38606 genes
+2025-06-22 18:35:17,709 - analysis.pipeline - INFO - Step 'calculate_qc' completed in 0.34s
+2025-06-22 18:35:17,859 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/intermediate_data/calculate_qc.h5ad
+2025-06-22 18:35:17,859 - analysis.pipeline - INFO - Executing step 2/10: filter_cells
+2025-06-22 18:35:17,896 - analysis.quality_control - INFO - Filtering cells based on QC metrics...
+2025-06-22 18:35:17,897 - analysis.quality_control - INFO - Min genes filter: 12037 cells pass
+2025-06-22 18:35:17,899 - analysis.quality_control - INFO - Cell filtering complete: 12037 cells kept, 10 removed
+2025-06-22 18:35:17,899 - analysis.pipeline - INFO - Step 'filter_cells' completed in 0.04s
+2025-06-22 18:35:18,042 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/intermediate_data/filter_cells.h5ad
+2025-06-22 18:35:18,042 - analysis.pipeline - INFO - Executing step 3/10: filter_genes
+2025-06-22 18:35:18,080 - analysis.quality_control - INFO - Filtering genes based on expression criteria...
+2025-06-22 18:35:18,081 - analysis.quality_control - INFO - Min cells filter: 28086 genes pass
+2025-06-22 18:35:18,083 - analysis.quality_control - INFO - Gene filtering complete: 28086 genes kept, 10520 removed
+2025-06-22 18:35:18,083 - analysis.pipeline - INFO - Step 'filter_genes' completed in 0.04s
+2025-06-22 18:35:18,224 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/intermediate_data/filter_genes.h5ad
+2025-06-22 18:35:18,224 - analysis.pipeline - INFO - Executing step 4/10: normalize_data
+2025-06-22 18:35:18,224 - analysis.normalization - INFO - Performing log normalization with target sum 10000
+2025-06-22 18:35:18,445 - analysis.normalization - INFO - Log normalization completed
+2025-06-22 18:35:18,445 - analysis.pipeline - INFO - Step 'normalize_data' completed in 0.22s
+2025-06-22 18:35:18,697 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/intermediate_data/normalize_data.h5ad
+2025-06-22 18:35:18,697 - analysis.pipeline - INFO - Executing step 5/10: find_variable_genes
+2025-06-22 18:35:18,697 - analysis.pipeline - INFO - Finding 2000 highly variable genes
+2025-06-22 18:35:18,982 - analysis.pipeline - INFO - Found 2000 highly variable genes
+2025-06-22 18:35:18,982 - analysis.pipeline - INFO - Step 'find_variable_genes' completed in 0.28s
+2025-06-22 18:35:19,276 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/intermediate_data/find_variable_genes.h5ad
+2025-06-22 18:35:19,277 - analysis.pipeline - INFO - Executing step 6/10: scale_data
+2025-06-22 18:35:19,277 - analysis.normalization - INFO - Scaling data to unit variance
+2025-06-22 18:35:23,244 - analysis.normalization - INFO - Data scaling completed
+2025-06-22 18:35:23,244 - analysis.pipeline - INFO - Step 'scale_data' completed in 3.97s
+2025-06-22 18:35:24,233 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/intermediate_data/scale_data.h5ad
+2025-06-22 18:35:24,234 - analysis.pipeline - INFO - Executing step 7/10: run_pca
+2025-06-22 18:35:24,234 - analysis.dimensionality_reduction - INFO - Running PCA with 40 components
+2025-06-22 18:35:25,776 - analysis.dimensionality_reduction - INFO - PCA completed. Variance explained by first 10 PCs: 0.081
+2025-06-22 18:35:25,777 - analysis.pipeline - INFO - Step 'run_pca' completed in 1.54s
+2025-06-22 18:35:26,750 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/intermediate_data/run_pca.h5ad
+2025-06-22 18:35:26,750 - analysis.pipeline - INFO - Executing step 8/10: compute_neighbors
+2025-06-22 18:35:26,750 - analysis.clustering - INFO - Computing neighborhood graph with 15 neighbors
+2025-06-22 18:35:43,138 - analysis.clustering - INFO - Neighborhood graph computation completed
+2025-06-22 18:35:43,138 - analysis.pipeline - INFO - Step 'compute_neighbors' completed in 16.39s
+2025-06-22 18:35:44,555 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/intermediate_data/compute_neighbors.h5ad
+2025-06-22 18:35:44,555 - analysis.pipeline - INFO - Executing step 9/10: run_umap
+2025-06-22 18:35:44,555 - analysis.dimensionality_reduction - INFO - Running UMAP with 15 neighbors, 2 components
+2025-06-22 18:35:50,137 - analysis.dimensionality_reduction - INFO - UMAP completed
+2025-06-22 18:35:50,137 - analysis.pipeline - INFO - Step 'run_umap' completed in 5.58s
+2025-06-22 18:35:51,111 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/intermediate_data/run_umap.h5ad
+2025-06-22 18:35:51,112 - analysis.pipeline - INFO - Executing step 10/10: clustering
+2025-06-22 18:35:51,112 - analysis.clustering - INFO - Running Leiden clustering with resolution 0.5
+2025-06-22 18:35:52,810 - analysis.clustering - INFO - Leiden clustering completed: 29 clusters found
+2025-06-22 18:35:52,810 - analysis.pipeline - INFO - Step 'clustering' completed in 1.70s
+2025-06-22 18:35:53,725 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/intermediate_data/clustering.h5ad
+2025-06-22 18:35:53,725 - analysis.pipeline - INFO - Pipeline completed: 10/10 steps successful in 36.35s
+2025-06-22 18:35:54,801 - analysis.pipeline - INFO - Final metadata saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/metadata
+2025-06-22 18:35:54,802 - analysis.pipeline - INFO - Execution log saved: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/logs/execution_log.csv
+2025-06-22 18:35:54,802 - analysis.pipeline - INFO - Results saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515
+2025-06-22 18:35:54,803 - gui.professional_main_window - INFO - Analysis completed successfully!
+2025-06-22 18:35:54,804 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 18:35:54,804 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 18:35:54,805 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 18:35:54,806 - gui.professional_main_window - INFO - Generating standard analysis plots...
+2025-06-22 18:35:56,864 - gui.professional_main_window - INFO - Generated 4 standard analysis plots
+2025-06-22 18:35:56,865 - gui.professional_main_window - INFO - Standard plots: summary_20250622_183554.png, umap_20250622_183555.png, qc_20250622_183556.png, pca_20250622_183556.png
+2025-06-22 18:35:56,866 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_183515/plots
+2025-06-22 18:35:56,867 - gui.professional_main_window - INFO - Available plots: ['summary_20250622_183554.png', 'pca_20250622_183556.png', 'umap_20250622_183555.png', 'qc_20250622_183556.png']
+2025-06-22 18:35:57,379 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_183554.png
+2025-06-22 18:35:57,576 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_183555.png
+2025-06-22 18:35:57,768 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_183556.png
+2025-06-22 18:35:57,964 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_183556.png
+2025-06-22 18:35:57,966 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 18:35:57,967 - gui.professional_main_window - INFO - Debug: Plots directory has 4 files
+2025-06-22 18:35:57,968 - gui.professional_main_window - INFO - Debug: Sample files: ['summary_20250622_183554.png', 'pca_20250622_183556.png', 'umap_20250622_183555.png', 'qc_20250622_183556.png']
+2025-06-22 18:36:03,509 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 18:36:03,509 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 18:36:03,516 - SingleCellStudio.CellAnnotation - INFO - Running CellTypist annotation...
+2025-06-22 18:36:03,517 - SingleCellStudio.CellAnnotation - INFO - CellTypist requires specific data preprocessing. Using reference-based method instead.
+2025-06-22 18:36:05,766 - gui.professional_main_window - INFO - ✅ Cell annotation completed using celltypist
+2025-06-22 18:36:05,767 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
+2025-06-22 20:09:29,779 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 20:09:29,782 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 20:09:30,079 - main - INFO - Using qtagg matplotlib backend
+2025-06-22 20:09:30,079 - main - INFO - Environment setup completed
+2025-06-22 20:09:30,246 - main - INFO - GUI application created successfully
+2025-06-22 20:09:32,847 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 20:09:32,875 - main - INFO - Professional main window created and shown
+2025-06-22 20:09:35,593 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-22 20:09:43,784 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 20:09:44,966 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 20:09:44,967 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 20:09:44,967 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-22 20:09:45,864 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-22 20:09:45,864 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-22 20:09:47,288 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-22 20:09:47,289 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947
+2025-06-22 20:09:47,308 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 20:09:47,308 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 20:09:47,309 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 20:09:48,692 - gui.professional_main_window - INFO - Starting QC to Cluster pipeline...
+2025-06-22 20:09:48,692 - gui.professional_main_window - INFO - Analysis parameters: {'min_genes': 200, 'min_cells': 3, 'target_sum': 10000, 'n_top_genes': 2000, 'n_pcs': 40, 'resolution': 0.5}
+2025-06-22 20:09:48,701 - analysis.pipeline - INFO - Starting standard analysis pipeline with 10 steps.
+2025-06-22 20:09:48,701 - analysis.pipeline - INFO - Executing step 1/10: calculate_qc
+2025-06-22 20:09:48,701 - analysis.quality_control - INFO - Calculating quality control metrics...
+2025-06-22 20:09:49,204 - analysis.quality_control - INFO - QC metrics calculated for 12047 cells and 38606 genes
+2025-06-22 20:09:49,204 - analysis.pipeline - INFO - Step 'calculate_qc' completed in 0.50s
+2025-06-22 20:09:49,353 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/calculate_qc.h5ad
+2025-06-22 20:09:49,354 - analysis.pipeline - INFO - Executing step 2/10: filter_cells
+2025-06-22 20:09:49,389 - analysis.quality_control - INFO - Filtering cells based on QC metrics...
+2025-06-22 20:09:49,391 - analysis.quality_control - INFO - Min genes filter: 12037 cells pass
+2025-06-22 20:09:49,396 - analysis.quality_control - INFO - Cell filtering complete: 12037 cells kept, 10 removed
+2025-06-22 20:09:49,396 - analysis.pipeline - INFO - Step 'filter_cells' completed in 0.04s
+2025-06-22 20:09:49,531 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/filter_cells.h5ad
+2025-06-22 20:09:49,531 - analysis.pipeline - INFO - Executing step 3/10: filter_genes
+2025-06-22 20:09:49,613 - analysis.quality_control - INFO - Filtering genes based on expression criteria...
+2025-06-22 20:09:49,614 - analysis.quality_control - INFO - Min cells filter: 28086 genes pass
+2025-06-22 20:09:49,618 - analysis.quality_control - INFO - Gene filtering complete: 28086 genes kept, 10520 removed
+2025-06-22 20:09:49,618 - analysis.pipeline - INFO - Step 'filter_genes' completed in 0.09s
+2025-06-22 20:09:49,803 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/filter_genes.h5ad
+2025-06-22 20:09:49,804 - analysis.pipeline - INFO - Executing step 4/10: normalize_data
+2025-06-22 20:09:49,804 - analysis.normalization - INFO - Performing log normalization with target sum 10000
+2025-06-22 20:09:50,065 - analysis.normalization - INFO - Log normalization completed
+2025-06-22 20:09:50,065 - analysis.pipeline - INFO - Step 'normalize_data' completed in 0.26s
+2025-06-22 20:09:50,363 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/normalize_data.h5ad
+2025-06-22 20:09:50,363 - analysis.pipeline - INFO - Executing step 5/10: find_variable_genes
+2025-06-22 20:09:50,363 - analysis.pipeline - INFO - Finding 2000 highly variable genes
+2025-06-22 20:09:50,749 - analysis.pipeline - INFO - Found 2000 highly variable genes
+2025-06-22 20:09:50,749 - analysis.pipeline - INFO - Step 'find_variable_genes' completed in 0.39s
+2025-06-22 20:09:51,014 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/find_variable_genes.h5ad
+2025-06-22 20:09:51,015 - analysis.pipeline - INFO - Executing step 6/10: scale_data
+2025-06-22 20:09:51,015 - analysis.normalization - INFO - Scaling data to unit variance
+2025-06-22 20:09:54,650 - analysis.normalization - INFO - Data scaling completed
+2025-06-22 20:09:54,650 - analysis.pipeline - INFO - Step 'scale_data' completed in 3.64s
+2025-06-22 20:09:55,598 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/scale_data.h5ad
+2025-06-22 20:09:55,598 - analysis.pipeline - INFO - Executing step 7/10: run_pca
+2025-06-22 20:09:55,598 - analysis.dimensionality_reduction - INFO - Running PCA with 40 components
+2025-06-22 20:09:57,412 - analysis.dimensionality_reduction - INFO - PCA completed. Variance explained by first 10 PCs: 0.081
+2025-06-22 20:09:57,412 - analysis.pipeline - INFO - Step 'run_pca' completed in 1.81s
+2025-06-22 20:09:58,767 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/run_pca.h5ad
+2025-06-22 20:09:58,768 - analysis.pipeline - INFO - Executing step 8/10: compute_neighbors
+2025-06-22 20:09:58,768 - analysis.clustering - INFO - Computing neighborhood graph with 15 neighbors
+2025-06-22 20:10:14,843 - analysis.clustering - INFO - Neighborhood graph computation completed
+2025-06-22 20:10:14,843 - analysis.pipeline - INFO - Step 'compute_neighbors' completed in 16.08s
+2025-06-22 20:10:16,156 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/compute_neighbors.h5ad
+2025-06-22 20:10:16,156 - analysis.pipeline - INFO - Executing step 9/10: run_umap
+2025-06-22 20:10:16,156 - analysis.dimensionality_reduction - INFO - Running UMAP with 15 neighbors, 2 components
+2025-06-22 20:10:21,237 - analysis.dimensionality_reduction - INFO - UMAP completed
+2025-06-22 20:10:21,237 - analysis.pipeline - INFO - Step 'run_umap' completed in 5.08s
+2025-06-22 20:10:22,423 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/run_umap.h5ad
+2025-06-22 20:10:22,423 - analysis.pipeline - INFO - Executing step 10/10: clustering
+2025-06-22 20:10:22,423 - analysis.clustering - INFO - Running Leiden clustering with resolution 0.5
+2025-06-22 20:10:24,099 - analysis.clustering - INFO - Leiden clustering completed: 29 clusters found
+2025-06-22 20:10:24,099 - analysis.pipeline - INFO - Step 'clustering' completed in 1.68s
+2025-06-22 20:10:25,018 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/clustering.h5ad
+2025-06-22 20:10:25,018 - analysis.pipeline - INFO - Pipeline completed: 10/10 steps successful in 36.32s
+2025-06-22 20:10:25,939 - analysis.pipeline - INFO - Final metadata saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/metadata
+2025-06-22 20:10:25,939 - analysis.pipeline - INFO - Execution log saved: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/logs/execution_log.csv
+2025-06-22 20:10:25,940 - analysis.pipeline - INFO - Results saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947
+2025-06-22 20:10:25,941 - gui.professional_main_window - INFO - Analysis completed successfully!
+2025-06-22 20:10:25,941 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-22 20:10:25,941 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-22 20:10:25,941 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-22 20:10:25,945 - gui.professional_main_window - INFO - Generating standard analysis plots...
+2025-06-22 20:10:27,944 - gui.professional_main_window - INFO - Generated 4 standard analysis plots
+2025-06-22 20:10:27,945 - gui.professional_main_window - INFO - Standard plots: summary_20250622_201026.png, umap_20250622_201026.png, qc_20250622_201027.png, pca_20250622_201027.png
+2025-06-22 20:10:27,945 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/plots
+2025-06-22 20:10:27,946 - gui.professional_main_window - INFO - Available plots: ['umap_20250622_201026.png', 'pca_20250622_201027.png', 'qc_20250622_201027.png', 'summary_20250622_201026.png']
+2025-06-22 20:10:28,441 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_201026.png
+2025-06-22 20:10:28,634 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_201026.png
+2025-06-22 20:10:28,794 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_201027.png
+2025-06-22 20:10:28,977 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_201027.png
+2025-06-22 20:10:28,977 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-22 20:10:28,979 - gui.professional_main_window - INFO - Debug: Plots directory has 4 files
+2025-06-22 20:10:28,979 - gui.professional_main_window - INFO - Debug: Sample files: ['umap_20250622_201026.png', 'pca_20250622_201027.png', 'qc_20250622_201027.png', 'summary_20250622_201026.png']
+2025-06-22 20:10:34,687 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-22 20:10:34,688 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-22 20:10:34,699 - SingleCellStudio.CellAnnotation - INFO - Running CellTypist annotation...
+2025-06-22 20:10:34,699 - SingleCellStudio.CellAnnotation - INFO - CellTypist requires specific data preprocessing. Using reference-based method instead.
+2025-06-22 20:10:36,909 - gui.professional_main_window - INFO - ✅ Cell annotation completed using celltypist
+2025-06-22 20:10:36,909 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
+2025-06-22 20:29:49,706 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 20:29:49,708 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 20:29:50,003 - main - INFO - Using qtagg matplotlib backend
+2025-06-22 20:29:50,003 - main - INFO - Environment setup completed
+2025-06-22 20:29:50,190 - main - INFO - GUI application created successfully
+2025-06-22 20:29:52,972 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 20:29:52,997 - gui.professional_main_window - INFO - Applied professional QSS styling
+2025-06-22 20:29:53,003 - main - INFO - Professional main window created and shown
+2025-06-22 20:37:45,180 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-22 20:37:45,182 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-22 20:37:45,456 - main - INFO - Using qtagg matplotlib backend
+2025-06-22 20:37:45,456 - main - INFO - Environment setup completed
+2025-06-22 20:37:45,554 - main - INFO - GUI application created successfully
+2025-06-22 20:37:47,520 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-22 20:37:47,539 - gui.professional_main_window - INFO - Applied professional QSS styling
+2025-06-22 20:37:47,544 - main - INFO - Professional main window created and shown

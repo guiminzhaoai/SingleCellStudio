@@ -1,0 +1,56 @@
+# SingleCellStudio - Development Dependencies
+# Include all production dependencies
+-r requirements.txt
+
+# Testing Framework
+pytest>=7.1.0
+pytest-qt>=4.1.0
+pytest-cov>=3.0.0
+pytest-mock>=3.8.0
+pytest-xvfb>=2.0.0  # For headless GUI testing
+
+# Code Quality
+black>=22.6.0
+isort>=5.10.0
+flake8>=5.0.0
+mypy>=0.971
+pylint>=2.14.0
+
+# Documentation
+sphinx>=5.1.0
+sphinx-rtd-theme>=1.0.0
+sphinx-autodoc-typehints>=1.19.0
+
+# Development Tools
+jupyter>=1.0.0
+ipython>=8.4.0
+notebook>=6.4.0
+
+# Build Tools
+setuptools>=65.0.0
+wheel>=0.37.0
+build>=0.8.0
+
+# Packaging
+pyinstaller>=5.3.0
+cx-freeze>=6.11.0
+
+# Version Control
+pre-commit>=2.20.0
+
+# Performance Profiling
+memory-profiler>=0.60.0
+line-profiler>=3.5.0
+py-spy>=0.3.12
+
+# GUI Development
+qt6-tools>=6.3.0  # Qt Designer and other tools
+# Note: PySide6 tools are included with the main PySide6 package
+
+# Additional Scientific Tools
+jupyter-lab>=3.4.0
+matplotlib-inline>=0.1.0
+
+# Mock Data Generation
+faker>=15.0.0
+factory-boy>=3.2.0 
