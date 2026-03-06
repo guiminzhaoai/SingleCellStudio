@@ -1707,7 +1707,12 @@ All results saved to: {self.output_dir}""")
             return
         
         # Check what plot files exist
-        all_plot_files = list(plots_dir.glob("*.png")) + list(plots_dir.glob("*.pdf")) + list(plots_dir.glob("*.jpg"))
+        all_plot_files = (
+            list(plots_dir.glob("*.png")) +
+            list(plots_dir.glob("*.pdf")) +
+            list(plots_dir.glob("*.svg")) +
+            list(plots_dir.glob("*.jpg"))
+        )
         self.log_activity(f"Found {len(all_plot_files)} plot files in {plots_dir}")
         
         if all_plot_files:
@@ -2047,12 +2052,18 @@ All results saved to: {self.output_dir}""")
             safe_title = "".join(c for c in title if c.isalnum() or c in (' ', '-', '_')).rstrip()
             safe_title = safe_title.replace(' ', '_')
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"custom_{safe_title}_{timestamp}.png"
-            
-            filepath = plots_dir / filename
-            figure.savefig(filepath, dpi=300, bbox_inches='tight')
-            
-            self.log_activity(f"Plot saved: {filename}")
+            base_filename = f"custom_{safe_title}_{timestamp}"
+            saved_files = []
+
+            for ext in ('.png', '.pdf'):
+                filepath = plots_dir / f"{base_filename}{ext}"
+                save_kwargs = {'bbox_inches': 'tight'}
+                if ext == '.png':
+                    save_kwargs['dpi'] = 300
+                figure.savefig(filepath, **save_kwargs)
+                saved_files.append(filepath.name)
+
+            self.log_activity(f"Plot saved: {', '.join(saved_files)}")
             
         except Exception as e:
             self.log_activity(f"Failed to save plot: {str(e)}")
@@ -2125,9 +2136,13 @@ All results saved to: {self.output_dir}""")
                 
                 # Save summary plot
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                summary_file = plots_dir / f"summary_{timestamp}.png"
-                fig.savefig(summary_file, dpi=300, bbox_inches='tight')
-                generated_plots.append(summary_file)
+                for ext in ('.png', '.pdf'):
+                    summary_file = plots_dir / f"summary_{timestamp}{ext}"
+                    save_kwargs = {'bbox_inches': 'tight'}
+                    if ext == '.png':
+                        save_kwargs['dpi'] = 300
+                    fig.savefig(summary_file, **save_kwargs)
+                    generated_plots.append(summary_file)
                 plt.close(fig)
                 
             except Exception as e:
@@ -2141,9 +2156,13 @@ All results saved to: {self.output_dir}""")
                     ax.set_title('UMAP - Leiden Clustering', fontsize=14, fontweight='bold')
                     
                     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                    umap_file = plots_dir / f"umap_{timestamp}.png"
-                    fig.savefig(umap_file, dpi=300, bbox_inches='tight')
-                    generated_plots.append(umap_file)
+                    for ext in ('.png', '.pdf'):
+                        umap_file = plots_dir / f"umap_{timestamp}{ext}"
+                        save_kwargs = {'bbox_inches': 'tight'}
+                        if ext == '.png':
+                            save_kwargs['dpi'] = 300
+                        fig.savefig(umap_file, **save_kwargs)
+                        generated_plots.append(umap_file)
                     plt.close(fig)
                     
             except Exception as e:
@@ -2165,9 +2184,13 @@ All results saved to: {self.output_dir}""")
                                multi_panel=True, ax=ax, show=False)
                     
                     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                    qc_file = plots_dir / f"qc_{timestamp}.png"
-                    fig.savefig(qc_file, dpi=300, bbox_inches='tight')
-                    generated_plots.append(qc_file)
+                    for ext in ('.png', '.pdf'):
+                        qc_file = plots_dir / f"qc_{timestamp}{ext}"
+                        save_kwargs = {'bbox_inches': 'tight'}
+                        if ext == '.png':
+                            save_kwargs['dpi'] = 300
+                        fig.savefig(qc_file, **save_kwargs)
+                        generated_plots.append(qc_file)
                     plt.close(fig)
                     
             except Exception as e:
@@ -2181,9 +2204,13 @@ All results saved to: {self.output_dir}""")
                     ax.set_title('PCA - Leiden Clustering', fontsize=14, fontweight='bold')
                     
                     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                    pca_file = plots_dir / f"pca_{timestamp}.png"
-                    fig.savefig(pca_file, dpi=300, bbox_inches='tight')
-                    generated_plots.append(pca_file)
+                    for ext in ('.png', '.pdf'):
+                        pca_file = plots_dir / f"pca_{timestamp}{ext}"
+                        save_kwargs = {'bbox_inches': 'tight'}
+                        if ext == '.png':
+                            save_kwargs['dpi'] = 300
+                        fig.savefig(pca_file, **save_kwargs)
+                        generated_plots.append(pca_file)
                     plt.close(fig)
                     
             except Exception as e:
