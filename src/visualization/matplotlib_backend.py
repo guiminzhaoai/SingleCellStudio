@@ -547,9 +547,21 @@ class MatplotlibPlotter(QWidget):
         self.workers.clear()
     
     def export_plot(self, plot_type: str, file_path: str):
-        """Export a specific plot to file"""
+        """Export a specific plot to file and ensure PDF export is available."""
         if plot_type in self.current_plots:
             figure = self.current_plots[plot_type].canvas.figure
-            figure.savefig(file_path, dpi=300, bbox_inches='tight')
+            output_path = Path(file_path)
+
+            # Save user-requested format first
+            save_kwargs = {'bbox_inches': 'tight'}
+            if output_path.suffix.lower() in ['.png', '.jpg', '.jpeg', '.tiff', '.tif']:
+                save_kwargs['dpi'] = 300
+            figure.savefig(output_path, **save_kwargs)
+
+            # Always provide a PDF export companion for publication workflows
+            pdf_path = output_path.with_suffix('.pdf')
+            if pdf_path != output_path:
+                figure.savefig(pdf_path, bbox_inches='tight')
+
             return True
-        return False 
+        return False
