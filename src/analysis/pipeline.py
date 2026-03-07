@@ -619,7 +619,7 @@ def find_variable_genes(adata, n_top_genes=2000):
 
 def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3, 
                             target_sum=10000, n_top_genes=2000, n_pcs=40, 
-                            resolution=0.5, save_checkpoints=False,
+                            resolution=0.5, save_checkpoints=True,
                             progress_callback=None):
     """
     Run a standard single-cell analysis pipeline from QC to clustering.
@@ -633,7 +633,7 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         n_top_genes (int): Number of highly variable genes to select.
         n_pcs (int): Number of principal components to compute.
         resolution (float): Resolution for Leiden clustering.
-        save_checkpoints (bool): Whether to save intermediate AnnData objects (disabled by default).
+        save_checkpoints (bool): Whether to save intermediate AnnData objects.
         progress_callback (callable): A function to report progress. 
                                      It should accept (step, total_steps, message).
 
@@ -649,14 +649,10 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         output_dir = Path(f"scs_results_{timestamp}")
     output_dir = Path(output_dir)
     log_dir = output_dir / "logs"
+    checkpoint_dir = output_dir / "intermediate_data"
     metadata_dir = output_dir / "metadata"
     
-    # Only create checkpoint_dir if saving is enabled
-    if save_checkpoints:
-        checkpoint_dir = output_dir / "intermediate_data"
-        checkpoint_dir.mkdir(parents=True, exist_ok=True)
-    
-    for d in [output_dir, log_dir, metadata_dir]:
+    for d in [output_dir, log_dir, checkpoint_dir, metadata_dir]:
         d.mkdir(parents=True, exist_ok=True)
     
     # Configure logging for this run
@@ -704,11 +700,11 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
             execution_log.append({"step": name, "status": "success", "duration_s": step_duration, "error": ""})
             logger.info(f"Step '{name}' completed in {step_duration:.2f}s")
             
-            # Only save checkpoint if explicitly enabled (disabled by default)
+            # Save checkpoint if enabled
             if save_checkpoints:
                 checkpoint_file = checkpoint_dir / f"{name}.h5ad"
                 adata.write(checkpoint_file)
-                logger.info(f"Saved checkpoint: {checkpoint_file}")
+                logger.info(f"Saved key checkpoint: {checkpoint_file}")
                 
         except Exception as e:
             step_duration = time.time() - step_start_time
@@ -724,11 +720,10 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
     if progress_callback:
         progress_callback(total_steps, total_steps, "Pipeline finished.")
 
-    # Save final results and metadata only
+    # Save final metadata and execution log
     try:
-        final_results_path = metadata_dir / "analysis_complete.h5ad"
+        final_results_path = metadata_dir / "final_adata.h5ad"
         adata.write(final_results_path)
-        logger.info(f"Final analysis results saved: {final_results_path}")
         
         params_used = {
             "min_genes": min_genes, "min_cells": min_cells, "target_sum": target_sum,
