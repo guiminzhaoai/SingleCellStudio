@@ -4317,4 +4317,4 @@ if __name__ == "__main__":
     window = ProfessionalMainWindow()
     window.show()
     
-    sys.exit(app.exec()) 
+    sys.exit(app.exec())
