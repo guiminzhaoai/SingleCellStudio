@@ -6,8 +6,9 @@ SingleCellStudio Professional is a comprehensive, user-friendly desktop applicat
 
 ## 🌟 Key Features
 
-### ✅ **Professional Interface (v0.3.0)**
+### ✅ **Professional Interface (v0.3.0+)**
 - **Unified Professional Window**: Single-window interface with 5-tab workflow (Home, QC & Cluster, Cell Annotation, Trajectory Analysis, Cell-Cell Interaction)
+- **Multi-Sample Entry Points**: Import single sample (`Ctrl+I`) or multiple samples (`Ctrl+Shift+I`) directly from the Home tab/File menu
 - **Commercial-Grade Menus**: File, Analysis, and Documentation menus with keyboard shortcuts
 - **Real-time Progress Tracking**: Live updates during analysis with detailed logging
 - **Interactive Plot Generation**: On-demand plot creation with customizable parameters
@@ -26,6 +27,8 @@ SingleCellStudio Professional is a comprehensive, user-friendly desktop applicat
 
 ### 📊 **Advanced Data Management**
 - **Multi-format Support**: 10X MTX folders, 10X H5 files, AnnData H5AD, CSV/TSV
+- **Multi-sample Merge Support**: Combine multiple input datasets into one AnnData object with sample/batch metadata
+- **Batch Metadata Tracking**: Automatic `batch` and `sample_id` labels for integration-aware analysis
 - **Smart Result Organization**: Timestamped folders with structured output
 - **Key Checkpoints**: Automatic saving of critical analysis stages
 - **Load Previous Results**: Resume analysis from any saved checkpoint
@@ -84,14 +87,14 @@ python src/main.py
 ```
 
 ### Professional Workflow
-1. **📁 Import Data** → Use File menu (Ctrl+I) or Home tab quick actions
-2. **🔬 Run QC & Clustering** → Click "Run Standard Analysis" with customizable parameters
-3. **🏷️ Annotate Cell Types** → Advanced cell type identification and annotation
-4. **🧬 Trajectory Analysis** → Pseudotime, RNA Velocity, or Lineage Tracing analysis
-5. **🔗 Cell-Cell Interaction** → Analyze cellular communication patterns and interactions
-6. **📊 View Results** → Automatic plot generation and results summary
-7. **🎨 Generate Plots** → Interactive plot creation with custom parameters
-8. **💾 Export Results** → Multiple export options for data and visualizations
+1. **📁 Import Single or Multiple Samples** → Use `Ctrl+I` (single) or `Ctrl+Shift+I` (multi-sample)
+2. **🧩 (Optional) Harmony Integration** → Enable Harmony in QC & Cluster parameters when `batch` metadata is available
+3. **🔬 Run QC & Clustering** → Click "Run Standard Analysis" with customizable parameters
+4. **🏷️ Annotate Cell Types** → Advanced cell type identification and annotation
+5. **🧬 Trajectory Analysis** → Run trajectory methods on integrated analysis results
+6. **🔗 Cell-Cell Interaction** → Run interaction analysis on integrated analysis results
+7. **📊 View Results** → Automatic plot generation and results summary
+8. **💾 Export Results** → Export AnnData, plots, and PDF analysis summary report
 
 ## 📁 Project Structure
 
@@ -154,7 +157,7 @@ results_[filename]_[timestamp]/
 
 ## 🔧 Analysis Pipeline
 
-### Standard Pipeline (10 Steps)
+### Standard Pipeline (11 steps when Harmony is enabled)
 1. **Quality Control** - Calculate QC metrics (genes/cell, counts/cell, MT%, doublet scores)
 2. **Cell Filtering** - Remove low-quality cells based on QC thresholds
 3. **Gene Filtering** - Remove lowly expressed genes
@@ -162,16 +165,17 @@ results_[filename]_[timestamp]/
 5. **Variable Gene Selection** - Identify highly variable genes
 6. **Data Scaling** - Z-score normalization for downstream analysis
 7. **PCA** - Principal component analysis for dimensionality reduction
-8. **Neighbor Graph** - k-nearest neighbor graph construction
-9. **UMAP** - 2D embedding generation for visualization
-10. **Clustering** - Leiden clustering for cell type identification
+8. **Harmony Integration (Optional)** - Batch-effect integration in PCA space for multi-sample datasets
+9. **Neighbor Graph** - k-nearest neighbor graph construction (uses Harmony embedding when enabled)
+10. **UMAP** - 2D embedding generation for visualization
+11. **Clustering** - Leiden clustering for cell type identification
 
 ### Customizable Parameters
 - **Cell Filtering**: Min genes per cell (200), min cells per gene (3)
-- **Quality Control**: Max mitochondrial percentage (20%)
 - **Feature Selection**: Number of highly variable genes (2000)
 - **Clustering**: Resolution parameter (0.5) for granularity control
-- **Dimensionality**: Number of PCA components (50), UMAP parameters
+- **Dimensionality**: Number of PCA components (40 default in professional UI)
+- **Integration**: Optional Harmony batch integration toggle (enabled when `batch` labels exist)
 
 ## 📈 Professional Visualization Features
 
@@ -194,8 +198,9 @@ After analysis completion, the following plots are automatically generated:
   - QC Overview: Comprehensive quality metrics
 
 ### Export Options
-- **Export Data**: H5AD, CSV formats for downstream analysis
+- **Export Data**: H5AD/metadata outputs for downstream analysis
 - **Export Plots**: Individual or batch export in multiple formats
+- **Export PDF Report**: One-click PDF summary generation from the results panel or File → Export
 - **Open Folder**: Direct access to results directory
 
 ## 💻 System Requirements
@@ -241,15 +246,16 @@ python singlecellstudio.py
 ## 🔧 Professional Interface Features
 
 ### Menu System
-- **File Menu**: New Project, Import Data (Ctrl+I), Load Previous Results (Ctrl+L), Save Project (Ctrl+S), Export options, Recent files
+- **File Menu**: New Project, Import Data (Ctrl+I), Import Multiple Samples (Ctrl+Shift+I), Load Previous Results (Ctrl+L), Save Project (Ctrl+S), Export options, Recent files
 - **Analysis Menu**: Run Standard Pipeline (Ctrl+R), Individual analysis steps, Parameter customization
 - **Documentation Menu**: Getting Started, User Manual (F1), Tutorials, API Reference, About
 
 ### Tabbed Workflow
-- **Home Tab**: Welcome screen, quick actions, system status, recent activity
-- **QC & Cluster Tab**: Standard analysis pipeline controls and parameter settings
+- **Home Tab**: Welcome screen, quick actions (including multi-sample import), system status, recent activity
+- **QC & Cluster Tab**: Standard analysis pipeline controls and parameter settings (including optional Harmony integration)
 - **Cell Annotation Tab**: Advanced cell type identification with multiple annotation methods
-- **Trajectory Analysis Tab**: Temporal analysis controls (30% left), results and plots (70% right)
+- **Trajectory Analysis Tab**: Temporal analysis controls and trajectory visualizations
+- **Cell-Cell Interaction Tab**: Ligand-receptor/spatial/communication interaction analysis
 
 ### Professional Features
 - **Keyboard Shortcuts**: Standard shortcuts for common operations
@@ -299,8 +305,11 @@ SingleCellStudio Professional is commercial software. Please contact info@single
 
 ## 🔄 Version History
 
-### v0.2.0 (Current)
-- ✅ Professional unified interface with 4-tab workflow
+### v0.3.0+ (Current)
+- ✅ Professional unified interface with 5-tab workflow
+- ✅ Multi-sample import and merge workflow
+- ✅ Optional Harmony integration in standard pipeline
+- ✅ Export PDF report from results summary
 - ✅ Advanced cell type annotation system
 - ✅ Trajectory analysis (Pseudotime, RNA Velocity, Lineage Tracing)
 - ✅ Integrated workflow with seamless data sharing
