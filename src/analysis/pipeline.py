@@ -672,6 +672,14 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         logger.info(f"Running Harmony integration using batch key '{batch_column}'")
 
         try:
+            import harmonypy  # noqa: F401
+        except ImportError as e:
+            raise ImportError(
+                "Harmony integration requires the optional dependency 'harmonypy'. "
+                "Install it with: pip install harmonypy"
+            ) from e
+
+        try:
             sc.external.pp.harmony_integrate(adata_obj, key=batch_column, basis='X_pca')
         except Exception as e:
             raise RuntimeError(f"Harmony integration failed: {e}") from e
@@ -680,6 +688,72 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
             raise RuntimeError("Harmony integration did not produce 'X_pca_harmony'")
 
         logger.info("Harmony integration completed")
+
+    def _compute_integration_diagnostics(adata_obj, batch_column):
+        """Compute simple integration diagnostics for multi-sample workflows."""
+        diagnostics = {
+            'computed': False,
+            'batch_key': batch_column,
+            'n_batches': 0,
+            'batch_counts': {},
+            'global_batch_entropy': None,
+            'batch_mixing_score': None,
+            'silhouette_by_batch': None,
+            'silhouette_by_cluster': None,
+            'warnings': []
+        }
+
+        if batch_column not in adata_obj.obs.columns:
+            diagnostics['warnings'].append(f"Batch key '{batch_column}' not found; diagnostics skipped.")
+            return diagnostics
+
+        batch_series = adata_obj.obs[batch_column].astype(str)
+        diagnostics['n_batches'] = int(batch_series.nunique())
+        diagnostics['batch_counts'] = {str(k): int(v) for k, v in batch_series.value_counts().items()}
+
+        probs = np.array(list(diagnostics['batch_counts'].values()), dtype=float)
+        probs = probs / probs.sum()
+        diagnostics['global_batch_entropy'] = float(-(probs * np.log2(np.clip(probs, 1e-12, None))).sum())
+
+        try:
+            if 'connectivities' in adata_obj.obsp:
+                conn = adata_obj.obsp['connectivities']
+                if hasattr(conn, 'tocsr'):
+                    conn = conn.tocsr()
+                batch_vals = batch_series.values
+                mixing_scores = []
+                for i in range(conn.shape[0]):
+                    start, end = conn.indptr[i], conn.indptr[i + 1]
+                    neigh = conn.indices[start:end]
+                    neigh = neigh[neigh != i]
+                    if neigh.size == 0:
+                        continue
+                    mixing_scores.append(float(np.mean(batch_vals[neigh] != batch_vals[i])))
+                if mixing_scores:
+                    diagnostics['batch_mixing_score'] = float(np.mean(mixing_scores))
+        except Exception as e:
+            diagnostics['warnings'].append(f"Batch mixing score failed: {e}")
+
+        try:
+            from sklearn.metrics import silhouette_score
+            rep = None
+            if 'X_pca_harmony' in adata_obj.obsm:
+                rep = np.asarray(adata_obj.obsm['X_pca_harmony'])
+            elif 'X_pca' in adata_obj.obsm:
+                rep = np.asarray(adata_obj.obsm['X_pca'])
+            elif 'X_umap' in adata_obj.obsm:
+                rep = np.asarray(adata_obj.obsm['X_umap'])
+
+            if rep is not None and rep.shape[0] > 2 and diagnostics['n_batches'] > 1:
+                diagnostics['silhouette_by_batch'] = float(silhouette_score(rep, batch_series.values))
+
+            if rep is not None and 'leiden' in adata_obj.obs and adata_obj.obs['leiden'].nunique() > 1:
+                diagnostics['silhouette_by_cluster'] = float(silhouette_score(rep, adata_obj.obs['leiden'].astype(str).values))
+        except Exception as e:
+            diagnostics['warnings'].append(f"Silhouette diagnostics failed: {e}")
+
+        diagnostics['computed'] = True
+        return diagnostics
 
     # --- Pipeline Steps ---
     pipeline_steps = [
@@ -761,9 +835,14 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
             json.dump(params_used, f, indent=4)
         
         pd.DataFrame(execution_log).to_csv(log_dir / "execution_log.csv", index=False)
-        
+
+        integration_diagnostics = _compute_integration_diagnostics(adata, batch_key)
+        with open(metadata_dir / "integration_diagnostics.json", 'w') as f:
+            json.dump(integration_diagnostics, f, indent=4)
+
         logger.info(f"Final metadata saved to: {metadata_dir}")
         logger.info(f"Execution log saved: {log_dir / 'execution_log.csv'}")
+        logger.info(f"Integration diagnostics saved: {metadata_dir / 'integration_diagnostics.json'}")
         
     except Exception as e:
         logger.error(f"Failed to save final results and metadata: {e}")
@@ -773,7 +852,7 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
     # Clean up logger
     logging.getLogger().removeHandler(file_handler)
     
-    return adata, {"output_dir": str(output_dir), "execution_log": execution_log, "steps": [step[0] for step in pipeline_steps]}
+    return adata, {"output_dir": str(output_dir), "execution_log": execution_log, "steps": [step[0] for step in pipeline_steps], "integration_diagnostics": str(metadata_dir / "integration_diagnostics.json")}
 
 
 def create_custom_pipeline(adata, steps_config, name="Custom Pipeline"):

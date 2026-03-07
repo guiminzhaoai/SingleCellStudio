@@ -3235,6 +3235,20 @@ Results loaded from: {results_dir}""")
                 self.log_activity("Harmony requested but no 'batch' column found; running without Harmony.")
                 pipeline_params['use_harmony'] = False
 
+            if pipeline_params['use_harmony']:
+                try:
+                    import harmonypy  # noqa: F401
+                except ImportError:
+                    self.log_activity("Harmony requested but 'harmonypy' is not installed; running without Harmony.")
+                    QMessageBox.warning(
+                        self,
+                        "Harmony Dependency Missing",
+                        "Harmony integration requires the optional dependency 'harmonypy'.\n"
+                        "Install it with: pip install harmonypy\n\n"
+                        "The pipeline will continue without Harmony."
+                    )
+                    pipeline_params['use_harmony'] = False
+
             self.log_activity(f"Analysis parameters: {pipeline_params}")
 
             # Disable run button to prevent multiple clicks
