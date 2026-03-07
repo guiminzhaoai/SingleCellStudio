@@ -170,6 +170,69 @@ Deployment:
 
 ---
 
+
+### **Roadmap Patch (2026 Q1) — Current Status & Next Delivery**
+
+#### **Current Implementation Snapshot (Plan Alignment)**
+- [x] Professional 5-tab GUI workflow (Home, QC & Cluster, Cell Annotation, Trajectory, Cell-Cell Interaction)
+- [x] Multi-sample import and merged AnnData preparation with batch metadata
+- [x] Optional Harmony integration in standard pipeline (batch-aware neighbor graph)
+- [x] PDF summary report export from professional UI
+- [~] Cell annotation available, but advanced methods and benchmarking can be expanded
+- [ ] Differential expression analysis workflow in professional GUI
+- [ ] GSEA / pathway analysis module integration
+- [ ] True project save/load state management (not placeholder)
+- [ ] Real (non-mock) trajectory and interaction analysis implementations across all modes
+- [ ] Comprehensive automated tests/CI quality gate
+
+#### **Gap-Closure Milestones (Priority-Ordered)**
+
+##### **Milestone A (v0.4.0): Reproducible Core & Real Exports**
+- [ ] Implement real **Save Project / Save As** with project manifest (`project.json`)
+- [ ] Implement **Export Analysis Data** (H5AD + metadata bundle)
+- [ ] Implement **Export Plots** (batch export from generated plot registry)
+- [ ] Persist full analysis provenance (input files, params, package versions, seed, git SHA)
+- [ ] Add migration-safe loader for prior project manifest versions
+
+**Acceptance Criteria**
+- Save/Load round-trip restores data, settings, and output references
+- Exported bundle is sufficient for downstream reproducibility without GUI
+
+##### **Milestone B (v0.5.0): Replace Mock Modules with Production Methods**
+- [ ] Replace mock trajectory flow with Scanpy/scVelo/PAGA-compatible execution paths
+- [ ] Replace mock cell-cell interaction with production method adapters (e.g., LIANA/CellPhoneDB/Squidpy-compatible backends)
+- [ ] Add method-level QC and confidence summaries in UI
+- [ ] Add graceful fallback when optional dependencies are unavailable
+
+**Acceptance Criteria**
+- No default production path uses mock-generated outputs
+- Method outputs are written to metadata/results folders and surfaced in GUI tabs
+
+##### **Milestone C (v0.6.0): Integration Robustness & Comparative Analysis**
+- [ ] Add fallback batch correction options (ComBat / BBKNN) alongside Harmony
+- [ ] Add cross-sample integration diagnostics (batch mixing metrics, cluster consistency)
+- [ ] Add reference mapping / label transfer workflow
+- [ ] Add multi-sample comparison plot presets
+
+**Acceptance Criteria**
+- Integration report includes method, metrics, and pass/warn summary
+- Comparative outputs available as both plots and exportable tables
+
+##### **Milestone D (v0.7.0): Reliability, Scale, and Automation**
+- [ ] Create `tests/` suite for pipeline, I/O, and GUI smoke tests
+- [ ] Add CI gates (unit tests + static checks) before release
+- [ ] Introduce large-dataset mode (backed/chunked operations and memory limits)
+- [ ] Add CLI parity for core pipeline and export workflows
+
+**Acceptance Criteria**
+- CI required for merge on protected branches
+- Standard and integration pipelines validated on synthetic and sample datasets
+
+#### **Release Governance Additions**
+- [ ] Unify versioning across README, docs, and in-app version string
+- [ ] Add release checklist item for dependency validation (e.g., harmonypy availability)
+- [ ] Add changelog sections: features, breaking changes, migration notes, reproducibility notes
+
 ## 👥 **TEAM STRUCTURE & HIRING PLAN**
 
 ### **Phase 1 Team (8-10 people)**
