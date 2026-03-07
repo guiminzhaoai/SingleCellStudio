@@ -620,7 +620,7 @@ def find_variable_genes(adata, n_top_genes=2000):
 def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3, 
                             target_sum=10000, n_top_genes=2000, n_pcs=40, 
                             resolution=0.5, save_checkpoints=True,
-                            progress_callback=None):
+                            progress_callback=None, use_harmony=False, batch_key="batch"):
     """
     Run a standard single-cell analysis pipeline from QC to clustering.
     
@@ -663,6 +663,24 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
     # Add handler to the root logger to capture all logs
     logging.getLogger().addHandler(file_handler)
     
+
+    def _run_harmony_integration(adata_obj, batch_column):
+        """Run Harmony integration on PCA space when batch metadata is available."""
+        if batch_column not in adata_obj.obs.columns:
+            raise ValueError(f"Batch key '{batch_column}' not found in adata.obs")
+
+        logger.info(f"Running Harmony integration using batch key '{batch_column}'")
+
+        try:
+            sc.external.pp.harmony_integrate(adata_obj, key=batch_column, basis='X_pca')
+        except Exception as e:
+            raise RuntimeError(f"Harmony integration failed: {e}") from e
+
+        if 'X_pca_harmony' not in adata_obj.obsm:
+            raise RuntimeError("Harmony integration did not produce 'X_pca_harmony'")
+
+        logger.info("Harmony integration completed")
+
     # --- Pipeline Steps ---
     pipeline_steps = [
         ("calculate_qc", quality_control.calculate_qc_metrics, {}),
@@ -672,10 +690,19 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         ("find_variable_genes", find_variable_genes, {"n_top_genes": n_top_genes}),
         ("scale_data", normalization.scale_data, {}),
         ("run_pca", dimensionality_reduction.run_pca, {"n_comps": n_pcs}),
-        ("compute_neighbors", clustering.compute_neighbors, {}),
+    ]
+
+    if use_harmony:
+        pipeline_steps.append(("harmony_integration", _run_harmony_integration, {"batch_column": batch_key}))
+        neighbor_params = {"use_rep": "X_pca_harmony"}
+    else:
+        neighbor_params = {}
+
+    pipeline_steps.extend([
+        ("compute_neighbors", clustering.compute_neighbors, neighbor_params),
         ("run_umap", dimensionality_reduction.run_umap, {}),
         ("clustering", clustering.run_leiden_clustering, {"resolution": resolution})
-    ]
+    ])
     total_steps = len(pipeline_steps)
 
     logger.info(f"Starting standard analysis pipeline with {total_steps} steps.")
@@ -727,7 +754,8 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         
         params_used = {
             "min_genes": min_genes, "min_cells": min_cells, "target_sum": target_sum,
-            "n_top_genes": n_top_genes, "n_pcs": n_pcs, "resolution": resolution
+            "n_top_genes": n_top_genes, "n_pcs": n_pcs, "resolution": resolution,
+            "use_harmony": use_harmony, "batch_key": batch_key
         }
         with open(metadata_dir / "parameters.json", 'w') as f:
             json.dump(params_used, f, indent=4)
@@ -745,7 +773,7 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
     # Clean up logger
     logging.getLogger().removeHandler(file_handler)
     
-    return adata, {"output_dir": str(output_dir), "execution_log": execution_log}
+    return adata, {"output_dir": str(output_dir), "execution_log": execution_log, "steps": [step[0] for step in pipeline_steps]}
 
 
 def create_custom_pipeline(adata, steps_config, name="Custom Pipeline"):
