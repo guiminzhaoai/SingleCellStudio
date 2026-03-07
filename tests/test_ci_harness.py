@@ -11,6 +11,7 @@ def test_critical_files_exist() -> None:
     assert (REPO_ROOT / "src/analysis/pipeline.py").exists()
     assert (REPO_ROOT / "src/gui/professional_main_window.py").exists()
     assert (REPO_ROOT / "pytest.ini").exists()
+    assert (REPO_ROOT / "src/cli/run_pipeline.py").exists()
 
 
 def test_pipeline_contains_harmony_guard_and_diagnostics() -> None:
@@ -19,6 +20,8 @@ def test_pipeline_contains_harmony_guard_and_diagnostics() -> None:
     assert "integration_diagnostics.json" in text
     assert "_compute_integration_diagnostics" in text
     assert "batch_mixing_score" in text
+    assert "checkpoint_mode" in text
+    assert "run_context.json" in text
 
 
 def test_professional_ui_contains_reproducibility_exports() -> None:
@@ -37,6 +40,7 @@ def test_python_sources_compile() -> None:
         "compileall",
         str(REPO_ROOT / "src/analysis/pipeline.py"),
         str(REPO_ROOT / "src/gui/professional_main_window.py"),
+        str(REPO_ROOT / "src/cli/run_pipeline.py"),
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     assert result.returncode == 0, result.stdout + "\n" + result.stderr

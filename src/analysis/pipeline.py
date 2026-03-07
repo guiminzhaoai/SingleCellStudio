@@ -13,6 +13,9 @@ import logging
 import time
 from datetime import datetime
 import os
+import platform
+import socket
+import getpass
 from pathlib import Path
 import anndata as ad
 import json
@@ -620,7 +623,8 @@ def find_variable_genes(adata, n_top_genes=2000):
 def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3, 
                             target_sum=10000, n_top_genes=2000, n_pcs=40, 
                             resolution=0.5, save_checkpoints=True,
-                            progress_callback=None, use_harmony=False, batch_key="batch"):
+                            progress_callback=None, use_harmony=False, batch_key="batch",
+                            checkpoint_mode="key", max_cells_for_diagnostics=20000, diagnostics_random_state=42):
     """
     Run a standard single-cell analysis pipeline from QC to clustering.
     
@@ -636,6 +640,9 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         save_checkpoints (bool): Whether to save intermediate AnnData objects.
         progress_callback (callable): A function to report progress. 
                                      It should accept (step, total_steps, message).
+        checkpoint_mode (str): Checkpoint persistence mode ("key" or "all").
+        max_cells_for_diagnostics (int): Max cells used for integration diagnostics computations.
+        diagnostics_random_state (int): Random seed used for diagnostics subsampling.
 
     Returns:
         tuple: A tuple containing the processed AnnData object and a dictionary
@@ -700,6 +707,8 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
             'batch_mixing_score': None,
             'silhouette_by_batch': None,
             'silhouette_by_cluster': None,
+            'n_cells_used': int(adata_obj.n_obs),
+            'subsampled': False,
             'warnings': []
         }
 
@@ -707,7 +716,15 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
             diagnostics['warnings'].append(f"Batch key '{batch_column}' not found; diagnostics skipped.")
             return diagnostics
 
-        batch_series = adata_obj.obs[batch_column].astype(str)
+        diag_adata = adata_obj
+        if max_cells_for_diagnostics and adata_obj.n_obs > max_cells_for_diagnostics:
+            rng = np.random.default_rng(diagnostics_random_state)
+            idx = np.sort(rng.choice(adata_obj.n_obs, size=max_cells_for_diagnostics, replace=False))
+            diag_adata = adata_obj[idx, :].copy()
+            diagnostics['n_cells_used'] = int(diag_adata.n_obs)
+            diagnostics['subsampled'] = True
+
+        batch_series = diag_adata.obs[batch_column].astype(str)
         diagnostics['n_batches'] = int(batch_series.nunique())
         diagnostics['batch_counts'] = {str(k): int(v) for k, v in batch_series.value_counts().items()}
 
@@ -716,8 +733,8 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         diagnostics['global_batch_entropy'] = float(-(probs * np.log2(np.clip(probs, 1e-12, None))).sum())
 
         try:
-            if 'connectivities' in adata_obj.obsp:
-                conn = adata_obj.obsp['connectivities']
+            if 'connectivities' in diag_adata.obsp:
+                conn = diag_adata.obsp['connectivities']
                 if hasattr(conn, 'tocsr'):
                     conn = conn.tocsr()
                 batch_vals = batch_series.values
@@ -737,18 +754,18 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         try:
             from sklearn.metrics import silhouette_score
             rep = None
-            if 'X_pca_harmony' in adata_obj.obsm:
-                rep = np.asarray(adata_obj.obsm['X_pca_harmony'])
-            elif 'X_pca' in adata_obj.obsm:
-                rep = np.asarray(adata_obj.obsm['X_pca'])
-            elif 'X_umap' in adata_obj.obsm:
-                rep = np.asarray(adata_obj.obsm['X_umap'])
+            if 'X_pca_harmony' in diag_adata.obsm:
+                rep = np.asarray(diag_adata.obsm['X_pca_harmony'])
+            elif 'X_pca' in diag_adata.obsm:
+                rep = np.asarray(diag_adata.obsm['X_pca'])
+            elif 'X_umap' in diag_adata.obsm:
+                rep = np.asarray(diag_adata.obsm['X_umap'])
 
             if rep is not None and rep.shape[0] > 2 and diagnostics['n_batches'] > 1:
                 diagnostics['silhouette_by_batch'] = float(silhouette_score(rep, batch_series.values))
 
-            if rep is not None and 'leiden' in adata_obj.obs and adata_obj.obs['leiden'].nunique() > 1:
-                diagnostics['silhouette_by_cluster'] = float(silhouette_score(rep, adata_obj.obs['leiden'].astype(str).values))
+            if rep is not None and 'leiden' in diag_adata.obs and diag_adata.obs['leiden'].nunique() > 1:
+                diagnostics['silhouette_by_cluster'] = float(silhouette_score(rep, diag_adata.obs['leiden'].astype(str).values))
         except Exception as e:
             diagnostics['warnings'].append(f"Silhouette diagnostics failed: {e}")
 
@@ -784,6 +801,12 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         progress_callback(0, total_steps, f"Starting pipeline with {total_steps} steps...")
         
     execution_log = []
+
+    if checkpoint_mode not in {'key', 'all'}:
+        logger.warning(f"Unknown checkpoint_mode={checkpoint_mode}; falling back to 'key'")
+        checkpoint_mode = 'key'
+
+    key_checkpoint_steps = {'normalize_data', 'clustering', 'harmony_integration'}
     
     # Execute each step
     for i, (name, func, params) in enumerate(pipeline_steps):
@@ -802,10 +825,11 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
             logger.info(f"Step '{name}' completed in {step_duration:.2f}s")
             
             # Save checkpoint if enabled
-            if save_checkpoints:
+            should_checkpoint = save_checkpoints and (checkpoint_mode == 'all' or name in key_checkpoint_steps)
+            if should_checkpoint:
                 checkpoint_file = checkpoint_dir / f"{name}.h5ad"
-                adata.write(checkpoint_file)
-                logger.info(f"Saved key checkpoint: {checkpoint_file}")
+                adata.write_h5ad(checkpoint_file, compression='gzip')
+                logger.info(f"Saved checkpoint: {checkpoint_file}")
                 
         except Exception as e:
             step_duration = time.time() - step_start_time
@@ -824,17 +848,34 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
     # Save final metadata and execution log
     try:
         final_results_path = metadata_dir / "final_adata.h5ad"
-        adata.write(final_results_path)
+        adata.write_h5ad(final_results_path, compression='gzip')
         
         params_used = {
             "min_genes": min_genes, "min_cells": min_cells, "target_sum": target_sum,
             "n_top_genes": n_top_genes, "n_pcs": n_pcs, "resolution": resolution,
-            "use_harmony": use_harmony, "batch_key": batch_key
+            "use_harmony": use_harmony, "batch_key": batch_key,
+            "checkpoint_mode": checkpoint_mode,
+            "max_cells_for_diagnostics": max_cells_for_diagnostics,
+            "diagnostics_random_state": diagnostics_random_state
         }
         with open(metadata_dir / "parameters.json", 'w') as f:
             json.dump(params_used, f, indent=4)
         
         pd.DataFrame(execution_log).to_csv(log_dir / "execution_log.csv", index=False)
+
+        run_context = {
+            "run_started_at": datetime.fromtimestamp(start_time).isoformat(),
+            "run_finished_at": datetime.now().isoformat(),
+            "duration_seconds": float(time.time() - start_time),
+            "hostname": socket.gethostname(),
+            "platform": platform.platform(),
+            "python_version": platform.python_version(),
+            "user": getpass.getuser(),
+            "n_obs": int(adata.n_obs),
+            "n_vars": int(adata.n_vars),
+        }
+        with open(metadata_dir / "run_context.json", "w") as f:
+            json.dump(run_context, f, indent=4)
 
         integration_diagnostics = _compute_integration_diagnostics(adata, batch_key)
         with open(metadata_dir / "integration_diagnostics.json", 'w') as f:
@@ -843,6 +884,7 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         logger.info(f"Final metadata saved to: {metadata_dir}")
         logger.info(f"Execution log saved: {log_dir / 'execution_log.csv'}")
         logger.info(f"Integration diagnostics saved: {metadata_dir / 'integration_diagnostics.json'}")
+        logger.info(f"Run context saved: {metadata_dir / 'run_context.json'}")
         
     except Exception as e:
         logger.error(f"Failed to save final results and metadata: {e}")
@@ -852,7 +894,7 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
     # Clean up logger
     logging.getLogger().removeHandler(file_handler)
     
-    return adata, {"output_dir": str(output_dir), "execution_log": execution_log, "steps": [step[0] for step in pipeline_steps], "integration_diagnostics": str(metadata_dir / "integration_diagnostics.json")}
+    return adata, {"output_dir": str(output_dir), "execution_log": execution_log, "steps": [step[0] for step in pipeline_steps], "integration_diagnostics": str(metadata_dir / "integration_diagnostics.json"), "run_context": str(metadata_dir / "run_context.json")}
 
 
 def create_custom_pipeline(adata, steps_config, name="Custom Pipeline"):
