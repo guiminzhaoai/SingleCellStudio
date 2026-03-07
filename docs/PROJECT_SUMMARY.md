@@ -9,9 +9,12 @@
 ### ✅ **Complete Functionality**
 - **Multi-format Data Loading**: 10X MTX folders, 10X H5 files, AnnData H5AD, CSV/TSV
 - **Full Analysis Pipeline**: 10-step workflow from QC to clustering
-- **Publication-Quality Visualizations**: 7 plot types with multi-format export
+- **Advanced Cell Annotation**: Multiple annotation methods with biological databases
+- **Trajectory Analysis**: Pseudotime, RNA Velocity, and Lineage Tracing
+- **Cell-Cell Interaction Analysis**: Ligand-receptor, spatial proximity, and communication modeling
+- **Publication-Quality Visualizations**: 15+ plot types with multi-format export
 - **Automatic Result Management**: Smart organization and export of all outputs
-- **Professional GUI**: Intuitive interface with real-time progress tracking
+- **Professional GUI**: 5-tab integrated workflow with real-time progress tracking
 
 ### ✅ **Real-World Performance**
 - **Successfully Tested**: 12,047 cells × 38,606 genes dataset
@@ -44,8 +47,11 @@ SingleCellStudio/
 
 ### **Core Capabilities**
 - **Data Formats**: 10X Genomics (MTX, H5), AnnData (H5AD), CSV/TSV with compression
-- **Analysis Methods**: Quality control, normalization, PCA, UMAP, Leiden clustering
-- **Visualization Types**: UMAP, PCA, QC plots, clusters, heatmaps, violin plots, summary
+- **QC & Clustering**: Quality control, normalization, PCA, UMAP, Leiden clustering
+- **Cell Annotation**: Reference-based annotation, database integration, confidence scoring
+- **Trajectory Analysis**: Pseudotime reconstruction, RNA velocity, lineage tracing
+- **Cell-Cell Interaction**: Ligand-receptor analysis, spatial proximity, communication modeling
+- **Visualization Types**: UMAP, PCA, QC plots, clusters, trajectories, velocity fields, lineages, interaction networks
 - **Export Formats**: H5AD (checkpoints), CSV (metadata), PNG/PDF/SVG (plots)
 
 ### **Performance Metrics**
@@ -115,11 +121,14 @@ python src/main.py
 ```
 
 ### **Basic Workflow**
-1. **Import Data** → Choose your scRNA-seq data file
-2. **Run Analysis** → Click "Run Standard Analysis" (30 seconds)
-3. **Explore Results** → View analysis summary and statistics
-4. **Generate Plots** → Create publication-ready visualizations
-5. **Export Results** → Access all saved files and plots
+1. **Import Data** (Home Tab) → Choose your scRNA-seq data file
+2. **Run QC & Clustering** (QC & Cluster Tab) → Click "Run Standard Analysis" (30 seconds)
+3. **Annotate Cell Types** (Cell Annotation Tab) → Identify cell types using reference databases
+4. **Trajectory Analysis** (Trajectory Analysis Tab) → Analyze temporal dynamics and development
+5. **Cell-Cell Interaction** (Cell-Cell Interaction Tab) → Analyze cellular communication patterns
+6. **Explore Results** → View integrated analysis summary and statistics
+7. **Generate Plots** → Create publication-ready visualizations
+8. **Export Results** → Access all saved files and plots
 
 ## 📈 Success Metrics
 
@@ -187,6 +196,7 @@ python src/main.py
 
 ### **Technical Documentation**
 - **[Development Log](DEVELOPMENT_LOG.md)**: Complete development history
+- **[Modular Development Best Practices](MODULAR_DEVELOPMENT_BEST_PRACTICES.md)**: Proven workflow for new module development
 - **[Milestone 4 Visualization](MILESTONE_4_VISUALIZATION.md)**: Detailed technical specs
 - **Code Documentation**: Comprehensive docstrings and type hints
 

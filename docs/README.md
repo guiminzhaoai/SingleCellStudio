@@ -13,6 +13,7 @@ Welcome to the SingleCellStudio documentation! This directory contains comprehen
 - **[Development Log](DEVELOPMENT_LOG.md)** - Complete development history and milestones
 - **[Project Summary](PROJECT_SUMMARY.md)** - Comprehensive project overview and achievements
 - **[Project Plan](PROJECT_PLAN.md)** - Original project planning and roadmap
+- **[Modular Development Best Practices](MODULAR_DEVELOPMENT_BEST_PRACTICES.md)** - Proven workflow for efficient module development
 
 ### 📋 **Milestone Documentation**
 - **[Milestone 2: Data Loading](MILESTONE_2_DATA_LOADING.md)** - Data loading system implementation
