@@ -2258,10 +2258,14 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         export_plots_btn = QPushButton("Export Plots")
         export_plots_btn.clicked.connect(self.export_plots)
         export_layout.addWidget(export_plots_btn, 0, 1)
+
+        export_report_btn = QPushButton("Export PDF Report")
+        export_report_btn.clicked.connect(self.export_report)
+        export_layout.addWidget(export_report_btn, 1, 0, 1, 2)
         
         open_folder_btn = QPushButton("Open Folder")
         open_folder_btn.clicked.connect(self.open_results_folder)
-        export_layout.addWidget(open_folder_btn, 1, 0, 1, 2)
+        export_layout.addWidget(open_folder_btn, 2, 0, 1, 2)
         
         export_group.setLayout(export_layout)
         layout.addWidget(export_group)
@@ -2436,6 +2440,10 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         export_plots_action = QAction("Export All Plots", self)
         export_plots_action.triggered.connect(self.export_plots)
         export_menu.addAction(export_plots_action)
+
+        export_report_action = QAction("Export PDF Report", self)
+        export_report_action.triggered.connect(self.export_report)
+        export_menu.addAction(export_report_action)
 
         file_menu.addSeparator()
         
@@ -3767,9 +3775,90 @@ All results saved to: {self.output_dir}""")
                               "Plot export functionality will be available in the next version.")
     
     def export_report(self):
-        """Export analysis report"""
-        QMessageBox.information(self, "Feature Coming Soon", 
-                              "Analysis report export functionality will be available in the next version.")
+        """Export analysis summary as a PDF report."""
+        if self.analysis_adata is None and self.adata is None:
+            QMessageBox.warning(self, "No Data", "Please load and analyze data before exporting a report.")
+            return
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        default_dir = self.output_dir if self.output_dir else Path.cwd()
+        default_path = Path(default_dir) / f"singlecellstudio_report_{timestamp}.pdf"
+
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export PDF Report",
+            str(default_path),
+            "PDF Files (*.pdf)"
+        )
+
+        if not file_path:
+            return
+
+        report_path = Path(file_path)
+        if report_path.suffix.lower() != ".pdf":
+            report_path = report_path.with_suffix(".pdf")
+
+        active_adata = self.analysis_adata if self.analysis_adata is not None else self.adata
+
+        report_lines = [
+            "SingleCellStudio Analysis Report",
+            "=" * 40,
+            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            f"Input file: {Path(self.input_file_path).name if self.input_file_path else 'N/A'}",
+            "",
+            "Dataset Summary",
+            "-" * 40,
+            f"Cells: {active_adata.n_obs:,}",
+            f"Genes: {active_adata.n_vars:,}",
+            f"Observation columns: {len(active_adata.obs.columns)}",
+            f"Variable columns: {len(active_adata.var.columns)}",
+        ]
+
+        if self.analysis_results:
+            report_lines.extend(["", "Analysis Result Keys", "-" * 40])
+            for key in sorted(self.analysis_results.keys()):
+                value = self.analysis_results.get(key)
+                if isinstance(value, dict):
+                    report_lines.append(f"{key}: {len(value)} entries")
+                elif isinstance(value, (list, tuple, set)):
+                    report_lines.append(f"{key}: {len(value)} items")
+                else:
+                    report_lines.append(f"{key}: {str(value)[:120]}")
+
+        summary_text = self.summary_text.toPlainText().strip() if hasattr(self, "summary_text") else ""
+        if summary_text:
+            report_lines.extend(["", "Analysis Summary", "-" * 40])
+            report_lines.extend(summary_text.splitlines())
+
+        try:
+            from matplotlib.backends.backend_pdf import PdfPages
+            import matplotlib.pyplot as plt
+
+            lines_per_page = 48
+            chunks = [report_lines[i:i + lines_per_page] for i in range(0, len(report_lines), lines_per_page)]
+
+            with PdfPages(report_path) as pdf:
+                for page_num, chunk in enumerate(chunks, start=1):
+                    fig = plt.figure(figsize=(8.27, 11.69))  # A4 portrait in inches
+                    fig.text(
+                        0.06,
+                        0.97,
+                        "\n".join(chunk),
+                        ha="left",
+                        va="top",
+                        fontsize=9,
+                        family="monospace",
+                    )
+                    fig.text(0.5, 0.02, f"Page {page_num}/{len(chunks)}", ha="center", va="bottom", fontsize=8)
+                    pdf.savefig(fig, bbox_inches="tight")
+                    plt.close(fig)
+
+            self.log_activity(f"PDF report exported: {report_path}")
+            QMessageBox.information(self, "Export Complete", f"Report exported successfully:\n{report_path}")
+
+        except Exception as e:
+            self.logger.error(f"Failed to export PDF report: {e}")
+            QMessageBox.critical(self, "Export Failed", f"Could not export PDF report:\n{e}")
     
     def refresh_plots_display(self):
         """Refresh plot display - useful for debugging"""
