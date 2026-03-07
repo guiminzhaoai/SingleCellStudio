@@ -251,38 +251,32 @@ Ready to load and analyze your single cell data!
     
     def apply_styling(self):
         """Apply basic styling to the window"""
-        self.setStyleSheet("""
-            QMainWindow {
-                background-color: #f5f5f5;
-            }
-            QLabel {
-                color: #333333;
-                margin: 10px;
-            }
-            QPushButton {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 5px;
-                font-weight: bold;
-                margin: 5px;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
-            }
-            QPushButton:pressed {
-                background-color: #3d8b40;
-            }
-            QTextEdit {
-                background-color: white;
-                border: 1px solid #cccccc;
-                border-radius: 5px;
-                padding: 10px;
-                font-family: 'Courier New', monospace;
-                margin: 10px;
-            }
-        """)
+        try:
+            # Get the path to the QSS file
+            from pathlib import Path
+            qss_path = Path(__file__).parent / "default.qss"
+            
+            if qss_path.exists():
+                with open(qss_path, 'r', encoding='utf-8') as f:
+                    qss_content = f.read()
+                self.setStyleSheet(qss_content)
+                print(f"Successfully loaded QSS styling from: {qss_path}")
+            else:
+                print(f"QSS file not found at: {qss_path}")
+                # Fallback to basic styling if QSS file is not found
+                self.setStyleSheet("""
+                    QMainWindow {
+                        background-color: #f5f5f5;
+                    }
+                """)
+        except Exception as e:
+            print(f"Failed to load QSS styling: {e}")
+            # Fallback to basic styling
+            self.setStyleSheet("""
+                QMainWindow {
+                    background-color: #f5f5f5;
+                }
+            """)
     
     def launch_demo(self):
         """Launch the interface demo"""

@@ -610,13 +610,9 @@ The analysis will automatically:
         # Check plots
         plots_dir = self.output_dir / "plots"
         if plots_dir.exists():
-            plot_files = sorted(
-                list(plots_dir.glob("*.png")) +
-                list(plots_dir.glob("*.pdf")) +
-                list(plots_dir.glob("*.svg"))
-            )
+            plot_files = list(plots_dir.glob("*.png"))
             if plot_files:
-                export_info += f"📈 Visualization Plots ({len(plot_files)} files: PNG/PDF/SVG):\n"
+                export_info += f"📈 Visualization Plots ({len(plot_files)} PNG files):\n"
                 for plot_file in sorted(plot_files)[:5]:  # Show first 5
                     export_info += f"   • {plot_file.name}\n"
                 if len(plot_files) > 5:

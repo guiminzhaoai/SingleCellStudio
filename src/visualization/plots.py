@@ -28,16 +28,6 @@ logger = logging.getLogger(__name__)
 plt.style.use('default')
 sns.set_palette("husl")
 
-
-def _save_figure_with_pdf(fig: plt.Figure, save_path: str, dpi: int = 300) -> None:
-    """Save figure to requested path and always create a PDF copy."""
-    output_path = Path(save_path)
-    fig.savefig(output_path, dpi=dpi, bbox_inches='tight')
-
-    pdf_path = output_path.with_suffix('.pdf')
-    if pdf_path != output_path:
-        fig.savefig(pdf_path, bbox_inches='tight')
-
 def create_umap_plot(adata: ad.AnnData, 
                     color_by: str = 'leiden',
                     title: Optional[str] = None,
@@ -123,7 +113,7 @@ def create_umap_plot(adata: ad.AnnData,
     plt.tight_layout()
     
     if save_path:
-        _save_figure_with_pdf(fig, save_path)
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
     
     return fig
 
@@ -208,7 +198,7 @@ def create_pca_plot(adata: ad.AnnData,
     plt.tight_layout()
     
     if save_path:
-        _save_figure_with_pdf(fig, save_path)
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
     
     return fig
 
@@ -270,7 +260,7 @@ def create_qc_plots(adata: ad.AnnData,
     plt.tight_layout()
     
     if save_path:
-        _save_figure_with_pdf(fig, save_path)
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
     
     return fig
 
@@ -350,7 +340,7 @@ def create_cluster_plot(adata: ad.AnnData,
     plt.tight_layout()
     
     if save_path:
-        _save_figure_with_pdf(fig, save_path)
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
     
     return fig
 
@@ -414,7 +404,7 @@ def create_heatmap(adata: ad.AnnData,
     plt.tight_layout()
     
     if save_path:
-        _save_figure_with_pdf(fig, save_path)
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
     
     return fig
 
@@ -478,7 +468,7 @@ def create_violin_plots(adata: ad.AnnData,
     plt.tight_layout()
     
     if save_path:
-        _save_figure_with_pdf(fig, save_path)
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
     
     return fig
 
@@ -588,6 +578,6 @@ def create_summary_plot(adata: ad.AnnData,
     plt.suptitle('Single Cell Analysis Summary', fontsize=16, y=0.95)
     
     if save_path:
-        _save_figure_with_pdf(fig, save_path)
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
     
     return fig 

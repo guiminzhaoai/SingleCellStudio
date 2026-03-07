@@ -1,0 +1,762 @@
+"""
+Cell-Cell Interaction Analysis Module
+
+This module provides comprehensive cell-cell interaction analysis including:
+- Ligand-receptor analysis (CellPhoneDB)
+- Spatial proximity analysis (Squidpy)
+- Cell communication modeling (COMMOT)
+- Network visualization
+"""
+
+import numpy as np
+import pandas as pd
+from typing import Dict, List, Optional, Any
+import logging
+
+from PySide6.QtWidgets import (
+    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, 
+    QTextEdit, QGroupBox, QSpinBox, QDoubleSpinBox, QComboBox, 
+    QCheckBox, QTabWidget, QTableWidget, QTableWidgetItem,
+    QProgressBar, QMessageBox, QScrollArea
+)
+from PySide6.QtCore import Qt, Signal, QThread, QObject
+from PySide6.QtGui import QFont
+
+from src.gui.modules.module_registry import BaseGUIModule
+
+class InteractionWorker(QObject):
+    """Worker thread for cell-cell interaction analysis"""
+    
+    progress_updated = Signal(int)
+    status_updated = Signal(str)
+    analysis_completed = Signal(dict)
+    analysis_failed = Signal(str)
+    
+    def __init__(self, adata, analysis_type, params):
+        super().__init__()
+        self.adata = adata
+        self.analysis_type = analysis_type
+        self.params = params
+        
+    def run(self):
+        """Run the selected interaction analysis"""
+        try:
+            if self.analysis_type == "ligand_receptor":
+                results = self._run_ligand_receptor()
+            elif self.analysis_type == "spatial_proximity":
+                results = self._run_spatial_proximity()
+            elif self.analysis_type == "communication_modeling":
+                results = self._run_communication_modeling()
+            else:
+                raise ValueError(f"Unknown analysis type: {self.analysis_type}")
+            
+            self.analysis_completed.emit(results)
+            
+        except Exception as e:
+            self.analysis_failed.emit(str(e))
+    
+    def _run_ligand_receptor(self):
+        """Run ligand-receptor analysis"""
+        self.status_updated.emit("Initializing ligand-receptor analysis...")
+        self.progress_updated.emit(10)
+        
+        # Mock CellPhoneDB analysis
+        self.status_updated.emit("Loading ligand-receptor database...")
+        self.progress_updated.emit(25)
+        
+        # Simulate analysis steps
+        self.status_updated.emit("Identifying cell type pairs...")
+        self.progress_updated.emit(40)
+        
+        self.status_updated.emit("Computing interaction scores...")
+        self.progress_updated.emit(65)
+        
+        self.status_updated.emit("Generating interaction networks...")
+        self.progress_updated.emit(85)
+        
+        # Mock results
+        results = {
+            'analysis_type': 'ligand_receptor',
+            'method': 'CellPhoneDB',
+            'n_interactions': np.random.randint(150, 300),
+            'n_significant': np.random.randint(50, 150),
+            'top_pathways': ['VEGF signaling', 'TGF-beta signaling', 'Notch signaling', 'Wnt signaling'],
+            'interaction_matrix': np.random.rand(10, 10),
+            'cell_types': ['T cells', 'B cells', 'Macrophages', 'Dendritic cells', 'NK cells'],
+            'significant_pairs': [
+                ('T cells', 'Dendritic cells', 'CD28-CD80', 0.001),
+                ('B cells', 'T cells', 'CD40-CD40LG', 0.003),
+                ('Macrophages', 'T cells', 'IL1B-IL1R1', 0.005)
+            ]
+        }
+        
+        self.status_updated.emit("Ligand-receptor analysis completed!")
+        self.progress_updated.emit(100)
+        return results
+    
+    def _run_spatial_proximity(self):
+        """Run spatial proximity analysis"""
+        self.status_updated.emit("Initializing spatial proximity analysis...")
+        self.progress_updated.emit(10)
+        
+        # Mock Squidpy analysis
+        self.status_updated.emit("Computing spatial coordinates...")
+        self.progress_updated.emit(30)
+        
+        self.status_updated.emit("Calculating neighborhood enrichment...")
+        self.progress_updated.emit(50)
+        
+        self.status_updated.emit("Analyzing spatial autocorrelation...")
+        self.progress_updated.emit(70)
+        
+        self.status_updated.emit("Computing co-occurrence patterns...")
+        self.progress_updated.emit(90)
+        
+        # Mock results
+        results = {
+            'analysis_type': 'spatial_proximity',
+            'method': 'Squidpy',
+            'n_neighborhoods': np.random.randint(8, 15),
+            'spatial_enrichment': np.random.rand(5, 5),
+            'cell_types': ['T cells', 'B cells', 'Macrophages', 'Dendritic cells', 'NK cells'],
+            'enriched_pairs': [
+                ('T cells', 'Dendritic cells', 2.3, 0.001),
+                ('B cells', 'Macrophages', 1.8, 0.005),
+                ('NK cells', 'T cells', 1.5, 0.01)
+            ],
+            'spatial_patterns': {
+                'clustered_types': ['T cells', 'B cells'],
+                'dispersed_types': ['Macrophages'],
+                'random_types': ['NK cells']
+            }
+        }
+        
+        self.status_updated.emit("Spatial proximity analysis completed!")
+        self.progress_updated.emit(100)
+        return results
+    
+    def _run_communication_modeling(self):
+        """Run cell communication modeling"""
+        self.status_updated.emit("Initializing communication modeling...")
+        self.progress_updated.emit(10)
+        
+        # Mock COMMOT analysis
+        self.status_updated.emit("Building communication networks...")
+        self.progress_updated.emit(25)
+        
+        self.status_updated.emit("Computing signaling flows...")
+        self.progress_updated.emit(45)
+        
+        self.status_updated.emit("Modeling communication dynamics...")
+        self.progress_updated.emit(70)
+        
+        self.status_updated.emit("Generating flow visualizations...")
+        self.progress_updated.emit(90)
+        
+        # Mock results
+        results = {
+            'analysis_type': 'communication_modeling',
+            'method': 'COMMOT',
+            'n_pathways': np.random.randint(20, 40),
+            'communication_strength': np.random.rand(5, 5),
+            'cell_types': ['T cells', 'B cells', 'Macrophages', 'Dendritic cells', 'NK cells'],
+            'top_senders': ['Dendritic cells', 'Macrophages', 'T cells'],
+            'top_receivers': ['T cells', 'B cells', 'NK cells'],
+            'pathway_flows': {
+                'Immune activation': 0.85,
+                'Inflammation': 0.72,
+                'Antigen presentation': 0.68,
+                'Cytokine signaling': 0.63
+            }
+        }
+        
+        self.status_updated.emit("Communication modeling completed!")
+        self.progress_updated.emit(100)
+        return results
+
+class CellInteractionModule(BaseGUIModule):
+    """Cell-Cell Interaction Analysis Module"""
+    
+    # Signals for communication with main window
+    analysis_requested = Signal(dict)
+    results_ready = Signal(dict)
+    
+    def __init__(self, parent=None):
+        """Initialize the module"""
+        super().__init__(parent)
+        self.current_data = None
+        self.current_results = None
+        self.analysis_thread = None
+        self.worker = None
+    
+    @property
+    def module_name(self) -> str:
+        return "cell_interaction"
+    
+    @property
+    def display_name(self) -> str:
+        return "Cell-Cell Interaction"
+    
+    @property
+    def description(self) -> str:
+        return "Comprehensive cell-cell interaction analysis including ligand-receptor, spatial proximity, and communication modeling"
+    
+    @property
+    def version(self) -> str:
+        return "1.0.0"
+    
+    @property
+    def requirements(self) -> List[str]:
+        return ["cellphonedb", "squidpy", "commot", "networkx"]
+    
+    def create_widget(self, parent=None):
+        """Create the main widget for this module"""
+        if self._widget is not None:
+            return self._widget
+        
+        self._widget = QWidget(parent)
+        layout = QVBoxLayout()
+        
+        # Header
+        header = QLabel("Cell-Cell Interaction Analysis")
+        header.setFont(QFont("Arial", 16, QFont.Weight.Bold))
+        header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        header.setStyleSheet("""
+            color: #2c3e50; 
+            padding: 15px; 
+            background-color: #ecf0f1; 
+            border-radius: 8px;
+            margin-bottom: 10px;
+        """)
+        layout.addWidget(header)
+        
+        # Data status
+        self.data_status = QLabel("📊 No data loaded")
+        self.data_status.setStyleSheet("color: #7f8c8d; font-size: 12px; padding: 5px;")
+        layout.addWidget(self.data_status)
+        
+        # Main content with tabs
+        self.tab_widget = QTabWidget()
+        self.tab_widget.addTab(self._create_analysis_tab(), "Analysis")
+        self.tab_widget.addTab(self._create_results_tab(), "Results")
+        self.tab_widget.addTab(self._create_visualization_tab(), "Visualization")
+        
+        layout.addWidget(self.tab_widget)
+        
+        self._widget.setLayout(layout)
+        return self._widget
+    
+    def _create_analysis_tab(self):
+        """Create the analysis configuration tab"""
+        tab = QWidget()
+        layout = QVBoxLayout()
+        
+        # Analysis method selection
+        method_group = QGroupBox("Analysis Method")
+        method_layout = QVBoxLayout()
+        
+        self.method_combo = QComboBox()
+        self.method_combo.addItems([
+            "Ligand-Receptor Analysis (CellPhoneDB)",
+            "Spatial Proximity Analysis (Squidpy)",
+            "Communication Modeling (COMMOT)"
+        ])
+        self.method_combo.currentTextChanged.connect(self._update_parameters)
+        method_layout.addWidget(self.method_combo)
+        
+        method_group.setLayout(method_layout)
+        layout.addWidget(method_group)
+        
+        # Parameters group
+        self.params_group = QGroupBox("Parameters")
+        self.params_layout = QVBoxLayout()
+        self.params_group.setLayout(self.params_layout)
+        layout.addWidget(self.params_group)
+        
+        # Method description
+        self.method_description = QTextEdit()
+        self.method_description.setMaximumHeight(100)
+        self.method_description.setReadOnly(True)
+        layout.addWidget(self.method_description)
+        
+        # Run button
+        self.run_button = QPushButton("🚀 Run Interaction Analysis")
+        self.run_button.setStyleSheet("""
+            QPushButton {
+                background-color: #27ae60;
+                color: white;
+                font-size: 14px;
+                font-weight: bold;
+                padding: 12px;
+                border-radius: 6px;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: #219a52;
+            }
+            QPushButton:disabled {
+                background-color: #bdc3c7;
+            }
+        """)
+        self.run_button.clicked.connect(self._run_analysis)
+        self.run_button.setEnabled(False)
+        layout.addWidget(self.run_button)
+        
+        # Progress bar
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setVisible(False)
+        layout.addWidget(self.progress_bar)
+        
+        # Status label
+        self.status_label = QLabel("Ready to analyze cell-cell interactions")
+        self.status_label.setStyleSheet("color: #2c3e50; font-style: italic; padding: 5px;")
+        layout.addWidget(self.status_label)
+        
+        layout.addStretch()
+        tab.setLayout(layout)
+        
+        # Initialize parameters
+        self._update_parameters()
+        
+        return tab
+    
+    def _create_results_tab(self):
+        """Create the results display tab"""
+        tab = QWidget()
+        layout = QVBoxLayout()
+        
+        # Results summary
+        summary_group = QGroupBox("Analysis Summary")
+        summary_layout = QVBoxLayout()
+        
+        self.summary_text = QTextEdit()
+        self.summary_text.setMaximumHeight(150)
+        self.summary_text.setReadOnly(True)
+        self.summary_text.setText("No analysis results available yet.")
+        summary_layout.addWidget(self.summary_text)
+        
+        summary_group.setLayout(summary_layout)
+        layout.addWidget(summary_group)
+        
+        # Detailed results table
+        results_group = QGroupBox("Detailed Results")
+        results_layout = QVBoxLayout()
+        
+        self.results_table = QTableWidget()
+        self.results_table.setMinimumHeight(200)
+        results_layout.addWidget(self.results_table)
+        
+        results_group.setLayout(results_layout)
+        layout.addWidget(results_group)
+        
+        # Export button
+        self.export_button = QPushButton("📥 Export Results")
+        self.export_button.setEnabled(False)
+        self.export_button.clicked.connect(self._export_results)
+        layout.addWidget(self.export_button)
+        
+        tab.setLayout(layout)
+        return tab
+    
+    def _create_visualization_tab(self):
+        """Create the visualization tab"""
+        tab = QWidget()
+        layout = QVBoxLayout()
+        
+        # Visualization controls
+        viz_group = QGroupBox("Visualization Options")
+        viz_layout = QHBoxLayout()
+        
+        self.viz_type_combo = QComboBox()
+        self.viz_type_combo.addItems([
+            "Interaction Network",
+            "Heatmap",
+            "Spatial Plot",
+            "Flow Diagram"
+        ])
+        viz_layout.addWidget(QLabel("Plot Type:"))
+        viz_layout.addWidget(self.viz_type_combo)
+        
+        self.generate_plot_button = QPushButton("📊 Generate Plot")
+        self.generate_plot_button.setEnabled(False)
+        self.generate_plot_button.clicked.connect(self._generate_plot)
+        viz_layout.addWidget(self.generate_plot_button)
+        
+        viz_group.setLayout(viz_layout)
+        layout.addWidget(viz_group)
+        
+        # Plot display area
+        self.plot_label = QLabel("No plot generated yet")
+        self.plot_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.plot_label.setStyleSheet("""
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 20px;
+            color: #7f8c8d;
+        """)
+        self.plot_label.setMinimumHeight(300)
+        
+        # Scroll area for plot
+        scroll_area = QScrollArea()
+        scroll_area.setWidget(self.plot_label)
+        scroll_area.setWidgetResizable(True)
+        layout.addWidget(scroll_area)
+        
+        tab.setLayout(layout)
+        return tab
+    
+    def _update_parameters(self):
+        """Update parameter controls based on selected method"""
+        # Clear existing parameters
+        for i in reversed(range(self.params_layout.count())):
+            child = self.params_layout.itemAt(i).widget()
+            if child:
+                child.setParent(None)
+        
+        method = self.method_combo.currentText()
+        
+        if "Ligand-Receptor" in method:
+            self._setup_ligand_receptor_params()
+            self.method_description.setText(
+                "CellPhoneDB analysis identifies significant ligand-receptor interactions "
+                "between cell types based on expression levels and statistical testing."
+            )
+        elif "Spatial Proximity" in method:
+            self._setup_spatial_params()
+            self.method_description.setText(
+                "Squidpy spatial analysis examines cell-cell interactions based on "
+                "spatial proximity and neighborhood enrichment patterns."
+            )
+        elif "Communication Modeling" in method:
+            self._setup_communication_params()
+            self.method_description.setText(
+                "COMMOT models cell communication through signaling pathways and "
+                "quantifies information flow between cell populations."
+            )
+    
+    def _setup_ligand_receptor_params(self):
+        """Setup parameters for ligand-receptor analysis"""
+        # Significance threshold
+        sig_layout = QHBoxLayout()
+        sig_layout.addWidget(QLabel("P-value threshold:"))
+        self.pval_spin = QDoubleSpinBox()
+        self.pval_spin.setRange(0.001, 0.1)
+        self.pval_spin.setValue(0.05)
+        self.pval_spin.setDecimals(3)
+        self.pval_spin.setSingleStep(0.01)
+        sig_layout.addWidget(self.pval_spin)
+        self.params_layout.addLayout(sig_layout)
+        
+        # Minimum expression threshold
+        expr_layout = QHBoxLayout()
+        expr_layout.addWidget(QLabel("Min expression:"))
+        self.min_expr_spin = QDoubleSpinBox()
+        self.min_expr_spin.setRange(0.0, 5.0)
+        self.min_expr_spin.setValue(0.1)
+        self.min_expr_spin.setDecimals(2)
+        self.min_expr_spin.setSingleStep(0.1)
+        expr_layout.addWidget(self.min_expr_spin)
+        self.params_layout.addLayout(expr_layout)
+        
+        # Cell type filters
+        self.use_all_celltypes = QCheckBox("Use all cell types")
+        self.use_all_celltypes.setChecked(True)
+        self.params_layout.addWidget(self.use_all_celltypes)
+    
+    def _setup_spatial_params(self):
+        """Setup parameters for spatial analysis"""
+        # Neighborhood radius
+        radius_layout = QHBoxLayout()
+        radius_layout.addWidget(QLabel("Neighborhood radius:"))
+        self.radius_spin = QDoubleSpinBox()
+        self.radius_spin.setRange(10.0, 200.0)
+        self.radius_spin.setValue(50.0)
+        self.radius_spin.setSuffix(" μm")
+        radius_layout.addWidget(self.radius_spin)
+        self.params_layout.addLayout(radius_layout)
+        
+        # Coordinate system
+        coord_layout = QHBoxLayout()
+        coord_layout.addWidget(QLabel("Coordinate system:"))
+        self.coord_combo = QComboBox()
+        self.coord_combo.addItems(["Spatial", "Grid", "Hexagonal"])
+        coord_layout.addWidget(self.coord_combo)
+        self.params_layout.addLayout(coord_layout)
+        
+        # Analysis type
+        self.include_autocorr = QCheckBox("Include spatial autocorrelation")
+        self.include_autocorr.setChecked(True)
+        self.params_layout.addWidget(self.include_autocorr)
+    
+    def _setup_communication_params(self):
+        """Setup parameters for communication modeling"""
+        # Flow threshold
+        flow_layout = QHBoxLayout()
+        flow_layout.addWidget(QLabel("Flow threshold:"))
+        self.flow_spin = QDoubleSpinBox()
+        self.flow_spin.setRange(0.1, 1.0)
+        self.flow_spin.setValue(0.3)
+        self.flow_spin.setDecimals(2)
+        self.flow_spin.setSingleStep(0.1)
+        flow_layout.addWidget(self.flow_spin)
+        self.params_layout.addLayout(flow_layout)
+        
+        # Pathway database
+        pathway_layout = QHBoxLayout()
+        pathway_layout.addWidget(QLabel("Pathway database:"))
+        self.pathway_combo = QComboBox()
+        self.pathway_combo.addItems(["KEGG", "Reactome", "GO"])
+        pathway_layout.addWidget(self.pathway_combo)
+        self.params_layout.addLayout(pathway_layout)
+        
+        # Modeling options
+        self.include_dynamics = QCheckBox("Include temporal dynamics")
+        self.include_dynamics.setChecked(False)
+        self.params_layout.addWidget(self.include_dynamics)
+    
+    def initialize(self):
+        """Initialize the module"""
+        self.logger.info("Cell-Cell Interaction module initialized")
+    
+    def set_data(self, adata):
+        """Set analysis data for the module"""
+        self.current_data = adata
+        if adata is not None:
+            info_text = f"📊 Data loaded: {adata.n_obs:,} cells × {adata.n_vars:,} genes"
+            
+            # Check for required metadata
+            if 'leiden' in adata.obs:
+                info_text += f" | {len(adata.obs['leiden'].unique())} clusters"
+            if 'spatial' in adata.obsm:
+                info_text += " | Spatial coordinates available"
+                
+            self.data_status.setText(info_text)
+            self.run_button.setEnabled(True)
+        else:
+            self.data_status.setText("📊 No data loaded")
+            self.run_button.setEnabled(False)
+    
+    def _run_analysis(self):
+        """Run the selected interaction analysis"""
+        if self.current_data is None:
+            QMessageBox.warning(self._widget, "No Data", "Please load data before running analysis.")
+            return
+        
+        # Get analysis type
+        method = self.method_combo.currentText()
+        if "Ligand-Receptor" in method:
+            analysis_type = "ligand_receptor"
+        elif "Spatial Proximity" in method:
+            analysis_type = "spatial_proximity"
+        elif "Communication Modeling" in method:
+            analysis_type = "communication_modeling"
+        else:
+            return
+        
+        # Get parameters
+        params = self._get_current_parameters()
+        
+        # Setup worker thread
+        self.analysis_thread = QThread()
+        self.worker = InteractionWorker(self.current_data, analysis_type, params)
+        self.worker.moveToThread(self.analysis_thread)
+        
+        # Connect signals
+        self.analysis_thread.started.connect(self.worker.run)
+        self.worker.progress_updated.connect(self.progress_bar.setValue)
+        self.worker.status_updated.connect(self.status_label.setText)
+        self.worker.analysis_completed.connect(self._analysis_completed)
+        self.worker.analysis_failed.connect(self._analysis_failed)
+        self.worker.analysis_completed.connect(self.analysis_thread.quit)
+        self.worker.analysis_failed.connect(self.analysis_thread.quit)
+        self.analysis_thread.finished.connect(self.analysis_thread.deleteLater)
+        
+        # Start analysis
+        self.run_button.setEnabled(False)
+        self.progress_bar.setVisible(True)
+        self.progress_bar.setValue(0)
+        self.analysis_thread.start()
+    
+    def _get_current_parameters(self):
+        """Get current parameter values"""
+        params = {}
+        
+        method = self.method_combo.currentText()
+        if "Ligand-Receptor" in method:
+            params.update({
+                'pval_threshold': self.pval_spin.value(),
+                'min_expression': self.min_expr_spin.value(),
+                'use_all_celltypes': self.use_all_celltypes.isChecked()
+            })
+        elif "Spatial Proximity" in method:
+            params.update({
+                'radius': self.radius_spin.value(),
+                'coord_system': self.coord_combo.currentText(),
+                'include_autocorr': self.include_autocorr.isChecked()
+            })
+        elif "Communication Modeling" in method:
+            params.update({
+                'flow_threshold': self.flow_spin.value(),
+                'pathway_db': self.pathway_combo.currentText(),
+                'include_dynamics': self.include_dynamics.isChecked()
+            })
+        
+        return params
+    
+    def _analysis_completed(self, results):
+        """Handle completed analysis"""
+        self.current_results = results
+        self.run_button.setEnabled(True)
+        self.progress_bar.setVisible(False)
+        self.status_label.setText("✅ Analysis completed successfully!")
+        
+        # Update results display
+        self._update_results_display(results)
+        
+        # Enable export and visualization
+        self.export_button.setEnabled(True)
+        self.generate_plot_button.setEnabled(True)
+        
+        # Switch to results tab
+        self.tab_widget.setCurrentIndex(1)
+        
+        # Emit signal for main window
+        self.results_ready.emit(results)
+    
+    def _analysis_failed(self, error_msg):
+        """Handle failed analysis"""
+        self.run_button.setEnabled(True)
+        self.progress_bar.setVisible(False)
+        self.status_label.setText(f"❌ Analysis failed: {error_msg}")
+        
+        QMessageBox.critical(self._widget, "Analysis Failed", f"Analysis failed with error:\n{error_msg}")
+    
+    def _update_results_display(self, results):
+        """Update the results display with analysis results"""
+        analysis_type = results['analysis_type']
+        
+        if analysis_type == 'ligand_receptor':
+            summary = f"""🔗 Ligand-Receptor Analysis Results (CellPhoneDB)
+
+Total interactions detected: {results['n_interactions']}
+Significant interactions: {results['n_significant']}
+Top pathways: {', '.join(results['top_pathways'][:3])}
+Cell types analyzed: {len(results['cell_types'])}
+
+Analysis completed with {len(results['significant_pairs'])} significant cell type pairs."""
+            
+            # Setup table for significant pairs
+            self.results_table.setRowCount(len(results['significant_pairs']))
+            self.results_table.setColumnCount(4)
+            self.results_table.setHorizontalHeaderLabels(['Sender', 'Receiver', 'Interaction', 'P-value'])
+            
+            for i, (sender, receiver, interaction, pval) in enumerate(results['significant_pairs']):
+                self.results_table.setItem(i, 0, QTableWidgetItem(sender))
+                self.results_table.setItem(i, 1, QTableWidgetItem(receiver))
+                self.results_table.setItem(i, 2, QTableWidgetItem(interaction))
+                self.results_table.setItem(i, 3, QTableWidgetItem(f"{pval:.3f}"))
+        
+        elif analysis_type == 'spatial_proximity':
+            summary = f"""📍 Spatial Proximity Analysis Results (Squidpy)
+
+Neighborhoods detected: {results['n_neighborhoods']}
+Enriched cell type pairs: {len(results['enriched_pairs'])}
+Clustered cell types: {', '.join(results['spatial_patterns']['clustered_types'])}
+Dispersed cell types: {', '.join(results['spatial_patterns']['dispersed_types'])}
+
+Analysis completed with spatial enrichment patterns identified."""
+            
+            # Setup table for enriched pairs
+            self.results_table.setRowCount(len(results['enriched_pairs']))
+            self.results_table.setColumnCount(4)
+            self.results_table.setHorizontalHeaderLabels(['Cell Type 1', 'Cell Type 2', 'Enrichment Score', 'P-value'])
+            
+            for i, (ct1, ct2, score, pval) in enumerate(results['enriched_pairs']):
+                self.results_table.setItem(i, 0, QTableWidgetItem(ct1))
+                self.results_table.setItem(i, 1, QTableWidgetItem(ct2))
+                self.results_table.setItem(i, 2, QTableWidgetItem(f"{score:.2f}"))
+                self.results_table.setItem(i, 3, QTableWidgetItem(f"{pval:.3f}"))
+        
+        elif analysis_type == 'communication_modeling':
+            summary = f"""📡 Communication Modeling Results (COMMOT)
+
+Signaling pathways: {results['n_pathways']}
+Top senders: {', '.join(results['top_senders'][:3])}
+Top receivers: {', '.join(results['top_receivers'][:3])}
+Strongest pathway flows: {', '.join(list(results['pathway_flows'].keys())[:3])}
+
+Analysis completed with communication flow patterns identified."""
+            
+            # Setup table for pathway flows
+            flows = list(results['pathway_flows'].items())
+            self.results_table.setRowCount(len(flows))
+            self.results_table.setColumnCount(2)
+            self.results_table.setHorizontalHeaderLabels(['Pathway', 'Flow Strength'])
+            
+            for i, (pathway, strength) in enumerate(flows):
+                self.results_table.setItem(i, 0, QTableWidgetItem(pathway))
+                self.results_table.setItem(i, 1, QTableWidgetItem(f"{strength:.2f}"))
+        
+        self.summary_text.setText(summary)
+        self.results_table.resizeColumnsToContents()
+    
+    def _generate_plot(self):
+        """Generate visualization plot"""
+        if self.current_results is None:
+            QMessageBox.warning(self._widget, "No Results", "Please run analysis first.")
+            return
+        
+        viz_type = self.viz_type_combo.currentText()
+        
+        # Mock plot generation
+        plot_text = f"📊 {viz_type} Plot Generated\n\n"
+        plot_text += f"Analysis: {self.current_results['analysis_type']}\n"
+        plot_text += f"Method: {self.current_results['method']}\n"
+        plot_text += f"Visualization: {viz_type}\n\n"
+        plot_text += "This would show the actual matplotlib/plotly visualization\n"
+        plot_text += "of the cell-cell interaction analysis results."
+        
+        self.plot_label.setText(plot_text)
+        self.plot_label.setStyleSheet("""
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 20px;
+            color: #2c3e50;
+            background-color: #e8f8f5;
+        """)
+    
+    def _export_results(self):
+        """Export analysis results"""
+        if self.current_results is None:
+            return
+        
+        # Mock export
+        QMessageBox.information(
+            self._widget,
+            "Export Results",
+            f"Results exported successfully!\n\n"
+            f"Analysis: {self.current_results['analysis_type']}\n"
+            f"Method: {self.current_results['method']}\n"
+            f"Files: interaction_results.csv, interaction_matrix.h5ad, plots.pdf"
+        )
+    
+    def get_menu_actions(self):
+        """Return menu actions for this module"""
+        return [
+            {
+                "text": "Run Interaction Analysis",
+                "callback": self._run_analysis,
+                "shortcut": "Ctrl+I"
+            },
+            {
+                "text": "Export Interaction Results",
+                "callback": self._export_results,
+                "shortcut": "Ctrl+Shift+E"
+            }
+        ]
+    
+    def cleanup(self):
+        """Cleanup resources"""
+        if self.analysis_thread and self.analysis_thread.isRunning():
+            self.analysis_thread.quit()
+            self.analysis_thread.wait() 

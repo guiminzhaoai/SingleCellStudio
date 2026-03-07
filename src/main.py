@@ -133,13 +133,25 @@ def main_gui():
         sys.exit(1)
     
     try:
-        # Import and create professional main window
-        from gui.professional_main_window import ProfessionalMainWindow
+        # Check if modular version should be used
+        use_modular = os.environ.get('SINGLECELLSTUDIO_MODULAR', 'false').lower() == 'true'
         
-        main_window = ProfessionalMainWindow()
-        main_window.show()
-        
-        logger.info("Professional main window created and shown")
+        if use_modular:
+            # Import and create modular main window
+            from gui.modular_main_window import ModularMainWindow
+            
+            main_window = ModularMainWindow()
+            main_window.show()
+            
+            logger.info("Modular main window created and shown")
+        else:
+            # Import and create professional main window
+            from gui.professional_main_window import ProfessionalMainWindow
+            
+            main_window = ProfessionalMainWindow()
+            main_window.show()
+            
+            logger.info("Professional main window created and shown")
         
         # Start the event loop
         sys.exit(app.exec())
