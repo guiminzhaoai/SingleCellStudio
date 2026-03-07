@@ -1,5 +1,7 @@
 # SingleCellStudio Professional - Installation Guide
 
+**Complete single-cell RNA-seq analysis platform with integrated trajectory analysis**
+
 ## Quick Installation
 
 ### Prerequisites
@@ -168,6 +170,13 @@ python singlecellstudio.py
 ==================================================
 INFO:main:Starting SingleCellStudio 0.2.0-dev
 INFO:main:Professional main window created and shown
+
+Features Available:
+- ✅ Data Import and QC
+- ✅ Clustering Analysis  
+- ✅ Cell Type Annotation
+- ✅ Trajectory Analysis (Pseudotime, RNA Velocity, Lineage Tracing)
+- ✅ Publication-Quality Visualizations
 ```
 
 ### Troubleshooting

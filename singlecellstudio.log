@@ -803,119 +803,895 @@
 2025-06-22 18:36:03,517 - SingleCellStudio.CellAnnotation - INFO - CellTypist requires specific data preprocessing. Using reference-based method instead.
 2025-06-22 18:36:05,766 - gui.professional_main_window - INFO - ✅ Cell annotation completed using celltypist
 2025-06-22 18:36:05,767 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
-2025-06-22 20:09:29,779 - main - INFO - Starting SingleCellStudio 0.2.0
-2025-06-22 20:09:29,782 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
-2025-06-22 20:09:30,079 - main - INFO - Using qtagg matplotlib backend
-2025-06-22 20:09:30,079 - main - INFO - Environment setup completed
-2025-06-22 20:09:30,246 - main - INFO - GUI application created successfully
-2025-06-22 20:09:32,847 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
-2025-06-22 20:09:32,875 - main - INFO - Professional main window created and shown
-2025-06-22 20:09:35,593 - gui.professional_main_window - INFO - Opening data import dialog...
-2025-06-22 20:09:43,784 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
-2025-06-22 20:09:44,966 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
-2025-06-22 20:09:44,967 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
-2025-06-22 20:09:44,967 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/filtered_feature_bc_matrix.h5
-2025-06-22 20:09:45,864 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
-2025-06-22 20:09:45,864 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
-2025-06-22 20:09:47,288 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
-2025-06-22 20:09:47,289 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947
-2025-06-22 20:09:47,308 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
-2025-06-22 20:09:47,308 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
-2025-06-22 20:09:47,309 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
-2025-06-22 20:09:48,692 - gui.professional_main_window - INFO - Starting QC to Cluster pipeline...
-2025-06-22 20:09:48,692 - gui.professional_main_window - INFO - Analysis parameters: {'min_genes': 200, 'min_cells': 3, 'target_sum': 10000, 'n_top_genes': 2000, 'n_pcs': 40, 'resolution': 0.5}
-2025-06-22 20:09:48,701 - analysis.pipeline - INFO - Starting standard analysis pipeline with 10 steps.
-2025-06-22 20:09:48,701 - analysis.pipeline - INFO - Executing step 1/10: calculate_qc
-2025-06-22 20:09:48,701 - analysis.quality_control - INFO - Calculating quality control metrics...
-2025-06-22 20:09:49,204 - analysis.quality_control - INFO - QC metrics calculated for 12047 cells and 38606 genes
-2025-06-22 20:09:49,204 - analysis.pipeline - INFO - Step 'calculate_qc' completed in 0.50s
-2025-06-22 20:09:49,353 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/calculate_qc.h5ad
-2025-06-22 20:09:49,354 - analysis.pipeline - INFO - Executing step 2/10: filter_cells
-2025-06-22 20:09:49,389 - analysis.quality_control - INFO - Filtering cells based on QC metrics...
-2025-06-22 20:09:49,391 - analysis.quality_control - INFO - Min genes filter: 12037 cells pass
-2025-06-22 20:09:49,396 - analysis.quality_control - INFO - Cell filtering complete: 12037 cells kept, 10 removed
-2025-06-22 20:09:49,396 - analysis.pipeline - INFO - Step 'filter_cells' completed in 0.04s
-2025-06-22 20:09:49,531 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/filter_cells.h5ad
-2025-06-22 20:09:49,531 - analysis.pipeline - INFO - Executing step 3/10: filter_genes
-2025-06-22 20:09:49,613 - analysis.quality_control - INFO - Filtering genes based on expression criteria...
-2025-06-22 20:09:49,614 - analysis.quality_control - INFO - Min cells filter: 28086 genes pass
-2025-06-22 20:09:49,618 - analysis.quality_control - INFO - Gene filtering complete: 28086 genes kept, 10520 removed
-2025-06-22 20:09:49,618 - analysis.pipeline - INFO - Step 'filter_genes' completed in 0.09s
-2025-06-22 20:09:49,803 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/filter_genes.h5ad
-2025-06-22 20:09:49,804 - analysis.pipeline - INFO - Executing step 4/10: normalize_data
-2025-06-22 20:09:49,804 - analysis.normalization - INFO - Performing log normalization with target sum 10000
-2025-06-22 20:09:50,065 - analysis.normalization - INFO - Log normalization completed
-2025-06-22 20:09:50,065 - analysis.pipeline - INFO - Step 'normalize_data' completed in 0.26s
-2025-06-22 20:09:50,363 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/normalize_data.h5ad
-2025-06-22 20:09:50,363 - analysis.pipeline - INFO - Executing step 5/10: find_variable_genes
-2025-06-22 20:09:50,363 - analysis.pipeline - INFO - Finding 2000 highly variable genes
-2025-06-22 20:09:50,749 - analysis.pipeline - INFO - Found 2000 highly variable genes
-2025-06-22 20:09:50,749 - analysis.pipeline - INFO - Step 'find_variable_genes' completed in 0.39s
-2025-06-22 20:09:51,014 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/find_variable_genes.h5ad
-2025-06-22 20:09:51,015 - analysis.pipeline - INFO - Executing step 6/10: scale_data
-2025-06-22 20:09:51,015 - analysis.normalization - INFO - Scaling data to unit variance
-2025-06-22 20:09:54,650 - analysis.normalization - INFO - Data scaling completed
-2025-06-22 20:09:54,650 - analysis.pipeline - INFO - Step 'scale_data' completed in 3.64s
-2025-06-22 20:09:55,598 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/scale_data.h5ad
-2025-06-22 20:09:55,598 - analysis.pipeline - INFO - Executing step 7/10: run_pca
-2025-06-22 20:09:55,598 - analysis.dimensionality_reduction - INFO - Running PCA with 40 components
-2025-06-22 20:09:57,412 - analysis.dimensionality_reduction - INFO - PCA completed. Variance explained by first 10 PCs: 0.081
-2025-06-22 20:09:57,412 - analysis.pipeline - INFO - Step 'run_pca' completed in 1.81s
-2025-06-22 20:09:58,767 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/run_pca.h5ad
-2025-06-22 20:09:58,768 - analysis.pipeline - INFO - Executing step 8/10: compute_neighbors
-2025-06-22 20:09:58,768 - analysis.clustering - INFO - Computing neighborhood graph with 15 neighbors
-2025-06-22 20:10:14,843 - analysis.clustering - INFO - Neighborhood graph computation completed
-2025-06-22 20:10:14,843 - analysis.pipeline - INFO - Step 'compute_neighbors' completed in 16.08s
-2025-06-22 20:10:16,156 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/compute_neighbors.h5ad
-2025-06-22 20:10:16,156 - analysis.pipeline - INFO - Executing step 9/10: run_umap
-2025-06-22 20:10:16,156 - analysis.dimensionality_reduction - INFO - Running UMAP with 15 neighbors, 2 components
-2025-06-22 20:10:21,237 - analysis.dimensionality_reduction - INFO - UMAP completed
-2025-06-22 20:10:21,237 - analysis.pipeline - INFO - Step 'run_umap' completed in 5.08s
-2025-06-22 20:10:22,423 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/run_umap.h5ad
-2025-06-22 20:10:22,423 - analysis.pipeline - INFO - Executing step 10/10: clustering
-2025-06-22 20:10:22,423 - analysis.clustering - INFO - Running Leiden clustering with resolution 0.5
-2025-06-22 20:10:24,099 - analysis.clustering - INFO - Leiden clustering completed: 29 clusters found
-2025-06-22 20:10:24,099 - analysis.pipeline - INFO - Step 'clustering' completed in 1.68s
-2025-06-22 20:10:25,018 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/intermediate_data/clustering.h5ad
-2025-06-22 20:10:25,018 - analysis.pipeline - INFO - Pipeline completed: 10/10 steps successful in 36.32s
-2025-06-22 20:10:25,939 - analysis.pipeline - INFO - Final metadata saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/metadata
-2025-06-22 20:10:25,939 - analysis.pipeline - INFO - Execution log saved: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/logs/execution_log.csv
-2025-06-22 20:10:25,940 - analysis.pipeline - INFO - Results saved to: /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947
-2025-06-22 20:10:25,941 - gui.professional_main_window - INFO - Analysis completed successfully!
-2025-06-22 20:10:25,941 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
-2025-06-22 20:10:25,941 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
-2025-06-22 20:10:25,941 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
-2025-06-22 20:10:25,945 - gui.professional_main_window - INFO - Generating standard analysis plots...
-2025-06-22 20:10:27,944 - gui.professional_main_window - INFO - Generated 4 standard analysis plots
-2025-06-22 20:10:27,945 - gui.professional_main_window - INFO - Standard plots: summary_20250622_201026.png, umap_20250622_201026.png, qc_20250622_201027.png, pca_20250622_201027.png
-2025-06-22 20:10:27,945 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio/examples/sample_data/results_filtered_feature_bc_matrix_20250622_200947/plots
-2025-06-22 20:10:27,946 - gui.professional_main_window - INFO - Available plots: ['umap_20250622_201026.png', 'pca_20250622_201027.png', 'qc_20250622_201027.png', 'summary_20250622_201026.png']
-2025-06-22 20:10:28,441 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250622_201026.png
-2025-06-22 20:10:28,634 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250622_201026.png
-2025-06-22 20:10:28,794 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250622_201027.png
-2025-06-22 20:10:28,977 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250622_201027.png
-2025-06-22 20:10:28,977 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
-2025-06-22 20:10:28,979 - gui.professional_main_window - INFO - Debug: Plots directory has 4 files
-2025-06-22 20:10:28,979 - gui.professional_main_window - INFO - Debug: Sample files: ['umap_20250622_201026.png', 'pca_20250622_201027.png', 'qc_20250622_201027.png', 'summary_20250622_201026.png']
-2025-06-22 20:10:34,687 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
-2025-06-22 20:10:34,688 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
-2025-06-22 20:10:34,699 - SingleCellStudio.CellAnnotation - INFO - Running CellTypist annotation...
-2025-06-22 20:10:34,699 - SingleCellStudio.CellAnnotation - INFO - CellTypist requires specific data preprocessing. Using reference-based method instead.
-2025-06-22 20:10:36,909 - gui.professional_main_window - INFO - ✅ Cell annotation completed using celltypist
-2025-06-22 20:10:36,909 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
-2025-06-22 20:29:49,706 - main - INFO - Starting SingleCellStudio 0.2.0
-2025-06-22 20:29:49,708 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
-2025-06-22 20:29:50,003 - main - INFO - Using qtagg matplotlib backend
-2025-06-22 20:29:50,003 - main - INFO - Environment setup completed
-2025-06-22 20:29:50,190 - main - INFO - GUI application created successfully
-2025-06-22 20:29:52,972 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
-2025-06-22 20:29:52,997 - gui.professional_main_window - INFO - Applied professional QSS styling
-2025-06-22 20:29:53,003 - main - INFO - Professional main window created and shown
-2025-06-22 20:37:45,180 - main - INFO - Starting SingleCellStudio 0.2.0
-2025-06-22 20:37:45,182 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
-2025-06-22 20:37:45,456 - main - INFO - Using qtagg matplotlib backend
-2025-06-22 20:37:45,456 - main - INFO - Environment setup completed
-2025-06-22 20:37:45,554 - main - INFO - GUI application created successfully
-2025-06-22 20:37:47,520 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
-2025-06-22 20:37:47,539 - gui.professional_main_window - INFO - Applied professional QSS styling
-2025-06-22 20:37:47,544 - main - INFO - Professional main window created and shown
+2025-06-27 13:45:30,040 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 13:45:30,043 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 13:45:30,178 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 13:45:30,178 - main - INFO - Environment setup completed
+2025-06-27 13:45:30,179 - main - ERROR - Failed to import PySide6: No module named 'PySide6'
+2025-06-27 13:45:30,179 - main - ERROR - Please install PySide6: pip install PySide6
+2025-06-27 13:45:56,639 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 13:45:56,642 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 13:45:56,783 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 13:45:56,783 - main - INFO - Environment setup completed
+2025-06-27 13:45:56,860 - main - INFO - GUI application created successfully
+2025-06-27 13:45:57,117 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 13:45:57,117 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 13:46:01,051 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 13:46:01,070 - main - INFO - Professional main window created and shown
+2025-06-27 13:50:04,257 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 13:50:04,260 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 13:50:04,409 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 13:50:04,409 - main - INFO - Environment setup completed
+2025-06-27 13:50:04,466 - main - INFO - GUI application created successfully
+2025-06-27 13:50:04,533 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 13:50:04,533 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 13:50:06,443 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 13:50:06,462 - main - INFO - Professional main window created and shown
+2025-06-27 13:50:30,134 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-27 13:50:38,895 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-27 13:50:41,285 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-27 13:50:41,286 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-27 13:50:41,286 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-27 13:50:42,197 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-27 13:50:42,198 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-27 13:50:44,515 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-27 13:50:44,516 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044
+2025-06-27 13:50:44,525 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 13:50:44,526 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 13:50:44,526 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 13:50:50,175 - gui.professional_main_window - INFO - Starting QC to Cluster pipeline...
+2025-06-27 13:50:50,176 - gui.professional_main_window - INFO - Analysis parameters: {'min_genes': 200, 'min_cells': 3, 'target_sum': 10000, 'n_top_genes': 2000, 'n_pcs': 40, 'resolution': 0.5}
+2025-06-27 13:50:50,193 - analysis.pipeline - INFO - Starting standard analysis pipeline with 10 steps.
+2025-06-27 13:50:50,193 - analysis.pipeline - INFO - Executing step 1/10: calculate_qc
+2025-06-27 13:50:50,194 - analysis.quality_control - INFO - Calculating quality control metrics...
+2025-06-27 13:50:50,483 - analysis.quality_control - INFO - QC metrics calculated for 12047 cells and 38606 genes
+2025-06-27 13:50:50,483 - analysis.pipeline - INFO - Step 'calculate_qc' completed in 0.29s
+2025-06-27 13:50:50,619 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/intermediate_data/calculate_qc.h5ad
+2025-06-27 13:50:50,619 - analysis.pipeline - INFO - Executing step 2/10: filter_cells
+2025-06-27 13:50:50,695 - analysis.quality_control - INFO - Filtering cells based on QC metrics...
+2025-06-27 13:50:50,695 - analysis.quality_control - INFO - Min genes filter: 12037 cells pass
+2025-06-27 13:50:50,706 - analysis.quality_control - INFO - Cell filtering complete: 12037 cells kept, 10 removed
+2025-06-27 13:50:50,707 - analysis.pipeline - INFO - Step 'filter_cells' completed in 0.09s
+2025-06-27 13:50:50,831 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/intermediate_data/filter_cells.h5ad
+2025-06-27 13:50:50,831 - analysis.pipeline - INFO - Executing step 3/10: filter_genes
+2025-06-27 13:50:50,905 - analysis.quality_control - INFO - Filtering genes based on expression criteria...
+2025-06-27 13:50:50,906 - analysis.quality_control - INFO - Min cells filter: 28086 genes pass
+2025-06-27 13:50:50,990 - analysis.quality_control - INFO - Gene filtering complete: 28086 genes kept, 10520 removed
+2025-06-27 13:50:50,991 - analysis.pipeline - INFO - Step 'filter_genes' completed in 0.16s
+2025-06-27 13:50:51,115 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/intermediate_data/filter_genes.h5ad
+2025-06-27 13:50:51,115 - analysis.pipeline - INFO - Executing step 4/10: normalize_data
+2025-06-27 13:50:51,115 - analysis.normalization - INFO - Performing log normalization with target sum 10000
+2025-06-27 13:50:51,367 - analysis.normalization - INFO - Log normalization completed
+2025-06-27 13:50:51,367 - analysis.pipeline - INFO - Step 'normalize_data' completed in 0.25s
+2025-06-27 13:50:51,644 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/intermediate_data/normalize_data.h5ad
+2025-06-27 13:50:51,644 - analysis.pipeline - INFO - Executing step 5/10: find_variable_genes
+2025-06-27 13:50:51,644 - analysis.pipeline - INFO - Finding 2000 highly variable genes
+2025-06-27 13:50:52,212 - analysis.pipeline - INFO - Found 2000 highly variable genes
+2025-06-27 13:50:52,212 - analysis.pipeline - INFO - Step 'find_variable_genes' completed in 0.57s
+2025-06-27 13:50:52,469 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/intermediate_data/find_variable_genes.h5ad
+2025-06-27 13:50:52,469 - analysis.pipeline - INFO - Executing step 6/10: scale_data
+2025-06-27 13:50:52,469 - analysis.normalization - INFO - Scaling data to unit variance
+2025-06-27 13:50:56,179 - analysis.normalization - INFO - Data scaling completed
+2025-06-27 13:50:56,179 - analysis.pipeline - INFO - Step 'scale_data' completed in 3.71s
+2025-06-27 13:50:57,043 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/intermediate_data/scale_data.h5ad
+2025-06-27 13:50:57,043 - analysis.pipeline - INFO - Executing step 7/10: run_pca
+2025-06-27 13:50:57,043 - analysis.dimensionality_reduction - INFO - Running PCA with 40 components
+2025-06-27 13:50:58,455 - analysis.dimensionality_reduction - INFO - PCA completed. Variance explained by first 10 PCs: 0.081
+2025-06-27 13:50:58,455 - analysis.pipeline - INFO - Step 'run_pca' completed in 1.41s
+2025-06-27 13:50:59,740 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/intermediate_data/run_pca.h5ad
+2025-06-27 13:50:59,740 - analysis.pipeline - INFO - Executing step 8/10: compute_neighbors
+2025-06-27 13:50:59,740 - analysis.clustering - INFO - Computing neighborhood graph with 15 neighbors
+2025-06-27 13:51:15,240 - analysis.clustering - INFO - Neighborhood graph computation completed
+2025-06-27 13:51:15,240 - analysis.pipeline - INFO - Step 'compute_neighbors' completed in 15.50s
+2025-06-27 13:51:16,204 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/intermediate_data/compute_neighbors.h5ad
+2025-06-27 13:51:16,205 - analysis.pipeline - INFO - Executing step 9/10: run_umap
+2025-06-27 13:51:16,205 - analysis.dimensionality_reduction - INFO - Running UMAP with 15 neighbors, 2 components
+2025-06-27 13:51:21,265 - analysis.dimensionality_reduction - INFO - UMAP completed
+2025-06-27 13:51:21,266 - analysis.pipeline - INFO - Step 'run_umap' completed in 5.06s
+2025-06-27 13:51:22,090 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/intermediate_data/run_umap.h5ad
+2025-06-27 13:51:22,090 - analysis.pipeline - INFO - Executing step 10/10: clustering
+2025-06-27 13:51:22,090 - analysis.clustering - INFO - Running Leiden clustering with resolution 0.5
+2025-06-27 13:51:23,596 - analysis.clustering - INFO - Leiden clustering completed: 28 clusters found
+2025-06-27 13:51:23,596 - analysis.pipeline - INFO - Step 'clustering' completed in 1.51s
+2025-06-27 13:51:24,435 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/intermediate_data/clustering.h5ad
+2025-06-27 13:51:24,435 - analysis.pipeline - INFO - Pipeline completed: 10/10 steps successful in 34.24s
+2025-06-27 13:51:25,282 - analysis.pipeline - INFO - Final metadata saved to: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/metadata
+2025-06-27 13:51:25,282 - analysis.pipeline - INFO - Execution log saved: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/logs/execution_log.csv
+2025-06-27 13:51:25,282 - analysis.pipeline - INFO - Results saved to: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044
+2025-06-27 13:51:25,283 - gui.professional_main_window - INFO - Analysis completed successfully!
+2025-06-27 13:51:25,283 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 13:51:25,283 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 13:51:25,284 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 13:51:25,287 - gui.professional_main_window - INFO - Generating standard analysis plots...
+2025-06-27 13:51:27,237 - gui.professional_main_window - INFO - Generated 4 standard analysis plots
+2025-06-27 13:51:27,238 - gui.professional_main_window - INFO - Standard plots: summary_20250627_135125.png, umap_20250627_135126.png, qc_20250627_135126.png, pca_20250627_135126.png
+2025-06-27 13:51:27,239 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/plots
+2025-06-27 13:51:27,239 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_135126.png', 'qc_20250627_135126.png', 'pca_20250627_135126.png', 'summary_20250627_135125.png']
+2025-06-27 13:51:27,806 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_135125.png
+2025-06-27 13:51:28,032 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_135126.png
+2025-06-27 13:51:28,236 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_135126.png
+2025-06-27 13:51:28,460 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_135126.png
+2025-06-27 13:51:28,461 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 13:51:28,462 - gui.professional_main_window - INFO - Debug: Plots directory has 4 files
+2025-06-27 13:51:28,463 - gui.professional_main_window - INFO - Debug: Sample files: ['umap_20250627_135126.png', 'qc_20250627_135126.png', 'pca_20250627_135126.png', 'summary_20250627_135125.png']
+2025-06-27 13:51:53,647 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-27 13:51:53,648 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-27 13:51:56,050 - gui.professional_main_window - INFO - ✅ Cell annotation completed using reference_based
+2025-06-27 13:51:56,051 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
+2025-06-27 15:37:25,323 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 15:37:25,332 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 15:37:25,676 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 15:37:25,677 - main - INFO - Environment setup completed
+2025-06-27 15:37:25,867 - main - INFO - GUI application created successfully
+2025-06-27 15:37:26,167 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 15:37:26,168 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 15:37:29,977 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 15:37:30,004 - main - INFO - Professional main window created and shown
+2025-06-27 15:37:35,181 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-27 15:37:47,974 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-27 15:37:58,581 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-27 15:38:01,830 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/plots
+2025-06-27 15:38:01,830 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_135126.png', 'qc_20250627_135126.png', 'pca_20250627_135126.png', 'summary_20250627_135125.png']
+2025-06-27 15:38:02,529 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_135125.png
+2025-06-27 15:38:02,742 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_135126.png
+2025-06-27 15:38:02,923 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_135126.png
+2025-06-27 15:38:03,121 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_135126.png
+2025-06-27 15:38:03,121 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 15:38:03,122 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250627_135044
+2025-06-27 15:38:03,122 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 15:38:03,123 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 15:38:03,123 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 15:38:12,845 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-27 15:38:12,845 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-27 15:38:15,250 - gui.professional_main_window - INFO - ✅ Cell annotation completed using reference_based
+2025-06-27 15:38:15,251 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
+2025-06-27 15:43:13,844 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 15:43:13,855 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 15:43:14,173 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 15:43:14,173 - main - INFO - Environment setup completed
+2025-06-27 15:43:14,334 - main - INFO - GUI application created successfully
+2025-06-27 15:43:14,589 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 15:43:14,589 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 15:43:18,364 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 15:43:18,381 - gui.professional_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 15:43:18,386 - main - INFO - Professional main window created and shown
+2025-06-27 15:43:22,054 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-27 15:43:26,065 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-27 15:43:38,294 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-27 15:43:40,407 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_135044/plots
+2025-06-27 15:43:40,407 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_135126.png', 'qc_20250627_135126.png', 'pca_20250627_135126.png', 'summary_20250627_135125.png']
+2025-06-27 15:43:41,147 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_135125.png
+2025-06-27 15:43:41,360 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_135126.png
+2025-06-27 15:43:41,562 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_135126.png
+2025-06-27 15:43:41,783 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_135126.png
+2025-06-27 15:43:41,784 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 15:43:41,785 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250627_135044
+2025-06-27 15:43:41,786 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 15:43:41,786 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 15:43:41,786 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 15:43:58,209 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-27 15:43:58,210 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-27 15:44:00,634 - gui.professional_main_window - INFO - ✅ Cell annotation completed using reference_based
+2025-06-27 15:44:00,635 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
+2025-06-27 15:45:44,792 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 15:45:44,795 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 15:45:44,933 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 15:45:44,933 - main - INFO - Environment setup completed
+2025-06-27 15:45:44,995 - main - INFO - GUI application created successfully
+2025-06-27 15:45:45,063 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 15:45:45,063 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 15:45:46,866 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 15:45:46,878 - gui.professional_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 15:45:46,881 - main - INFO - Professional main window created and shown
+2025-06-27 15:45:50,582 - gui.professional_main_window - INFO - Opening data import dialog...
+2025-06-27 15:46:08,773 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-27 15:46:10,022 - data.formats - INFO - Detected 10x_h5 format: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-27 15:46:10,022 - data.formats - INFO - Format validation passed for 10x_h5: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-27 15:46:10,022 - data.loaders - INFO - Loading 10X H5 data from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/filtered_feature_bc_matrix.h5
+2025-06-27 15:46:10,810 - data.loaders - INFO - Loaded 10X H5 data: 12047 cells × 38606 genes
+2025-06-27 15:46:10,810 - data.loaders - INFO - Successfully loaded data: 12047 cells × 38606 genes
+2025-06-27 15:46:12,630 - gui.professional_main_window - INFO - Data loaded: 12,047 cells × 38,606 genes
+2025-06-27 15:46:12,631 - gui.professional_main_window - INFO - Output directory set up: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612
+2025-06-27 15:46:12,646 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 15:46:12,646 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 15:46:12,647 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 15:46:14,583 - gui.professional_main_window - INFO - Starting QC to Cluster pipeline...
+2025-06-27 15:46:14,584 - gui.professional_main_window - INFO - Analysis parameters: {'min_genes': 200, 'min_cells': 3, 'target_sum': 10000, 'n_top_genes': 2000, 'n_pcs': 40, 'resolution': 0.5}
+2025-06-27 15:46:14,601 - analysis.pipeline - INFO - Starting standard analysis pipeline with 10 steps.
+2025-06-27 15:46:14,602 - analysis.pipeline - INFO - Executing step 1/10: calculate_qc
+2025-06-27 15:46:14,602 - analysis.quality_control - INFO - Calculating quality control metrics...
+2025-06-27 15:46:14,851 - analysis.quality_control - INFO - QC metrics calculated for 12047 cells and 38606 genes
+2025-06-27 15:46:14,851 - analysis.pipeline - INFO - Step 'calculate_qc' completed in 0.25s
+2025-06-27 15:46:14,994 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/intermediate_data/calculate_qc.h5ad
+2025-06-27 15:46:14,994 - analysis.pipeline - INFO - Executing step 2/10: filter_cells
+2025-06-27 15:46:15,060 - analysis.quality_control - INFO - Filtering cells based on QC metrics...
+2025-06-27 15:46:15,060 - analysis.quality_control - INFO - Min genes filter: 12037 cells pass
+2025-06-27 15:46:15,068 - analysis.quality_control - INFO - Cell filtering complete: 12037 cells kept, 10 removed
+2025-06-27 15:46:15,068 - analysis.pipeline - INFO - Step 'filter_cells' completed in 0.07s
+2025-06-27 15:46:15,190 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/intermediate_data/filter_cells.h5ad
+2025-06-27 15:46:15,190 - analysis.pipeline - INFO - Executing step 3/10: filter_genes
+2025-06-27 15:46:15,267 - analysis.quality_control - INFO - Filtering genes based on expression criteria...
+2025-06-27 15:46:15,267 - analysis.quality_control - INFO - Min cells filter: 28086 genes pass
+2025-06-27 15:46:15,357 - analysis.quality_control - INFO - Gene filtering complete: 28086 genes kept, 10520 removed
+2025-06-27 15:46:15,357 - analysis.pipeline - INFO - Step 'filter_genes' completed in 0.17s
+2025-06-27 15:46:15,483 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/intermediate_data/filter_genes.h5ad
+2025-06-27 15:46:15,483 - analysis.pipeline - INFO - Executing step 4/10: normalize_data
+2025-06-27 15:46:15,483 - analysis.normalization - INFO - Performing log normalization with target sum 10000
+2025-06-27 15:46:15,746 - analysis.normalization - INFO - Log normalization completed
+2025-06-27 15:46:15,746 - analysis.pipeline - INFO - Step 'normalize_data' completed in 0.26s
+2025-06-27 15:46:16,031 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/intermediate_data/normalize_data.h5ad
+2025-06-27 15:46:16,031 - analysis.pipeline - INFO - Executing step 5/10: find_variable_genes
+2025-06-27 15:46:16,031 - analysis.pipeline - INFO - Finding 2000 highly variable genes
+2025-06-27 15:46:16,601 - analysis.pipeline - INFO - Found 2000 highly variable genes
+2025-06-27 15:46:16,601 - analysis.pipeline - INFO - Step 'find_variable_genes' completed in 0.57s
+2025-06-27 15:46:16,858 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/intermediate_data/find_variable_genes.h5ad
+2025-06-27 15:46:16,858 - analysis.pipeline - INFO - Executing step 6/10: scale_data
+2025-06-27 15:46:16,859 - analysis.normalization - INFO - Scaling data to unit variance
+2025-06-27 15:46:20,512 - analysis.normalization - INFO - Data scaling completed
+2025-06-27 15:46:20,512 - analysis.pipeline - INFO - Step 'scale_data' completed in 3.65s
+2025-06-27 15:46:21,392 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/intermediate_data/scale_data.h5ad
+2025-06-27 15:46:21,392 - analysis.pipeline - INFO - Executing step 7/10: run_pca
+2025-06-27 15:46:21,392 - analysis.dimensionality_reduction - INFO - Running PCA with 40 components
+2025-06-27 15:46:22,887 - analysis.dimensionality_reduction - INFO - PCA completed. Variance explained by first 10 PCs: 0.081
+2025-06-27 15:46:22,887 - analysis.pipeline - INFO - Step 'run_pca' completed in 1.50s
+2025-06-27 15:46:24,167 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/intermediate_data/run_pca.h5ad
+2025-06-27 15:46:24,167 - analysis.pipeline - INFO - Executing step 8/10: compute_neighbors
+2025-06-27 15:46:24,167 - analysis.clustering - INFO - Computing neighborhood graph with 15 neighbors
+2025-06-27 15:46:39,620 - analysis.clustering - INFO - Neighborhood graph computation completed
+2025-06-27 15:46:39,620 - analysis.pipeline - INFO - Step 'compute_neighbors' completed in 15.45s
+2025-06-27 15:46:40,905 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/intermediate_data/compute_neighbors.h5ad
+2025-06-27 15:46:40,906 - analysis.pipeline - INFO - Executing step 9/10: run_umap
+2025-06-27 15:46:40,906 - analysis.dimensionality_reduction - INFO - Running UMAP with 15 neighbors, 2 components
+2025-06-27 15:46:45,972 - analysis.dimensionality_reduction - INFO - UMAP completed
+2025-06-27 15:46:45,972 - analysis.pipeline - INFO - Step 'run_umap' completed in 5.07s
+2025-06-27 15:46:47,099 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/intermediate_data/run_umap.h5ad
+2025-06-27 15:46:47,101 - analysis.pipeline - INFO - Executing step 10/10: clustering
+2025-06-27 15:46:47,101 - analysis.clustering - INFO - Running Leiden clustering with resolution 0.5
+2025-06-27 15:46:48,591 - analysis.clustering - INFO - Leiden clustering completed: 28 clusters found
+2025-06-27 15:46:48,591 - analysis.pipeline - INFO - Step 'clustering' completed in 1.49s
+2025-06-27 15:46:49,463 - analysis.pipeline - INFO - Saved key checkpoint: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/intermediate_data/clustering.h5ad
+2025-06-27 15:46:49,463 - analysis.pipeline - INFO - Pipeline completed: 10/10 steps successful in 34.86s
+2025-06-27 15:46:50,336 - analysis.pipeline - INFO - Final metadata saved to: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/metadata
+2025-06-27 15:46:50,337 - analysis.pipeline - INFO - Execution log saved: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/logs/execution_log.csv
+2025-06-27 15:46:50,338 - analysis.pipeline - INFO - Results saved to: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612
+2025-06-27 15:46:50,339 - gui.professional_main_window - INFO - Analysis completed successfully!
+2025-06-27 15:46:50,339 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 15:46:50,339 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 15:46:50,339 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 15:46:50,343 - gui.professional_main_window - INFO - Generating standard analysis plots...
+2025-06-27 15:46:52,244 - gui.professional_main_window - INFO - Generated 4 standard analysis plots
+2025-06-27 15:46:52,245 - gui.professional_main_window - INFO - Standard plots: summary_20250627_154650.png, umap_20250627_154651.png, qc_20250627_154651.png, pca_20250627_154651.png
+2025-06-27 15:46:52,245 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/plots
+2025-06-27 15:46:52,246 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_154651.png', 'pca_20250627_154651.png', 'qc_20250627_154651.png', 'summary_20250627_154650.png']
+2025-06-27 15:46:52,747 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_154650.png
+2025-06-27 15:46:52,935 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_154651.png
+2025-06-27 15:46:53,117 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_154651.png
+2025-06-27 15:46:53,316 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_154651.png
+2025-06-27 15:46:53,316 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 15:46:53,318 - gui.professional_main_window - INFO - Debug: Plots directory has 4 files
+2025-06-27 15:46:53,318 - gui.professional_main_window - INFO - Debug: Sample files: ['umap_20250627_154651.png', 'pca_20250627_154651.png', 'qc_20250627_154651.png', 'summary_20250627_154650.png']
+2025-06-27 16:45:05,701 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 16:45:05,707 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 16:45:06,029 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 16:45:06,029 - main - INFO - Environment setup completed
+2025-06-27 16:45:06,196 - main - INFO - GUI application created successfully
+2025-06-27 16:45:06,445 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 16:45:06,445 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 16:45:10,402 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 16:45:10,423 - gui.professional_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 16:45:10,430 - main - INFO - Professional main window created and shown
+2025-06-27 16:45:12,770 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-27 16:45:24,947 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-27 16:45:28,235 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/plots
+2025-06-27 16:45:28,235 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_154651.png', 'pca_20250627_154651.png', 'qc_20250627_154651.png', 'summary_20250627_154650.png']
+2025-06-27 16:45:29,002 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_154650.png
+2025-06-27 16:45:29,202 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_154651.png
+2025-06-27 16:45:29,388 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_154651.png
+2025-06-27 16:45:29,587 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_154651.png
+2025-06-27 16:45:29,587 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 16:45:29,588 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250627_154612
+2025-06-27 16:45:29,589 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 16:45:29,589 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 16:45:29,590 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 16:49:37,107 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 16:49:37,114 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 16:49:37,407 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 16:49:37,407 - main - INFO - Environment setup completed
+2025-06-27 16:49:37,554 - main - INFO - GUI application created successfully
+2025-06-27 16:49:37,784 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 16:49:37,784 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 16:49:41,318 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 16:49:41,334 - gui.professional_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 16:49:41,339 - main - INFO - Professional main window created and shown
+2025-06-27 16:49:45,546 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-27 16:49:59,073 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-27 16:50:01,003 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/plots
+2025-06-27 16:50:01,003 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_154651.png', 'pca_20250627_154651.png', 'qc_20250627_154651.png', 'summary_20250627_154650.png']
+2025-06-27 16:50:01,713 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_154650.png
+2025-06-27 16:50:01,908 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_154651.png
+2025-06-27 16:50:02,092 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_154651.png
+2025-06-27 16:50:02,315 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_154651.png
+2025-06-27 16:50:02,316 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 16:50:02,316 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250627_154612
+2025-06-27 16:50:02,317 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 16:50:02,317 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 16:50:02,318 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 17:50:22,105 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 17:50:22,114 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 17:50:22,413 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 17:50:22,413 - main - INFO - Environment setup completed
+2025-06-27 17:50:22,573 - main - INFO - GUI application created successfully
+2025-06-27 17:50:22,853 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 17:50:22,853 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 17:50:26,849 - gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 17:50:26,852 - gui.modules.module_registry - ERROR - Failed to discover module /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/modules/trajectory_analysis_module.py: attempted relative import with no known parent package
+2025-06-27 17:50:26,852 - gui.modules.module_registry - ERROR - Failed to discover module /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/modules/example_module.py: attempted relative import with no known parent package
+2025-06-27 17:50:26,852 - gui.modules.module_registry - INFO - Auto-discovered 0 modules
+2025-06-27 17:50:26,852 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 17:50:26,913 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 17:50:26,915 - ExampleModule - INFO - Example module initialized
+2025-06-27 17:50:26,915 - gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 17:50:26,917 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 17:50:26,917 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 17:50:26,918 - gui.modular_main_window - INFO - Loaded 1 modules
+2025-06-27 17:50:26,930 - main - INFO - Modular main window created and shown
+2025-06-27 17:51:33,397 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 17:51:33,398 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 17:51:33,399 - gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 17:51:42,106 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 17:51:42,112 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 17:51:42,364 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 17:51:42,364 - main - INFO - Environment setup completed
+2025-06-27 17:51:42,461 - main - INFO - GUI application created successfully
+2025-06-27 17:51:42,584 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 17:51:42,584 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 17:51:45,578 - gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 17:51:45,589 - gui.modules.module_registry - ERROR - Failed to discover module /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/modules/example_module.py: attempted relative import with no known parent package
+2025-06-27 17:51:45,590 - gui.modules.module_registry - INFO - Auto-discovered 0 modules
+2025-06-27 17:51:45,590 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 17:51:45,624 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 17:51:45,626 - ExampleModule - INFO - Example module initialized
+2025-06-27 17:51:45,626 - gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 17:51:45,628 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 17:51:45,628 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 17:51:45,628 - gui.modular_main_window - INFO - Loaded 1 modules
+2025-06-27 17:51:45,637 - main - INFO - Modular main window created and shown
+2025-06-27 17:52:40,423 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 17:52:40,424 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 17:52:40,424 - gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 17:52:42,627 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 17:52:42,634 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 17:52:42,927 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 17:52:42,927 - main - INFO - Environment setup completed
+2025-06-27 17:52:43,094 - main - INFO - GUI application created successfully
+2025-06-27 17:52:43,355 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 17:52:43,355 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 17:52:46,980 - gui.modular_main_window - ERROR - Failed to setup module system: Module class must inherit from BaseGUIModule
+2025-06-27 17:52:47,031 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 17:52:47,032 - gui.modular_main_window - INFO - Loaded 0 modules
+2025-06-27 17:52:47,038 - main - INFO - Modular main window created and shown
+2025-06-27 17:54:06,867 - gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 17:54:10,672 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 17:54:10,678 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 17:54:10,909 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 17:54:10,910 - main - INFO - Environment setup completed
+2025-06-27 17:54:11,007 - main - INFO - GUI application created successfully
+2025-06-27 17:54:11,138 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 17:54:11,138 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 17:54:14,136 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 17:54:14,138 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 17:54:14,138 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 17:54:14,138 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 17:54:14,138 - src.gui.modules.module_registry - INFO - Auto-discovered 2 modules
+2025-06-27 17:54:14,138 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 17:54:14,166 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 17:54:14,168 - ExampleModule - INFO - Example module initialized
+2025-06-27 17:54:14,168 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 17:54:14,171 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 17:54:14,171 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 17:54:14,172 - TrajectoryAnalysisModule - INFO - Trajectory analysis module initialized
+2025-06-27 17:54:14,172 - src.gui.modules.module_registry - INFO - Instantiated module: trajectory_analysis
+2025-06-27 17:54:14,203 - gui.modular_main_window - ERROR - Error connecting signals for module trajectory_analysis: <built-in function hasattr> returned a result with an exception set
+2025-06-27 17:54:14,203 - gui.modular_main_window - INFO - Loaded module: 轨迹分析
+2025-06-27 17:54:14,203 - gui.modular_main_window - INFO - Loaded 2 modules
+2025-06-27 17:54:14,229 - main - INFO - Modular main window created and shown
+2025-06-27 17:56:08,719 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 17:56:08,720 - TrajectoryAnalysisModule - INFO - Trajectory analysis module cleaned up
+2025-06-27 17:56:08,720 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 17:56:08,720 - TrajectoryAnalysisModule - INFO - Trajectory analysis module cleaned up
+2025-06-27 17:56:08,720 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 17:56:25,543 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 17:56:25,549 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 17:56:25,802 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 17:56:25,802 - main - INFO - Environment setup completed
+2025-06-27 17:56:25,902 - main - INFO - GUI application created successfully
+2025-06-27 17:56:26,031 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 17:56:26,031 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 17:56:29,101 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 17:56:29,121 - gui.professional_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 17:56:29,127 - main - INFO - Professional main window created and shown
+2025-06-27 17:57:11,103 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 17:57:11,106 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 17:57:11,252 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 17:57:11,252 - main - INFO - Environment setup completed
+2025-06-27 17:57:11,314 - main - INFO - GUI application created successfully
+2025-06-27 17:57:11,386 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 17:57:11,387 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 17:57:13,171 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 17:57:13,175 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 17:57:13,175 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 17:57:13,175 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 17:57:13,175 - src.gui.modules.module_registry - INFO - Auto-discovered 2 modules
+2025-06-27 17:57:13,175 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 17:57:13,185 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 17:57:13,186 - ExampleModule - INFO - Example module initialized
+2025-06-27 17:57:13,186 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 17:57:13,187 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 17:57:13,187 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 17:57:13,189 - TrajectoryAnalysisModule - INFO - Trajectory analysis module initialized
+2025-06-27 17:57:13,189 - src.gui.modules.module_registry - INFO - Instantiated module: trajectory_analysis
+2025-06-27 17:57:13,199 - gui.modular_main_window - ERROR - Error connecting signals for module trajectory_analysis: <built-in function hasattr> returned a result with an exception set
+2025-06-27 17:57:13,200 - gui.modular_main_window - INFO - Loaded module: Trajectory Analysis
+2025-06-27 17:57:13,200 - gui.modular_main_window - INFO - Loaded 2 modules
+2025-06-27 17:57:13,209 - main - INFO - Modular main window created and shown
+2025-06-27 18:09:06,783 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 18:09:06,785 - TrajectoryAnalysisModule - INFO - Trajectory analysis module cleaned up
+2025-06-27 18:09:06,785 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 18:09:06,785 - TrajectoryAnalysisModule - INFO - Trajectory analysis module cleaned up
+2025-06-27 18:09:06,786 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 18:09:56,596 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 18:09:56,603 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 18:09:56,844 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 18:09:56,844 - main - INFO - Environment setup completed
+2025-06-27 18:09:56,941 - main - INFO - GUI application created successfully
+2025-06-27 18:09:57,063 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 18:09:57,063 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 18:10:00,178 - src.gui.modules.data_manager - INFO - Data manager initialized
+2025-06-27 18:10:00,179 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 18:10:00,183 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 18:10:00,184 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 18:10:00,184 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 18:10:00,184 - src.gui.modules.module_registry - INFO - Auto-discovered 2 modules
+2025-06-27 18:10:00,184 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 18:10:00,213 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 18:10:00,214 - ExampleModule - INFO - Example module initialized
+2025-06-27 18:10:00,214 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 18:10:00,216 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 18:10:00,216 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 18:10:00,218 - TrajectoryAnalysisModule - INFO - English trajectory analysis module initialized
+2025-06-27 18:10:00,218 - src.gui.modules.module_registry - ERROR - Failed to instantiate module trajectory_analysis: 'TrajectoryAnalysisModule' object has no attribute 'sharing_status'
+2025-06-27 18:10:00,218 - gui.modular_main_window - INFO - Loaded 1 modules
+2025-06-27 18:10:00,227 - main - INFO - Modular main window created and shown
+2025-06-27 18:10:25,330 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 18:10:25,330 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 18:10:25,330 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 18:12:44,705 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 18:12:44,712 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 18:12:45,012 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 18:12:45,012 - main - INFO - Environment setup completed
+2025-06-27 18:12:45,176 - main - INFO - GUI application created successfully
+2025-06-27 18:12:45,421 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 18:12:45,421 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 18:12:49,304 - src.gui.modules.data_manager - INFO - Data manager initialized
+2025-06-27 18:12:49,308 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 18:12:49,315 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 18:12:49,315 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 18:12:49,315 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 18:12:49,315 - src.gui.modules.module_registry - INFO - Auto-discovered 2 modules
+2025-06-27 18:12:49,315 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 18:12:49,367 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 18:12:49,369 - ExampleModule - INFO - Example module initialized
+2025-06-27 18:12:49,369 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 18:12:49,371 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 18:12:49,371 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 18:12:49,372 - TrajectoryAnalysisModule - INFO - English trajectory analysis module initialized
+2025-06-27 18:12:49,372 - src.gui.modules.module_registry - INFO - Instantiated module: trajectory_analysis
+2025-06-27 18:12:49,386 - gui.modular_main_window - ERROR - Error connecting signals for module trajectory_analysis: <built-in function hasattr> returned a result with an exception set
+2025-06-27 18:12:49,386 - gui.modular_main_window - INFO - Loaded module: Trajectory Analysis
+2025-06-27 18:12:49,387 - gui.modular_main_window - INFO - Loaded 2 modules
+2025-06-27 18:12:49,404 - main - INFO - Modular main window created and shown
+2025-06-27 18:26:51,347 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 18:26:51,348 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 18:26:51,349 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 18:26:51,349 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 18:26:51,349 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 18:26:56,491 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 18:26:56,499 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 18:26:56,738 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 18:26:56,738 - main - INFO - Environment setup completed
+2025-06-27 18:26:56,837 - main - INFO - GUI application created successfully
+2025-06-27 18:26:56,966 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 18:26:56,967 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 18:27:00,135 - src.gui.modules.data_manager - INFO - Data manager initialized
+2025-06-27 18:27:00,136 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 18:27:00,138 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 18:27:00,138 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 18:27:00,138 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 18:27:00,138 - src.gui.modules.module_registry - INFO - Auto-discovered 2 modules
+2025-06-27 18:27:00,138 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 18:27:00,169 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 18:27:00,170 - ExampleModule - INFO - Example module initialized
+2025-06-27 18:27:00,170 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 18:27:00,172 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 18:27:00,172 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 18:27:00,173 - TrajectoryAnalysisModule - INFO - English trajectory analysis module initialized
+2025-06-27 18:27:00,173 - src.gui.modules.module_registry - INFO - Instantiated module: trajectory_analysis
+2025-06-27 18:27:00,182 - gui.modular_main_window - ERROR - Error connecting signals for module trajectory_analysis: <built-in function hasattr> returned a result with an exception set
+2025-06-27 18:27:00,183 - gui.modular_main_window - INFO - Loaded module: Trajectory Analysis
+2025-06-27 18:27:00,183 - gui.modular_main_window - INFO - Loaded 2 modules
+2025-06-27 18:27:00,196 - main - INFO - Modular main window created and shown
+2025-06-27 18:27:07,949 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 18:27:07,949 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 18:27:07,949 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 18:27:07,949 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 18:27:07,949 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 18:27:14,941 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 18:27:14,946 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 18:27:15,084 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 18:27:15,084 - main - INFO - Environment setup completed
+2025-06-27 18:27:15,151 - main - INFO - GUI application created successfully
+2025-06-27 18:27:15,227 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 18:27:15,227 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 18:27:17,244 - src.gui.modules.data_manager - INFO - Data manager initialized
+2025-06-27 18:27:17,244 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 18:27:17,245 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 18:27:17,246 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 18:27:17,246 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 18:27:17,246 - src.gui.modules.module_registry - INFO - Auto-discovered 2 modules
+2025-06-27 18:27:17,246 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 18:27:17,257 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 18:27:17,257 - ExampleModule - INFO - Example module initialized
+2025-06-27 18:27:17,257 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 18:27:17,259 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 18:27:17,259 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 18:27:17,259 - TrajectoryAnalysisModule - INFO - English trajectory analysis module initialized
+2025-06-27 18:27:17,259 - src.gui.modules.module_registry - INFO - Instantiated module: trajectory_analysis
+2025-06-27 18:27:17,268 - gui.modular_main_window - ERROR - Error connecting signals for module trajectory_analysis: <built-in function hasattr> returned a result with an exception set
+2025-06-27 18:27:17,268 - gui.modular_main_window - INFO - Loaded module: Trajectory Analysis
+2025-06-27 18:27:17,269 - gui.modular_main_window - INFO - Loaded 2 modules
+2025-06-27 18:27:17,279 - main - INFO - Modular main window created and shown
+2025-06-27 18:30:57,276 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 18:30:57,278 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 18:30:57,278 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 18:30:57,278 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 18:30:57,278 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 18:34:18,473 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 18:34:18,479 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 18:34:18,725 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 18:34:18,726 - main - INFO - Environment setup completed
+2025-06-27 18:34:18,820 - main - INFO - GUI application created successfully
+2025-06-27 18:34:18,955 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 18:34:18,955 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 18:34:22,101 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 18:34:22,124 - gui.professional_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 18:34:22,131 - main - INFO - Professional main window created and shown
+2025-06-27 18:34:25,545 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-27 18:34:38,102 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-27 18:34:41,527 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/plots
+2025-06-27 18:34:41,527 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_154651.png', 'pca_20250627_154651.png', 'qc_20250627_154651.png', 'summary_20250627_154650.png']
+2025-06-27 18:34:42,275 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_154650.png
+2025-06-27 18:34:42,482 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_154651.png
+2025-06-27 18:34:42,674 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_154651.png
+2025-06-27 18:34:42,876 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_154651.png
+2025-06-27 18:34:42,876 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 18:34:42,877 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250627_154612
+2025-06-27 18:34:42,879 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 18:34:42,879 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 18:34:42,880 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 18:34:49,570 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-27 18:34:49,571 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-27 18:34:52,066 - gui.professional_main_window - INFO - ✅ Cell annotation completed using reference_based
+2025-06-27 18:34:52,066 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
+2025-06-27 18:34:58,245 - gui.professional_main_window - INFO - Starting Pseudotime trajectory analysis...
+2025-06-27 18:34:58,253 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 18:35:34,507 - gui.professional_main_window - INFO - Starting Pseudotime trajectory analysis...
+2025-06-27 18:35:34,509 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 18:35:43,122 - gui.professional_main_window - INFO - Starting RNA Velocity trajectory analysis...
+2025-06-27 18:35:43,124 - gui.professional_main_window - INFO - Trajectory analysis failed: local variable 'np' referenced before assignment
+2025-06-27 18:38:51,356 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 18:38:51,363 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 18:38:51,653 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 18:38:51,654 - main - INFO - Environment setup completed
+2025-06-27 18:38:51,826 - main - INFO - GUI application created successfully
+2025-06-27 18:38:52,096 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 18:38:52,097 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 18:38:55,923 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 18:38:55,950 - gui.professional_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 18:38:55,955 - main - INFO - Professional main window created and shown
+2025-06-27 18:38:57,755 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-27 18:39:08,379 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-27 18:39:11,575 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/plots
+2025-06-27 18:39:11,576 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_154651.png', 'pca_20250627_154651.png', 'qc_20250627_154651.png', 'summary_20250627_154650.png']
+2025-06-27 18:39:12,280 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_154650.png
+2025-06-27 18:39:12,483 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_154651.png
+2025-06-27 18:39:12,669 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_154651.png
+2025-06-27 18:39:12,876 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_154651.png
+2025-06-27 18:39:12,877 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 18:39:12,878 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250627_154612
+2025-06-27 18:39:12,878 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 18:39:12,878 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 18:39:12,879 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 18:39:18,274 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-27 18:39:18,274 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-27 18:39:20,468 - gui.professional_main_window - INFO - ✅ Cell annotation completed using reference_based
+2025-06-27 18:39:20,468 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
+2025-06-27 18:39:26,940 - gui.professional_main_window - INFO - Starting Pseudotime trajectory analysis...
+2025-06-27 18:39:26,943 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 18:39:33,651 - gui.professional_main_window - INFO - Starting RNA Velocity trajectory analysis...
+2025-06-27 18:39:33,653 - gui.professional_main_window - INFO - Trajectory analysis failed: 'ProfessionalMainWindow' object has no attribute 'get_trajectory_params'
+2025-06-27 18:39:45,637 - gui.professional_main_window - INFO - Starting Lineage Tracing trajectory analysis...
+2025-06-27 18:39:45,640 - gui.professional_main_window - INFO - Trajectory analysis failed: 'ProfessionalMainWindow' object has no attribute 'get_trajectory_params'
+2025-06-27 18:39:51,029 - gui.professional_main_window - INFO - Starting RNA Velocity trajectory analysis...
+2025-06-27 18:39:51,032 - gui.professional_main_window - INFO - Trajectory analysis failed: 'ProfessionalMainWindow' object has no attribute 'get_trajectory_params'
+2025-06-27 18:41:32,251 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 18:41:32,254 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 18:41:32,396 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 18:41:32,396 - main - INFO - Environment setup completed
+2025-06-27 18:41:32,454 - main - INFO - GUI application created successfully
+2025-06-27 18:41:32,540 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 18:41:32,540 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 18:41:34,480 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 18:41:34,499 - gui.professional_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 18:41:34,503 - main - INFO - Professional main window created and shown
+2025-06-27 18:41:36,535 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-27 18:41:47,653 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-27 18:41:50,337 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/plots
+2025-06-27 18:41:50,337 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_154651.png', 'pca_20250627_154651.png', 'qc_20250627_154651.png', 'summary_20250627_154650.png']
+2025-06-27 18:41:51,332 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_154650.png
+2025-06-27 18:41:51,541 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_154651.png
+2025-06-27 18:41:51,725 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_154651.png
+2025-06-27 18:41:51,927 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_154651.png
+2025-06-27 18:41:51,928 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 18:41:51,928 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250627_154612
+2025-06-27 18:41:51,929 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 18:41:51,929 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 18:41:51,930 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 18:41:55,403 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-27 18:41:55,403 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-27 18:41:58,152 - gui.professional_main_window - INFO - ✅ Cell annotation completed using reference_based
+2025-06-27 18:41:58,152 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
+2025-06-27 18:42:06,037 - gui.professional_main_window - INFO - Starting Pseudotime trajectory analysis...
+2025-06-27 18:42:06,040 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 18:42:16,349 - gui.professional_main_window - INFO - Starting RNA Velocity trajectory analysis...
+2025-06-27 18:42:16,352 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 18:42:24,055 - gui.professional_main_window - INFO - Starting Lineage Tracing trajectory analysis...
+2025-06-27 18:42:24,057 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 19:45:37,209 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 19:45:37,219 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 19:45:37,545 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 19:45:37,545 - main - INFO - Environment setup completed
+2025-06-27 19:45:37,711 - main - INFO - GUI application created successfully
+2025-06-27 19:45:37,972 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 19:45:37,972 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 19:45:41,923 - src.gui.modules.data_manager - INFO - Data manager initialized
+2025-06-27 19:45:41,928 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 19:45:41,930 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 19:45:41,936 - src.gui.modules.module_registry - INFO - Registered module class: cell_interaction
+2025-06-27 19:45:41,936 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 19:45:41,936 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 19:45:41,936 - src.gui.modules.module_registry - INFO - Auto-discovered 3 modules
+2025-06-27 19:45:41,936 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 19:45:42,002 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 19:45:42,002 - ExampleModule - INFO - Example module initialized
+2025-06-27 19:45:42,002 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 19:45:42,004 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:45:42,004 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 19:45:42,005 - TrajectoryAnalysisModule - INFO - English trajectory analysis module initialized
+2025-06-27 19:45:42,005 - src.gui.modules.module_registry - INFO - Instantiated module: trajectory_analysis
+2025-06-27 19:45:42,019 - gui.modular_main_window - ERROR - Error connecting signals for module trajectory_analysis: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:45:42,020 - gui.modular_main_window - INFO - Loaded module: Trajectory Analysis
+2025-06-27 19:45:42,260 - src.gui.modules.module_registry - ERROR - Failed to instantiate module cell_interaction: The legacy implementation is no longer supported
+2025-06-27 19:45:42,261 - gui.modular_main_window - INFO - Loaded 2 modules
+2025-06-27 19:45:42,283 - main - INFO - Modular main window created and shown
+2025-06-27 19:48:09,386 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 19:48:09,387 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 19:48:09,387 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 19:48:09,387 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 19:48:09,387 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 19:49:00,973 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 19:49:00,979 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 19:49:01,234 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 19:49:01,234 - main - INFO - Environment setup completed
+2025-06-27 19:49:01,335 - main - INFO - GUI application created successfully
+2025-06-27 19:49:01,461 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 19:49:01,461 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 19:49:04,498 - src.gui.modules.data_manager - INFO - Data manager initialized
+2025-06-27 19:49:04,499 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 19:49:04,501 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 19:49:04,510 - src.gui.modules.module_registry - INFO - Registered module class: cell_interaction
+2025-06-27 19:49:04,510 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 19:49:04,510 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 19:49:04,510 - src.gui.modules.module_registry - INFO - Auto-discovered 3 modules
+2025-06-27 19:49:04,510 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 19:49:04,541 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 19:49:04,541 - ExampleModule - INFO - Example module initialized
+2025-06-27 19:49:04,541 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 19:49:04,542 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:49:04,542 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 19:49:04,544 - TrajectoryAnalysisModule - INFO - English trajectory analysis module initialized
+2025-06-27 19:49:04,544 - src.gui.modules.module_registry - INFO - Instantiated module: trajectory_analysis
+2025-06-27 19:49:04,552 - gui.modular_main_window - ERROR - Error connecting signals for module trajectory_analysis: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:49:04,552 - gui.modular_main_window - INFO - Loaded module: Trajectory Analysis
+2025-06-27 19:49:04,723 - src.gui.modules.module_registry - ERROR - Failed to instantiate module cell_interaction: The legacy implementation is no longer supported
+2025-06-27 19:49:04,723 - gui.modular_main_window - INFO - Loaded 2 modules
+2025-06-27 19:49:04,739 - main - INFO - Modular main window created and shown
+2025-06-27 19:51:06,167 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 19:51:06,168 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 19:51:06,168 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 19:51:06,169 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 19:51:06,169 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 19:52:07,867 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 19:52:07,874 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 19:52:08,100 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 19:52:08,100 - main - INFO - Environment setup completed
+2025-06-27 19:52:08,194 - main - INFO - GUI application created successfully
+2025-06-27 19:52:08,324 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 19:52:08,325 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 19:52:11,380 - src.gui.modules.data_manager - INFO - Data manager initialized
+2025-06-27 19:52:11,381 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 19:52:11,384 - src.gui.modules.module_registry - INFO - Registered module class: simple_cell_interaction
+2025-06-27 19:52:11,385 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 19:52:11,385 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 19:52:11,385 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 19:52:11,385 - src.gui.modules.module_registry - INFO - Auto-discovered 3 modules
+2025-06-27 19:52:11,385 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 19:52:11,414 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 19:52:11,417 - ExampleModule - INFO - Example module initialized
+2025-06-27 19:52:11,417 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 19:52:11,418 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:52:11,418 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 19:52:11,418 - SimpleCellInteractionModule - INFO - Simple Cell-Cell Interaction module initialized
+2025-06-27 19:52:11,418 - src.gui.modules.module_registry - INFO - Instantiated module: simple_cell_interaction
+2025-06-27 19:52:11,419 - gui.modular_main_window - ERROR - Error connecting signals for module simple_cell_interaction: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:52:11,419 - gui.modular_main_window - INFO - Loaded module: Cell-Cell Interaction (Simple)
+2025-06-27 19:52:11,421 - TrajectoryAnalysisModule - INFO - English trajectory analysis module initialized
+2025-06-27 19:52:11,421 - src.gui.modules.module_registry - INFO - Instantiated module: trajectory_analysis
+2025-06-27 19:52:11,430 - gui.modular_main_window - ERROR - Error connecting signals for module trajectory_analysis: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:52:11,430 - gui.modular_main_window - INFO - Loaded module: Trajectory Analysis
+2025-06-27 19:52:11,430 - gui.modular_main_window - INFO - Loaded 3 modules
+2025-06-27 19:52:11,445 - main - INFO - Modular main window created and shown
+2025-06-27 19:53:31,152 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 19:53:31,153 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 19:53:31,153 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 19:53:31,153 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 19:53:31,153 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 19:53:35,152 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 19:53:35,157 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 19:53:35,402 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 19:53:35,402 - main - INFO - Environment setup completed
+2025-06-27 19:53:35,493 - main - INFO - GUI application created successfully
+2025-06-27 19:53:35,608 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 19:53:35,608 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 19:53:38,491 - src.gui.modules.data_manager - INFO - Data manager initialized
+2025-06-27 19:53:38,493 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 19:53:38,495 - src.gui.modules.module_registry - INFO - Registered module class: simple_cell_interaction
+2025-06-27 19:53:38,496 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 19:53:38,496 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 19:53:38,496 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 19:53:38,496 - src.gui.modules.module_registry - INFO - Auto-discovered 3 modules
+2025-06-27 19:53:38,496 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 19:53:38,526 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 19:53:38,527 - ExampleModule - INFO - Example module initialized
+2025-06-27 19:53:38,527 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 19:53:38,528 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:53:38,528 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 19:53:38,528 - SimpleCellInteractionModule - INFO - Simple Cell-Cell Interaction module initialized
+2025-06-27 19:53:38,528 - src.gui.modules.module_registry - INFO - Instantiated module: simple_cell_interaction
+2025-06-27 19:53:38,529 - gui.modular_main_window - ERROR - Error connecting signals for module simple_cell_interaction: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:53:38,529 - gui.modular_main_window - INFO - Loaded module: Cell-Cell Interaction (Simple)
+2025-06-27 19:53:38,531 - TrajectoryAnalysisModule - INFO - English trajectory analysis module initialized
+2025-06-27 19:53:38,531 - src.gui.modules.module_registry - INFO - Instantiated module: trajectory_analysis
+2025-06-27 19:53:38,538 - gui.modular_main_window - ERROR - Error connecting signals for module trajectory_analysis: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:53:38,538 - gui.modular_main_window - INFO - Loaded module: Trajectory Analysis
+2025-06-27 19:53:38,538 - gui.modular_main_window - INFO - Loaded 3 modules
+2025-06-27 19:53:38,551 - main - INFO - Modular main window created and shown
+2025-06-27 19:54:12,827 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 19:54:12,827 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 19:54:12,827 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 19:54:12,827 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 19:54:12,827 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 19:55:23,177 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 19:55:23,184 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 19:55:23,421 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 19:55:23,421 - main - INFO - Environment setup completed
+2025-06-27 19:55:23,516 - main - INFO - GUI application created successfully
+2025-06-27 19:55:23,637 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 19:55:23,637 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 19:55:26,514 - src.gui.modules.data_manager - INFO - Data manager initialized
+2025-06-27 19:55:26,516 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 19:55:26,518 - src.gui.modules.module_registry - INFO - Registered module class: simple_cell_interaction
+2025-06-27 19:55:26,519 - src.gui.modules.module_registry - INFO - Registered module class: trajectory_analysis
+2025-06-27 19:55:26,519 - src.gui.modules.module_registry - WARNING - Module example_module already registered, overwriting
+2025-06-27 19:55:26,519 - src.gui.modules.module_registry - INFO - Registered module class: example_module
+2025-06-27 19:55:26,519 - src.gui.modules.module_registry - INFO - Auto-discovered 3 modules
+2025-06-27 19:55:26,519 - gui.modular_main_window - INFO - Module system initialized
+2025-06-27 19:55:26,548 - gui.modular_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 19:55:26,549 - ExampleModule - INFO - Example module initialized
+2025-06-27 19:55:26,549 - src.gui.modules.module_registry - INFO - Instantiated module: example_module
+2025-06-27 19:55:26,550 - gui.modular_main_window - ERROR - Error connecting signals for module example_module: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:55:26,550 - gui.modular_main_window - INFO - Loaded module: Example Analysis
+2025-06-27 19:55:26,550 - SimpleCellInteractionModule - INFO - Simple Cell-Cell Interaction module initialized
+2025-06-27 19:55:26,550 - src.gui.modules.module_registry - INFO - Instantiated module: simple_cell_interaction
+2025-06-27 19:55:26,551 - gui.modular_main_window - ERROR - Error connecting signals for module simple_cell_interaction: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:55:26,551 - gui.modular_main_window - INFO - Loaded module: Cell-Cell Interaction (Simple)
+2025-06-27 19:55:26,552 - TrajectoryAnalysisModule - INFO - English trajectory analysis module initialized
+2025-06-27 19:55:26,552 - src.gui.modules.module_registry - INFO - Instantiated module: trajectory_analysis
+2025-06-27 19:55:26,559 - gui.modular_main_window - ERROR - Error connecting signals for module trajectory_analysis: <built-in function hasattr> returned a result with an exception set
+2025-06-27 19:55:26,560 - gui.modular_main_window - INFO - Loaded module: Trajectory Analysis
+2025-06-27 19:55:26,560 - gui.modular_main_window - INFO - Loaded 3 modules
+2025-06-27 19:55:26,572 - main - INFO - Modular main window created and shown
+2025-06-27 19:56:45,093 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 19:56:45,094 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 19:56:45,094 - ExampleModule - INFO - Example module cleaned up
+2025-06-27 19:56:45,095 - TrajectoryAnalysisModule - INFO - English trajectory analysis module cleaned up
+2025-06-27 19:56:45,095 - src.gui.modules.module_registry - INFO - All modules cleaned up
+2025-06-27 20:01:18,334 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 20:01:18,339 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 20:01:18,574 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 20:01:18,575 - main - INFO - Environment setup completed
+2025-06-27 20:01:18,670 - main - INFO - GUI application created successfully
+2025-06-27 20:01:18,801 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 20:01:18,801 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 20:01:21,994 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 20:01:22,022 - gui.professional_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 20:01:22,029 - main - INFO - Professional main window created and shown
+2025-06-27 20:01:23,652 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-27 20:01:36,588 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-27 20:01:39,952 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/plots
+2025-06-27 20:01:39,952 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_154651.png', 'pca_20250627_154651.png', 'qc_20250627_154651.png', 'summary_20250627_154650.png']
+2025-06-27 20:01:40,683 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_154650.png
+2025-06-27 20:01:40,891 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_154651.png
+2025-06-27 20:01:41,075 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_154651.png
+2025-06-27 20:01:41,277 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_154651.png
+2025-06-27 20:01:41,278 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 20:01:41,279 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250627_154612
+2025-06-27 20:01:41,279 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 20:01:41,280 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 20:01:41,280 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 20:01:43,626 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-27 20:01:43,627 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-27 20:01:46,163 - gui.professional_main_window - INFO - ✅ Cell annotation completed using reference_based
+2025-06-27 20:01:46,164 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
+2025-06-27 20:01:50,903 - gui.professional_main_window - INFO - Starting Pseudotime trajectory analysis...
+2025-06-27 20:01:50,907 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 20:01:57,330 - gui.professional_main_window - INFO - Starting RNA Velocity trajectory analysis...
+2025-06-27 20:01:57,333 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 20:02:11,606 - gui.professional_main_window - INFO - Starting Lineage Tracing trajectory analysis...
+2025-06-27 20:02:11,610 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 20:02:19,919 - gui.professional_main_window - INFO - Starting Ligand-Receptor Analysis analysis...
+2025-06-27 20:02:19,920 - gui.professional_main_window - INFO - ✅ Ligand-Receptor Analysis completed successfully!
+2025-06-27 20:37:51,873 - main - INFO - Starting SingleCellStudio 0.2.0
+2025-06-27 20:37:51,880 - main - WARNING - SingleCellStudio is optimized for Windows, detected Linux
+2025-06-27 20:37:52,167 - main - INFO - Using qtagg matplotlib backend
+2025-06-27 20:37:52,167 - main - INFO - Environment setup completed
+2025-06-27 20:37:52,314 - main - INFO - GUI application created successfully
+2025-06-27 20:37:52,531 - numexpr.utils - INFO - Note: NumExpr detected 20 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 16.
+2025-06-27 20:37:52,531 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2025-06-27 20:37:56,179 - gui.professional_main_window - INFO - Advanced cell annotation module loaded successfully
+2025-06-27 20:37:56,216 - gui.professional_main_window - INFO - Successfully loaded QSS styling from: /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/src/gui/default.qss
+2025-06-27 20:37:56,225 - main - INFO - Professional main window created and shown
+2025-06-27 20:38:08,083 - gui.professional_main_window - INFO - Loading previous analysis results...
+2025-06-27 20:38:19,056 - gui.professional_main_window - INFO - Loading result file: intermediate_data/clustering.h5ad
+2025-06-27 20:38:22,281 - gui.professional_main_window - INFO - Found 4 plot files in /home/minzhao/xiamen/web/SingleCellStudio_PySide_CellAnnot2/examples/sample_data/results_filtered_feature_bc_matrix_20250627_154612/plots
+2025-06-27 20:38:22,281 - gui.professional_main_window - INFO - Available plots: ['umap_20250627_154651.png', 'pca_20250627_154651.png', 'qc_20250627_154651.png', 'summary_20250627_154650.png']
+2025-06-27 20:38:23,013 - gui.professional_main_window - INFO - Loaded summary plot: summary_20250627_154650.png
+2025-06-27 20:38:23,211 - gui.professional_main_window - INFO - Loaded umap plot: umap_20250627_154651.png
+2025-06-27 20:38:23,395 - gui.professional_main_window - INFO - Loaded qc plot: qc_20250627_154651.png
+2025-06-27 20:38:23,590 - gui.professional_main_window - INFO - Loaded pca plot: pca_20250627_154651.png
+2025-06-27 20:38:23,590 - gui.professional_main_window - INFO - Successfully loaded 4/4 analysis plots
+2025-06-27 20:38:23,591 - gui.professional_main_window - INFO - Previous results loaded successfully from: results_filtered_feature_bc_matrix_20250627_154612
+2025-06-27 20:38:23,592 - SingleCellStudio.AnnotationWidget - INFO - Setting data: True
+2025-06-27 20:38:23,592 - SingleCellStudio.AnnotationWidget - INFO - Data is available and module is available
+2025-06-27 20:38:23,593 - gui.professional_main_window - INFO - Advanced annotation widget updated with new data
+2025-06-27 20:38:32,954 - SingleCellStudio.AnnotationWidget - INFO - Starting run_analysis
+2025-06-27 20:38:32,954 - SingleCellStudio.AnnotationWidget - INFO - Setting up UI for analysis
+2025-06-27 20:38:35,163 - gui.professional_main_window - INFO - ✅ Cell annotation completed using reference_based
+2025-06-27 20:38:35,164 - gui.professional_main_window - INFO -    Annotated 12047 cells into 13 cell types
+2025-06-27 20:38:40,319 - gui.professional_main_window - INFO - Starting Pseudotime trajectory analysis...
+2025-06-27 20:38:40,320 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 20:38:44,565 - gui.professional_main_window - INFO - Starting Ligand-Receptor Analysis analysis...
+2025-06-27 20:38:44,567 - gui.professional_main_window - INFO - ✅ Ligand-Receptor Analysis completed successfully!
+2025-06-27 20:38:53,841 - gui.professional_main_window - INFO - Starting RNA Velocity trajectory analysis...
+2025-06-27 20:38:53,846 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!
+2025-06-27 20:39:00,595 - gui.professional_main_window - INFO - Starting Lineage Tracing trajectory analysis...
+2025-06-27 20:39:00,597 - gui.professional_main_window - INFO - Trajectory analysis completed successfully!

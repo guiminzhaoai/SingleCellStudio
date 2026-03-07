@@ -6,18 +6,22 @@ SingleCellStudio Professional is a comprehensive, user-friendly desktop applicat
 
 ## 🌟 Key Features
 
-### ✅ **Professional Interface (v0.2.0)**
-- **Unified Professional Window**: Single-window interface with tabbed workflow (Home, Analysis, Results)
+### ✅ **Professional Interface (v0.3.0)**
+- **Unified Professional Window**: Single-window interface with 5-tab workflow (Home, QC & Cluster, Cell Annotation, Trajectory Analysis, Cell-Cell Interaction)
 - **Commercial-Grade Menus**: File, Analysis, and Documentation menus with keyboard shortcuts
 - **Real-time Progress Tracking**: Live updates during analysis with detailed logging
 - **Interactive Plot Generation**: On-demand plot creation with customizable parameters
 - **Automatic Plot Generation**: Standard analysis plots created automatically after pipeline completion
+- **Integrated Workflow**: Seamless data flow between analysis steps with shared annotations
 
 ### 🔬 **Complete Analysis Pipeline**
 - **Quality Control**: Cell/gene filtering, mitochondrial gene analysis, doublet detection
 - **Normalization**: Log normalization, scaling, highly variable gene selection
 - **Dimensionality Reduction**: PCA, UMAP, t-SNE with customizable parameters
 - **Clustering**: Leiden and Louvain algorithms with adjustable resolution
+- **Cell Annotation**: Advanced cell type identification with multiple annotation methods
+- **Trajectory Analysis**: Pseudotime, RNA Velocity, and Lineage Tracing for temporal analysis
+- **Cell-Cell Interaction**: Ligand-receptor analysis, spatial proximity, and communication modeling
 - **Visualization**: Publication-quality plots with multiple export formats
 
 ### 📊 **Advanced Data Management**
@@ -27,8 +31,24 @@ SingleCellStudio Professional is a comprehensive, user-friendly desktop applicat
 - **Load Previous Results**: Resume analysis from any saved checkpoint
 - **Comprehensive Metadata**: CSV exports for all analysis metrics
 
+### 🧬 **Advanced Trajectory Analysis**
+- **Pseudotime Analysis**: Reconstruct developmental trajectories and temporal cell ordering
+- **RNA Velocity**: Analyze RNA dynamics to infer future cell states and transition directions
+- **Lineage Tracing**: Identify developmental lineages and cell fate relationships
+- **Integration with Annotations**: Seamlessly use cell type annotations from clustering analysis
+- **Method-Specific Parameters**: Customizable settings for each trajectory analysis method
+- **Interactive Visualizations**: Real-time plots with trajectory overlays and cell type integration
+
+### 🔗 **Cell-Cell Interaction Analysis**
+- **Ligand-Receptor Analysis**: CellPhoneDB-based prediction of cellular communication
+- **Spatial Proximity Analysis**: Squidpy-powered spatial interaction modeling
+- **Communication Modeling**: COMMOT algorithm for communication strength quantification
+- **Network Visualizations**: Interactive network plots showing communication patterns
+- **Multi-dimensional Results**: Pathway enrichment, signal strength, and spatial distribution
+
 ### 🎨 **Publication-Ready Visualizations**
 - **Standard Plots**: UMAP, PCA, QC metrics, summary plots generated automatically
+- **Trajectory Plots**: Pseudotime gradients, velocity fields, lineage assignments
 - **Interactive Generation**: Create custom plots with different color mappings
 - **Quick Actions**: One-click generation of common plot combinations (UMAP + Doublet Score, PCA + Clusters)
 - **Multiple Formats**: PNG (300 DPI), PDF, SVG for publications
@@ -65,10 +85,13 @@ python src/main.py
 
 ### Professional Workflow
 1. **📁 Import Data** → Use File menu (Ctrl+I) or Home tab quick actions
-2. **🔬 Run Analysis** → Click "Run Standard Analysis" with customizable parameters
-3. **📊 View Results** → Automatic plot generation and results summary
-4. **🎨 Generate Plots** → Interactive plot creation with custom parameters
-5. **💾 Export Results** → Multiple export options for data and visualizations
+2. **🔬 Run QC & Clustering** → Click "Run Standard Analysis" with customizable parameters
+3. **🏷️ Annotate Cell Types** → Advanced cell type identification and annotation
+4. **🧬 Trajectory Analysis** → Pseudotime, RNA Velocity, or Lineage Tracing analysis
+5. **🔗 Cell-Cell Interaction** → Analyze cellular communication patterns and interactions
+6. **📊 View Results** → Automatic plot generation and results summary
+7. **🎨 Generate Plots** → Interactive plot creation with custom parameters
+8. **💾 Export Results** → Multiple export options for data and visualizations
 
 ## 📁 Project Structure
 
@@ -224,8 +247,9 @@ python singlecellstudio.py
 
 ### Tabbed Workflow
 - **Home Tab**: Welcome screen, quick actions, system status, recent activity
-- **Analysis Tab**: Pipeline controls (30% left), parameter settings (70% right)
-- **Results Tab**: Plot viewer (60% left), summary and interactive generation (40% right)
+- **QC & Cluster Tab**: Standard analysis pipeline controls and parameter settings
+- **Cell Annotation Tab**: Advanced cell type identification with multiple annotation methods
+- **Trajectory Analysis Tab**: Temporal analysis controls (30% left), results and plots (70% right)
 
 ### Professional Features
 - **Keyboard Shortcuts**: Standard shortcuts for common operations
@@ -248,6 +272,7 @@ python singlecellstudio.py
 
 ### Development Plans
 - [Modular Architecture Plan](docs/MODULAR_ARCHITECTURE_PLAN.md) - Future roadmap for advanced analysis modules
+- [Modular Development Best Practices](docs/MODULAR_DEVELOPMENT_BEST_PRACTICES.md) - Proven development workflow for new modules
 - [Migration Summary](MIGRATION_SUMMARY.md) - PyQt6 to PySide6 migration details
 
 ### API Reference
@@ -275,12 +300,16 @@ SingleCellStudio Professional is commercial software. Please contact info@single
 ## 🔄 Version History
 
 ### v0.2.0 (Current)
-- ✅ Professional unified interface
+- ✅ Professional unified interface with 4-tab workflow
+- ✅ Advanced cell type annotation system
+- ✅ Trajectory analysis (Pseudotime, RNA Velocity, Lineage Tracing)
+- ✅ Integrated workflow with seamless data sharing
 - ✅ Automatic plot generation
 - ✅ Interactive plot creation
 - ✅ Load previous results functionality
 - ✅ Comprehensive result organization
 - ✅ Real-time progress tracking
+- ✅ Professional QSS styling
 
 ### v0.1.0
 - Basic analysis pipeline
