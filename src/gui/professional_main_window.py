@@ -25,6 +25,8 @@ integrated analysis workflows where results from one step inform the next.
 """
 
 import sys
+import json
+import shutil
 import logging
 from pathlib import Path
 from typing import Optional, Dict, Any
@@ -144,6 +146,7 @@ class ProfessionalMainWindow(QMainWindow):
         self.input_file_path = None
         self.input_file_paths = []
         self.output_dir = None
+        self.project_file_path = None
         
         # UI state
         self.current_mode = "welcome"  # welcome, data_loaded, analysis_running, analysis_complete
@@ -2813,6 +2816,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         self.input_file_path = None
         self.input_file_paths = []
         self.output_dir = None
+        self.project_file_path = None
         
         # Update UI
         self.current_mode = "welcome"
@@ -3081,17 +3085,127 @@ Results loaded from: {results_dir}""")
                 f"Failed to load analysis results:\n\n{str(e)}"
             )
     
+    def _to_json_safe(self, value):
+        """Convert values into JSON-serializable structures for manifests."""
+        if value is None or isinstance(value, (str, int, float, bool)):
+            return value
+        if isinstance(value, (list, tuple, set)):
+            return [self._to_json_safe(v) for v in value]
+        if isinstance(value, dict):
+            return {str(k): self._to_json_safe(v) for k, v in value.items()}
+        if hasattr(value, 'tolist'):
+            try:
+                return value.tolist()
+            except Exception:
+                return str(value)
+        return str(value)
+
+    def _build_project_manifest(self, exported_files):
+        """Build reproducibility manifest for saved project/export bundles."""
+        active_adata = self.analysis_adata if self.analysis_adata is not None else self.adata
+
+        manifest = {
+            'project_name': Path(self.input_file_path).stem if self.input_file_path else 'singlecellstudio_project',
+            'created_at': datetime.now().isoformat(),
+            'singlecellstudio_version': VERSION_STRING,
+            'python_version': sys.version,
+            'input_file_path': self.input_file_path,
+            'input_file_paths': list(self.input_file_paths) if hasattr(self, 'input_file_paths') else [],
+            'output_dir': str(self.output_dir) if self.output_dir else None,
+            'active_data_shape': [int(active_adata.n_obs), int(active_adata.n_vars)] if active_adata is not None else None,
+            'analysis_result_keys': sorted(list(self.analysis_results.keys())) if isinstance(self.analysis_results, dict) else [],
+            'summary_text': self.summary_text.toPlainText() if hasattr(self, 'summary_text') else '',
+            'trajectory_summary_text': self.trajectory_summary_text.toPlainText() if hasattr(self, 'trajectory_summary_text') else '',
+            'interaction_summary_text': self.interaction_summary_text.toPlainText() if hasattr(self, 'interaction_summary_text') else '',
+            'files': {k: str(v) for k, v in exported_files.items()},
+        }
+
+        if active_adata is not None:
+            manifest['obs_columns'] = [str(c) for c in active_adata.obs.columns]
+            manifest['var_columns'] = [str(c) for c in active_adata.var.columns]
+            if 'batch' in active_adata.obs.columns:
+                manifest['batch_stats'] = {
+                    'batch_key': 'batch',
+                    'n_batches': int(active_adata.obs['batch'].nunique()),
+                }
+
+        if isinstance(self.analysis_results, dict):
+            manifest['analysis_results'] = self._to_json_safe(self.analysis_results)
+
+        return manifest
+
     def save_project(self):
-        """Save current project"""
-        if self.adata is None:
+        """Save current project with reproducibility metadata and data bundle."""
+        active_adata = self.analysis_adata if self.analysis_adata is not None else self.adata
+        if active_adata is None:
             QMessageBox.information(self, "No Data", "No data to save. Please import data first.")
             return
-        
-        QMessageBox.information(self, "Feature Coming Soon", 
-                              "Project saving functionality will be available in the next version.")
-    
+
+        if not self.project_file_path:
+            self.save_project_as()
+            return
+
+        manifest_path = Path(self.project_file_path)
+        if manifest_path.suffix.lower() != '.json':
+            manifest_path = manifest_path.with_suffix('.json')
+            self.project_file_path = str(manifest_path)
+
+        bundle_dir = manifest_path.parent / f"{manifest_path.stem}_data"
+        bundle_dir.mkdir(parents=True, exist_ok=True)
+
+        exported_files = {}
+        try:
+            active_file = bundle_dir / 'active_adata.h5ad'
+            active_adata.write(active_file)
+            exported_files['active_adata'] = active_file
+
+            if self.analysis_adata is not None and self.analysis_adata is not active_adata:
+                analysis_file = bundle_dir / 'analysis_adata.h5ad'
+                self.analysis_adata.write(analysis_file)
+                exported_files['analysis_adata'] = analysis_file
+
+            if self.adata is not None and self.adata is not active_adata:
+                raw_file = bundle_dir / 'raw_adata.h5ad'
+                self.adata.write(raw_file)
+                exported_files['raw_adata'] = raw_file
+
+            if self.output_dir and Path(self.output_dir).exists():
+                exported_files['results_dir'] = Path(self.output_dir)
+
+            manifest = self._build_project_manifest(exported_files)
+            with open(manifest_path, 'w', encoding='utf-8') as f:
+                json.dump(manifest, f, indent=2)
+
+            self.log_activity(f"Project saved: {manifest_path}")
+            QMessageBox.information(
+                self,
+                "Project Saved",
+                f"Project saved successfully:\n{manifest_path}\n\nData bundle:\n{bundle_dir}"
+            )
+
+        except Exception as e:
+            self.log_activity(f"Project save failed: {e}")
+            QMessageBox.critical(self, "Save Failed", f"Failed to save project:\n{e}")
+
     def save_project_as(self):
-        """Save project with new name"""
+        """Save project with new name."""
+        if self.adata is None and self.analysis_adata is None:
+            QMessageBox.information(self, "No Data", "No data to save. Please import data first.")
+            return
+
+        default_name = f"singlecellstudio_project_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        default_dir = self.output_dir if self.output_dir else Path.cwd()
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save Project As",
+            str(Path(default_dir) / default_name),
+            "Project Manifest (*.json)"
+        )
+
+        if not file_path:
+            return
+
+        self.project_file_path = file_path
         self.save_project()
     
     def run_standard_analysis(self):
@@ -4011,22 +4125,104 @@ All results saved to: {self.output_dir}""")
     
     # Export and file operations
     def export_analysis_data(self):
-        """Export analysis data"""
-        if self.analysis_adata is None:
+        """Export analysis data and reproducibility metadata."""
+        active_adata = self.analysis_adata if self.analysis_adata is not None else self.adata
+        if active_adata is None:
             QMessageBox.warning(self, "No Analysis Data", "No analysis data to export.")
             return
-        
-        QMessageBox.information(self, "Feature Coming Soon", 
-                              "Analysis data export functionality will be available in the next version.")
-    
-    def export_plots(self):
-        """Export plots"""
-        if self.analysis_adata is None:
-            QMessageBox.warning(self, "No Analysis Data", "No analysis data to export plots for.")
+
+        default_dir = self.output_dir if self.output_dir else Path.cwd()
+        default_file = Path(default_dir) / f"singlecellstudio_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.h5ad"
+
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export Analysis Data",
+            str(default_file),
+            "AnnData Files (*.h5ad)"
+        )
+
+        if not file_path:
             return
-        
-        QMessageBox.information(self, "Feature Coming Soon", 
-                              "Plot export functionality will be available in the next version.")
+
+        export_path = Path(file_path)
+        if export_path.suffix.lower() != '.h5ad':
+            export_path = export_path.with_suffix('.h5ad')
+
+        try:
+            active_adata.write(export_path)
+
+            obs_csv = export_path.with_name(f"{export_path.stem}_obs.csv")
+            var_csv = export_path.with_name(f"{export_path.stem}_var.csv")
+            active_adata.obs.to_csv(obs_csv)
+            active_adata.var.to_csv(var_csv)
+
+            exported_files = {
+                'analysis_h5ad': export_path,
+                'obs_csv': obs_csv,
+                'var_csv': var_csv,
+            }
+            manifest = self._build_project_manifest(exported_files)
+            manifest_path = export_path.with_name(f"{export_path.stem}_manifest.json")
+            with open(manifest_path, 'w', encoding='utf-8') as f:
+                json.dump(manifest, f, indent=2)
+
+            self.log_activity(f"Analysis data exported: {export_path}")
+            QMessageBox.information(
+                self,
+                "Export Complete",
+                f"Analysis data exported successfully:\n{export_path}\n\nAdditional files:\n- {obs_csv.name}\n- {var_csv.name}\n- {manifest_path.name}"
+            )
+
+        except Exception as e:
+            self.log_activity(f"Analysis data export failed: {e}")
+            QMessageBox.critical(self, "Export Failed", f"Failed to export analysis data:\n{e}")
+
+    def export_plots(self):
+        """Export generated plots to a user-selected directory."""
+        target_dir = QFileDialog.getExistingDirectory(
+            self,
+            "Select Export Folder for Plots",
+            str(self.output_dir if self.output_dir else Path.cwd()),
+            QFileDialog.Option.ShowDirsOnly,
+        )
+
+        if not target_dir:
+            return
+
+        target_path = Path(target_dir)
+        target_path.mkdir(parents=True, exist_ok=True)
+
+        copied = []
+        plots_dir = (Path(self.output_dir) / 'plots') if self.output_dir else None
+        if plots_dir and plots_dir.exists():
+            for ext in ('*.png', '*.pdf', '*.svg', '*.jpg', '*.jpeg'):
+                for src in plots_dir.glob(ext):
+                    dst = target_path / src.name
+                    shutil.copy2(src, dst)
+                    copied.append(dst)
+
+        # Fallback export from currently rendered canvases
+        if not copied and MATPLOTLIB_AVAILABLE:
+            canvas_map = {
+                'summary': getattr(self, 'summary_canvas', None),
+                'umap': getattr(self, 'umap_canvas', None),
+                'qc': getattr(self, 'qc_canvas', None),
+                'pca': getattr(self, 'pca_canvas', None),
+                'trajectory': getattr(self, 'trajectory_canvas', None),
+                'interaction': getattr(self, 'interaction_canvas', None),
+            }
+            for key, canvas in canvas_map.items():
+                if canvas is not None and hasattr(canvas, 'figure'):
+                    out_file = target_path / f"{key}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                    canvas.figure.savefig(out_file, dpi=300, bbox_inches='tight')
+                    copied.append(out_file)
+
+        if not copied:
+            QMessageBox.warning(self, "No Plots Found", "No plot files were found or generated to export.")
+            return
+
+        self.log_activity(f"Exported {len(copied)} plots to: {target_path}")
+        QMessageBox.information(self, "Export Complete", f"Exported {len(copied)} plot file(s) to:\n{target_path}")
     
     def export_report(self):
         """Export analysis summary as a PDF report."""
