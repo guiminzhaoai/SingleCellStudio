@@ -142,6 +142,7 @@ class ProfessionalMainWindow(QMainWindow):
         self.analysis_results = None
         self.worker = None
         self.input_file_path = None
+        self.input_file_paths = []
         self.output_dir = None
         
         # UI state
@@ -277,6 +278,24 @@ class ProfessionalMainWindow(QMainWindow):
         """)
         import_btn.clicked.connect(self.import_data)
         actions_layout.addWidget(import_btn)
+
+        import_multi_btn = QPushButton("🧬 Import Multiple Samples")
+        import_multi_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #16a085;
+                color: white;
+                font-size: 14px;
+                font-weight: bold;
+                padding: 12px;
+                border-radius: 6px;
+                margin: 5px;
+            }
+            QPushButton:hover {
+                background-color: #138d75;
+            }
+        """)
+        import_multi_btn.clicked.connect(self.import_multiple_samples)
+        actions_layout.addWidget(import_multi_btn)
         
         # Load Sample Data Button (NEW)
         sample_btn = QPushButton("📊 Load Sample Dataset")
@@ -2112,6 +2131,11 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         params_group.setLayout(params_layout)
         layout.addWidget(params_group)
         
+        self.use_harmony_check = QCheckBox("Enable Harmony integration for multi-sample data")
+        self.use_harmony_check.setChecked(True)
+        self.use_harmony_check.setEnabled(False)
+        params_layout.addWidget(self.use_harmony_check, 6, 0, 1, 2)
+
         # Output Options
         output_group = QGroupBox("📁 Output Options")
         output_layout = QVBoxLayout()
@@ -2400,6 +2424,11 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         import_action.triggered.connect(self.import_data)
         file_menu.addAction(import_action)
 
+        import_multi_action = QAction("Import Multiple Samples", self)
+        import_multi_action.setShortcut(QKeySequence("Ctrl+Shift+I"))
+        import_multi_action.triggered.connect(self.import_multiple_samples)
+        file_menu.addAction(import_multi_action)
+
         load_action = QAction("Load Results", self)
         load_action.setShortcut(QKeySequence("Ctrl+L"))
         load_action.triggered.connect(self.load_previous_results)
@@ -2643,6 +2672,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         self.analysis_adata = None
         self.analysis_results = None
         self.input_file_path = None
+        self.input_file_paths = []
         self.output_dir = None
         
         # Update UI
@@ -2660,6 +2690,46 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         QMessageBox.information(self, "Feature Coming Soon", 
                               "Recent projects functionality will be available in the next version.")
     
+    def _finalize_loaded_data(self, adata_obj, source_description, input_reference):
+        """Apply common state updates after loading data."""
+        self.adata = adata_obj
+        self.input_file_path = input_reference
+        if isinstance(input_reference, list):
+            self.input_file_paths = input_reference
+        elif isinstance(input_reference, str) and input_reference:
+            self.input_file_paths = [input_reference]
+        else:
+            self.input_file_paths = []
+
+        self.log_activity(f"Data loaded ({source_description}): {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes")
+
+        self.output_dir = self._setup_output_directory()
+
+        self.current_mode = "data_loaded"
+        self.data_info_label.setText(f"📊 {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes")
+        self.data_header.setText(f"📊 Dataset: {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes")
+
+        self.tab_widget.setTabEnabled(1, True)
+        self.tab_widget.setCurrentIndex(1)
+
+        self.update_annotation_widget_data()
+        self.update_trajectory_tab_status()
+        self.update_interaction_tab_status()
+
+        has_batch = 'batch' in self.adata.obs.columns
+        if hasattr(self, 'use_harmony_check'):
+            self.use_harmony_check.setEnabled(has_batch)
+            if has_batch:
+                n_batches = self.adata.obs['batch'].nunique()
+                self.use_harmony_check.setText(f"Enable Harmony integration for multi-sample data ({n_batches} batches)")
+            else:
+                self.use_harmony_check.setChecked(False)
+                self.use_harmony_check.setText("Enable Harmony integration for multi-sample data")
+
+        self.statusBar().showMessage(
+            f"Data loaded: {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes"
+        )
+
     def import_data(self):
         """Import single cell data using professional dialog"""
         self.log_activity("Opening data import dialog...")
@@ -2683,33 +2753,72 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         
         dialog = dialog_class(self)
         if dialog.exec() == QDialog.DialogCode.Accepted:
-            # Get the loaded data and file path
-            self.adata = dialog.get_loaded_data()
-            self.input_file_path = dialog.get_file_path()
-            
-            if self.adata is not None:
-                self.log_activity(f"Data loaded: {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes")
-                
-                # Set up output directory
-                self.output_dir = self._setup_output_directory()
-                
-                # Update UI
-                self.current_mode = "data_loaded"
-                self.data_info_label.setText(f"📊 {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes")
-                self.data_header.setText(f"📊 Dataset: {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes")
-                
-                # Enable QC & Cluster tab for analysis
-                self.tab_widget.setTabEnabled(1, True)  # QC & Cluster
-                # Cell Annotation tab remains disabled until clustering is complete
-                self.tab_widget.setCurrentIndex(1)
-                
-                # Update annotation widget with new data (but it will remain disabled until clustering)
-                self.update_annotation_widget_data()
-                
-                self.statusBar().showMessage(
-                    f"Data loaded: {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes"
-                )
+            loaded_data = dialog.get_loaded_data()
+            file_path = dialog.get_file_path()
+
+            if loaded_data is not None:
+                self._finalize_loaded_data(loaded_data, "single sample", file_path)
     
+    def import_multiple_samples(self):
+        """Import and merge multiple single-cell samples for integration workflows."""
+        if not ANALYSIS_AVAILABLE:
+            QMessageBox.warning(self, "Import Not Available", "Analysis dependencies are required for multi-sample import.")
+            return
+
+        file_paths, _ = QFileDialog.getOpenFileNames(
+            self,
+            "Select Multiple Single-Cell Datasets",
+            str(Path.home()),
+            "Single-cell files (*.h5ad *.h5 *.csv *.tsv);;All files (*)"
+        )
+
+        if not file_paths:
+            return
+
+        if len(file_paths) < 2:
+            QMessageBox.information(self, "Single File Selected", "Only one file selected. Loading as a single sample.")
+            self._load_data_from_path(Path(file_paths[0]))
+            return
+
+        loader = DataLoader()
+        sample_adatas = []
+        sample_names = []
+
+        try:
+            for idx, file_path in enumerate(file_paths, start=1):
+                current_path = Path(file_path)
+                sample_name = current_path.stem or f"sample_{idx}"
+                format_type = auto_detect_format(file_path)
+                sample_adata = loader.load(file_path, format_type)
+                sample_adata.obs_names_make_unique()
+                sample_adata.obs_names = [f"{sample_name}_{cell}" for cell in sample_adata.obs_names]
+                sample_adata.obs['batch'] = sample_name
+                sample_adata.obs['sample_id'] = sample_name
+                sample_adatas.append(sample_adata)
+                sample_names.append(sample_name)
+                self.log_activity(f"Loaded sample '{sample_name}': {sample_adata.n_obs:,} cells × {sample_adata.n_vars:,} genes")
+
+            integrated_adata = ad.concat(
+                sample_adatas,
+                join='outer',
+                merge='same',
+                fill_value=0
+            )
+            integrated_adata.obs_names_make_unique()
+            integrated_adata.uns['scs_integration'] = {
+                'n_samples': len(sample_names),
+                'sample_names': sample_names,
+                'integration_ready': True,
+                'batch_key': 'batch'
+            }
+
+            self._finalize_loaded_data(integrated_adata, f"{len(sample_names)} merged samples", file_paths[0])
+            self.log_activity(f"Multi-sample dataset prepared with batch labels: {', '.join(sample_names)}")
+
+        except Exception as e:
+            self.log_activity(f"Failed multi-sample import: {e}")
+            QMessageBox.critical(self, "Import Failed", f"Failed to import multiple samples:\n{e}")
+
     def load_previous_results(self):
         """Load analysis results from a previous session"""
         self.log_activity("Loading previous analysis results...")
@@ -2864,9 +2973,15 @@ Results loaded from: {results_dir}""")
                 'target_sum': self.target_sum_spin.value(),
                 'n_top_genes': self.n_var_genes_spin.value(),
                 'n_pcs': self.n_pca_spin.value(),
-                'resolution': self.resolution_spin.value()
+                'resolution': self.resolution_spin.value(),
+                'use_harmony': bool(getattr(self, 'use_harmony_check', None) and self.use_harmony_check.isChecked()),
+                'batch_key': 'batch'
             }
             
+            if pipeline_params['use_harmony'] and 'batch' not in self.adata.obs.columns:
+                self.log_activity("Harmony requested but no 'batch' column found; running without Harmony.")
+                pipeline_params['use_harmony'] = False
+
             self.log_activity(f"Analysis parameters: {pipeline_params}")
 
             # Disable run button to prevent multiple clicks
@@ -4048,21 +4163,14 @@ Click 'Open Documentation Folder' to access all guides.
     def _load_data_from_path(self, file_path):
         """Helper method to load data from a given path"""
         try:
-            from data import DataLoader, auto_detect_format
-            
-            # Auto-detect format
-            data_format = auto_detect_format(file_path)
+            data_format = auto_detect_format(str(file_path))
             self.log_activity(f"Detected format: {data_format}")
-            
-            # Load data
+
             loader = DataLoader()
-            self.adata = loader.load_data(file_path, data_format)
-            
-            # Update UI
-            self.current_mode = "data_loaded"
-            self._update_data_display()
-            self._setup_output_directory()
-            
+            adata = loader.load(str(file_path), data_format)
+
+            self._finalize_loaded_data(adata, Path(file_path).name, str(file_path))
+
         except Exception as e:
             raise e
     
@@ -4209,4 +4317,4 @@ if __name__ == "__main__":
     window = ProfessionalMainWindow()
     window.show()
     
-    sys.exit(app.exec()) 
+    sys.exit(app.exec())
