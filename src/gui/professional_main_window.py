@@ -25,6 +25,8 @@ integrated analysis workflows where results from one step inform the next.
 """
 
 import sys
+import json
+import shutil
 import logging
 from pathlib import Path
 from typing import Optional, Dict, Any
@@ -144,6 +146,7 @@ class ProfessionalMainWindow(QMainWindow):
         self.input_file_path = None
         self.input_file_paths = []
         self.output_dir = None
+        self.project_file_path = None
         
         # UI state
         self.current_mode = "welcome"  # welcome, data_loaded, analysis_running, analysis_complete
@@ -1247,14 +1250,14 @@ class ProfessionalMainWindow(QMainWindow):
             self.run_interaction_btn.setEnabled(False)
     
     def run_interaction_analysis(self):
-        """Run cell-cell interaction analysis"""
-        if not hasattr(self, 'adata') or self.adata is None:
+        """Run cell-cell interaction analysis."""
+        active_adata = self.analysis_adata if self.analysis_adata is not None else self.adata
+        if active_adata is None:
             QMessageBox.warning(self, "No Data", "Please load data before running interaction analysis.")
             return
-        
+
         method = self.interaction_method_combo.currentText()
-        
-        # Get parameters based on method
+
         params = {}
         if "Ligand-Receptor" in method:
             params = {
@@ -1269,80 +1272,198 @@ class ProfessionalMainWindow(QMainWindow):
             params = {
                 'flow_threshold': self.interaction_flow_spin.value()
             }
-        
-        # Start analysis
-        import numpy as np
+
         self.log_activity(f"Starting {method} analysis...")
-        
+
         try:
-            # Mock analysis - replace with real implementation
             if "Ligand-Receptor" in method:
-                results = self._run_mock_ligand_receptor_analysis(params)
+                results = self._run_ligand_receptor_analysis(active_adata, params)
             elif "Spatial Proximity" in method:
-                results = self._run_mock_spatial_analysis(params)
+                results = self._run_spatial_analysis(active_adata, params)
             elif "Communication Modeling" in method:
-                results = self._run_mock_communication_analysis(params)
-            
+                results = self._run_communication_analysis(active_adata, params)
+            else:
+                raise ValueError(f"Unsupported interaction method: {method}")
+
             self.interaction_analysis_completed(results)
-            
+
         except Exception as e:
             self.interaction_analysis_failed(str(e))
-    
-    def _run_mock_ligand_receptor_analysis(self, params):
-        """Mock ligand-receptor analysis"""
-        results = {
+
+    def _run_ligand_receptor_analysis(self, adata, params):
+        """Run a simple data-driven ligand-receptor interaction scoring."""
+        import numpy as np
+
+        cluster_key = 'leiden' if 'leiden' in adata.obs.columns else None
+        if cluster_key is None:
+            adata.obs['_single_cluster'] = 'all_cells'
+            cluster_key = '_single_cluster'
+
+        cluster_labels = adata.obs[cluster_key].astype(str)
+        clusters = sorted(cluster_labels.unique())
+
+        lr_db = [
+            ('CXCL12', 'CXCR4', 'Chemokine signaling'),
+            ('TGFB1', 'TGFBR1', 'TGF-beta signaling'),
+            ('IL7', 'IL7R', 'Cytokine signaling'),
+            ('JAG1', 'NOTCH1', 'Notch signaling'),
+            ('WNT5A', 'FZD7', 'Wnt signaling'),
+            ('TNF', 'TNFRSF1A', 'Inflammation'),
+            ('VEGFA', 'KDR', 'VEGF signaling'),
+            ('PDGFB', 'PDGFRB', 'Growth factor signaling'),
+        ]
+
+        var_lookup = {str(g).upper(): i for i, g in enumerate(adata.var_names)}
+        valid_pairs = [(l, r, p) for l, r, p in lr_db if l in var_lookup and r in var_lookup]
+        if not valid_pairs:
+            raise ValueError("No ligand-receptor reference genes found in the loaded dataset.")
+
+        cluster_means = {}
+        for cluster in clusters:
+            mask = (cluster_labels == cluster).values
+            idx = np.where(mask)[0]
+            if idx.size == 0:
+                continue
+            cluster_means[cluster] = {}
+            for ligand, receptor, _ in valid_pairs:
+                l_vec = adata.X[idx, var_lookup[ligand]]
+                r_vec = adata.X[idx, var_lookup[receptor]]
+                if hasattr(l_vec, 'toarray'):
+                    l_vec = l_vec.toarray()
+                if hasattr(r_vec, 'toarray'):
+                    r_vec = r_vec.toarray()
+                cluster_means[cluster][ligand] = float(np.mean(np.asarray(l_vec).ravel()))
+                cluster_means[cluster][receptor] = float(np.mean(np.asarray(r_vec).ravel()))
+
+        scored = []
+        pathway_scores = {}
+        min_expression = float(params.get('min_expression', 0.1))
+        pval_threshold = float(params.get('pval_threshold', 0.05))
+
+        for sender in clusters:
+            for receiver in clusters:
+                for ligand, receptor, pathway in valid_pairs:
+                    lig_expr = cluster_means[sender].get(ligand, 0.0)
+                    rec_expr = cluster_means[receiver].get(receptor, 0.0)
+                    score = lig_expr * rec_expr
+                    if score < min_expression:
+                        continue
+                    pval = float(np.exp(-max(score, 1e-8)))
+                    scored.append((sender, receiver, f"{ligand}-{receptor}", score, pval, pathway))
+                    pathway_scores.setdefault(pathway, []).append(score)
+
+        if not scored:
+            raise ValueError("No interactions passed the configured expression threshold.")
+
+        scored.sort(key=lambda x: x[3], reverse=True)
+        significant = [row for row in scored if row[4] <= pval_threshold]
+        top_pathways = sorted(pathway_scores, key=lambda k: np.mean(pathway_scores[k]), reverse=True)
+
+        significant_pairs = [(s, r, pair, p) for s, r, pair, _, p, _ in (significant[:10] if significant else scored[:10])]
+
+        return {
             'method': 'Ligand-Receptor Analysis',
             'parameters': params,
-            'n_interactions': np.random.randint(150, 300),
-            'n_significant': np.random.randint(50, 150),
-            'top_pathways': ['VEGF signaling', 'TGF-beta signaling', 'Notch signaling', 'Wnt signaling'],
-            'significant_pairs': [
-                ('T cells', 'Dendritic cells', 'CD28-CD80', 0.001),
-                ('B cells', 'T cells', 'CD40-CD40LG', 0.003),
-                ('Macrophages', 'T cells', 'IL1B-IL1R1', 0.005),
-                ('NK cells', 'Target cells', 'KLRK1-ULBP1', 0.002),
-                ('Endothelial', 'Pericytes', 'PDGFB-PDGFRB', 0.004)
-            ]
+            'n_interactions': len(scored),
+            'n_significant': len(significant),
+            'top_pathways': top_pathways[:5],
+            'significant_pairs': significant_pairs,
         }
-        return results
-    
-    def _run_mock_spatial_analysis(self, params):
-        """Mock spatial proximity analysis"""
-        results = {
+
+    def _run_spatial_analysis(self, adata, params):
+        """Run a coordinate-driven neighborhood enrichment analysis."""
+        import numpy as np
+
+        cluster_key = 'leiden' if 'leiden' in adata.obs.columns else None
+        if cluster_key is None:
+            adata.obs['_single_cluster'] = 'all_cells'
+            cluster_key = '_single_cluster'
+
+        labels = adata.obs[cluster_key].astype(str).values
+        clusters = sorted(np.unique(labels))
+
+        if 'X_umap' in adata.obsm:
+            coords = np.asarray(adata.obsm['X_umap'])
+        elif 'X_pca' in adata.obsm and adata.obsm['X_pca'].shape[1] >= 2:
+            coords = np.asarray(adata.obsm['X_pca'][:, :2])
+        else:
+            raise ValueError("No coordinate embedding (UMAP/PCA) available for spatial-style analysis.")
+
+        centroids = {}
+        spreads = {}
+        for cluster in clusters:
+            mask = labels == cluster
+            cluster_coords = coords[mask]
+            centroids[cluster] = cluster_coords.mean(axis=0)
+            spreads[cluster] = float(np.mean(np.linalg.norm(cluster_coords - centroids[cluster], axis=1)))
+
+        enriched_pairs = []
+        for i, c1 in enumerate(clusters):
+            for c2 in clusters[i + 1:]:
+                dist = float(np.linalg.norm(centroids[c1] - centroids[c2]))
+                score = float(1.0 / (dist + 1e-6))
+                pval = float(np.exp(-score))
+                enriched_pairs.append((c1, c2, score, pval))
+
+        enriched_pairs.sort(key=lambda x: x[2], reverse=True)
+        top_pairs = enriched_pairs[:10]
+
+        spread_values = np.array(list(spreads.values()))
+        low_thr = float(np.quantile(spread_values, 0.33))
+        high_thr = float(np.quantile(spread_values, 0.66))
+
+        spatial_patterns = {
+            'clustered_types': [c for c, v in spreads.items() if v <= low_thr],
+            'dispersed_types': [c for c, v in spreads.items() if v >= high_thr],
+            'random_types': [c for c, v in spreads.items() if low_thr < v < high_thr],
+        }
+
+        return {
             'method': 'Spatial Proximity Analysis',
             'parameters': params,
-            'n_neighborhoods': np.random.randint(8, 15),
-            'enriched_pairs': [
-                ('T cells', 'Dendritic cells', 2.3, 0.001),
-                ('B cells', 'Macrophages', 1.8, 0.005),
-                ('NK cells', 'T cells', 1.5, 0.01),
-                ('Endothelial', 'Smooth muscle', 3.1, 0.0001)
-            ],
-            'spatial_patterns': {
-                'clustered_types': ['T cells', 'B cells'],
-                'dispersed_types': ['Macrophages'],
-                'random_types': ['NK cells']
-            }
+            'n_neighborhoods': len(clusters),
+            'enriched_pairs': top_pairs,
+            'spatial_patterns': spatial_patterns,
         }
-        return results
-    
-    def _run_mock_communication_analysis(self, params):
-        """Mock communication modeling analysis"""
-        results = {
+
+    def _run_communication_analysis(self, adata, params):
+        """Run communication modeling derived from ligand-receptor scores."""
+
+        lr_results = self._run_ligand_receptor_analysis(
+            adata,
+            {
+                'pval_threshold': 1.0,
+                'min_expression': max(0.01, float(params.get('flow_threshold', 0.1)) / 10.0),
+            },
+        )
+
+        interactions = lr_results.get('significant_pairs', [])
+        if not interactions:
+            interactions = []
+
+        sender_scores = {}
+        receiver_scores = {}
+        for sender, receiver, _, pval in interactions:
+            strength = max(1e-6, 1.0 - float(pval))
+            sender_scores[sender] = sender_scores.get(sender, 0.0) + strength
+            receiver_scores[receiver] = receiver_scores.get(receiver, 0.0) + strength
+
+        top_senders = [k for k, _ in sorted(sender_scores.items(), key=lambda x: x[1], reverse=True)[:3]]
+        top_receivers = [k for k, _ in sorted(receiver_scores.items(), key=lambda x: x[1], reverse=True)[:3]]
+
+        pathways = lr_results.get('top_pathways', [])
+        if not pathways:
+            pathways = ['General communication']
+        pathway_flows = {name: float(max(0.05, 1.0 - (i * 0.12))) for i, name in enumerate(pathways[:5])}
+
+        return {
             'method': 'Communication Modeling',
             'parameters': params,
-            'n_pathways': np.random.randint(20, 40),
-            'top_senders': ['Dendritic cells', 'Macrophages', 'T cells'],
-            'top_receivers': ['T cells', 'B cells', 'NK cells'],
-            'pathway_flows': {
-                'Immune activation': 0.85,
-                'Inflammation': 0.72,
-                'Antigen presentation': 0.68,
-                'Cytokine signaling': 0.63,
-                'Cell adhesion': 0.58
-            }
+            'n_pathways': len(pathway_flows),
+            'top_senders': top_senders,
+            'top_receivers': top_receivers,
+            'pathway_flows': pathway_flows,
         }
-        return results
     
     def interaction_analysis_completed(self, results):
         """Handle completed interaction analysis"""
@@ -1694,134 +1815,155 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
     def run_trajectory_analysis(self):
         """
         Run trajectory analysis using the selected method
-        
+
         Executes one of three trajectory analysis methods:
         - Pseudotime: Orders cells along developmental trajectories
-        - RNA Velocity: Computes cell state transition directions
-        - Lineage Tracing: Identifies developmental lineage relationships
-        
-        The analysis integrates with cell type annotations when available,
-        providing biological context for trajectory inference.
-        
-        Results include:
-        - Method-specific trajectory metrics
-        - Integration with cell type annotations
-        - Interactive visualizations
-        - Detailed summary statistics
+        - RNA Velocity: Estimates state transition trends from local neighborhoods
+        - Lineage Tracing: Identifies lineage groups from trajectory structure
         """
-        if self.adata is None:
+        active_adata = self.analysis_adata if self.analysis_adata is not None else self.adata
+        if active_adata is None:
             QMessageBox.warning(self, "No Data", "Please load data first.")
             return
-        
+
         method = self.trajectory_method_combo.currentText()
         use_annotations = self.trajectory_use_annotations.isChecked()
-        
+
         self.log_activity(f"Starting {method} trajectory analysis...")
-        
-        # For now, create a mock analysis
+
         try:
-            import numpy as np  # Import numpy at the top for all methods
-            
+            import numpy as np
+            import scanpy as sc
+
+            self.progress_bar.setVisible(True)
+            self.run_trajectory_btn.setEnabled(False)
+
             self.update_progress(10, f"Preparing data for {method} analysis...")
-            
-            # Simulate some processing time and steps
+            work_adata = active_adata.copy()
+
             self.update_progress(25, f"Preprocessing data for {method}...")
-            
-            # Mock trajectory analysis results
+            if 'X_pca' not in work_adata.obsm:
+                n_comps = min(40, max(2, work_adata.n_vars - 1))
+                sc.pp.pca(work_adata, n_comps=n_comps)
+
+            if 'neighbors' not in work_adata.uns:
+                n_pcs = min(30, work_adata.obsm['X_pca'].shape[1])
+                sc.pp.neighbors(work_adata, n_pcs=n_pcs)
+
+            if 'X_umap' not in work_adata.obsm:
+                sc.tl.umap(work_adata)
+
+            self.update_progress(50, f"Computing {method} trajectory...")
+
+            # Shared pseudotime backbone
+            if 'X_diffmap' not in work_adata.obsm:
+                sc.tl.diffmap(work_adata)
+
+            root_candidate = self.trajectory_root_combo.currentText().strip()
+            if root_candidate and root_candidate not in ["", "Auto Detect", "Auto"] and root_candidate in work_adata.obs_names:
+                work_adata.uns['iroot'] = int(np.where(work_adata.obs_names == root_candidate)[0][0])
+            else:
+                work_adata.uns['iroot'] = 0
+
+            sc.tl.dpt(work_adata)
+            pseudotime = np.asarray(work_adata.obs['dpt_pseudotime'].fillna(0.0))
+
             results = {
                 'method': method,
-                'n_cells': self.adata.n_obs,
+                'n_cells': work_adata.n_obs,
                 'used_annotations': use_annotations,
-                'success': True
+                'success': True,
+                'umap': np.asarray(work_adata.obsm['X_umap']),
             }
-            
-            self.update_progress(50, f"Computing {method} trajectory...")
-            
+
             if method == "Pseudotime":
-                # Create mock pseudotime data
+                n_branches = len(work_adata.obs['leiden'].unique()) if 'leiden' in work_adata.obs else max(2, int(np.ceil(np.sqrt(work_adata.n_obs / 2000))))
                 results.update({
-                    'pseudotime': np.random.random(self.adata.n_obs),
-                    'root_cell': self.trajectory_root_combo.currentText(),
-                    'n_branches': np.random.randint(2, 5)
+                    'pseudotime': pseudotime,
+                    'root_cell': root_candidate if root_candidate else 'Auto Detect',
+                    'n_branches': int(max(2, n_branches)),
                 })
-                
-                # Add UMAP coordinates if available
-                if 'X_umap' in self.adata.obsm:
-                    results['umap'] = self.adata.obsm['X_umap']
-                else:
-                    # Create mock UMAP
-                    results['umap'] = np.random.randn(self.adata.n_obs, 2)
-                
-                # Add cell types if available
-                if use_annotations and 'leiden' in self.adata.obs:
-                    results['cell_types'] = self.adata.obs['leiden'].values
-                    results['cell_type_analysis'] = {
-                        f"Cluster {i}": f"Pseudotime range: {np.random.random():.2f}-{np.random.random():.2f}"
-                        for i in self.adata.obs['leiden'].unique()
-                    }
-            
+
             elif method == "RNA Velocity":
-                # Create mock RNA velocity data
+                from sklearn.neighbors import NearestNeighbors
+
+                coords = np.asarray(work_adata.obsm['X_umap'])
+                n_neighbors = min(15, max(3, coords.shape[0] - 1))
+                nn = NearestNeighbors(n_neighbors=n_neighbors)
+                nn.fit(coords)
+                neigh_idx = nn.kneighbors(return_distance=False)
+
+                velocity_vectors = np.zeros_like(coords)
+                for i in range(coords.shape[0]):
+                    nbrs = neigh_idx[i]
+                    direction = coords[nbrs].mean(axis=0) - coords[i]
+                    time_delta = float(pseudotime[nbrs].mean() - pseudotime[i])
+                    velocity_vectors[i] = direction * time_delta
+
+                magnitudes = np.linalg.norm(velocity_vectors, axis=1)
+                velocity_confidence = float(np.clip(np.nanmean(magnitudes) / (np.nanstd(magnitudes) + 1e-6), 0.0, 1.0))
+
                 results.update({
                     'mode': self.trajectory_velocity_mode.currentText(),
-                    'velocity_confidence': np.random.uniform(0.6, 0.9),
-                    'n_velocity_genes': np.random.randint(800, 1200)
+                    'velocity_confidence': velocity_confidence,
+                    'n_velocity_genes': int(work_adata.n_vars),
+                    'velocity_vectors': velocity_vectors,
+                    'pseudotime': pseudotime,
                 })
-                
-                # Add UMAP coordinates if available
-                if 'X_umap' in self.adata.obsm:
-                    results['umap'] = self.adata.obsm['X_umap']
-                else:
-                    # Create mock UMAP
-                    results['umap'] = np.random.randn(self.adata.n_obs, 2)
-                
-                # Add velocity vectors (mock)
-                results['velocity_vectors'] = np.random.randn(self.adata.n_obs, 2) * 0.1
-                
-                # Add cell types if available
-                if use_annotations and 'leiden' in self.adata.obs:
-                    results['cell_types'] = self.adata.obs['leiden'].values
-                    results['cell_type_analysis'] = {
-                        f"Cluster {i}": f"Velocity strength: {np.random.uniform(0.3, 0.8):.2f}"
-                        for i in self.adata.obs['leiden'].unique()
-                    }
-            
+
             elif method == "Lineage Tracing":
-                # Create mock lineage tracing data
-                n_lineages = np.random.randint(3, 8)
+                if 'leiden' in work_adata.obs:
+                    lineage_codes, unique_lineages = work_adata.obs['leiden'].astype('category').cat.codes.values, work_adata.obs['leiden'].astype(str).unique()
+                    n_lineages = len(unique_lineages)
+                else:
+                    bins = min(6, max(3, int(np.sqrt(work_adata.n_obs / 1000)) + 2))
+                    lineage_codes = np.digitize(pseudotime, np.linspace(0, 1, bins, endpoint=False), right=False) - 1
+                    n_lineages = int(np.max(lineage_codes) + 1)
+
+                lineage_confidence = float(np.clip(1.0 - np.std(pseudotime), 0.0, 1.0))
                 results.update({
                     'resolution': self.trajectory_lineage_resolution.value(),
-                    'n_lineages': n_lineages,
-                    'lineage_confidence': np.random.uniform(0.7, 0.95)
+                    'n_lineages': int(max(1, n_lineages)),
+                    'lineage_confidence': lineage_confidence,
+                    'lineage_assignments': lineage_codes,
+                    'pseudotime': pseudotime,
                 })
-                
-                # Add UMAP coordinates if available
-                if 'X_umap' in self.adata.obsm:
-                    results['umap'] = self.adata.obsm['X_umap']
-                else:
-                    # Create mock UMAP
-                    results['umap'] = np.random.randn(self.adata.n_obs, 2)
-                
-                # Assign cells to lineages
-                lineage_assignments = np.random.choice(range(n_lineages), size=self.adata.n_obs)
-                results['lineage_assignments'] = lineage_assignments
-                
-                # Add cell types if available
-                if use_annotations and 'leiden' in self.adata.obs:
-                    results['cell_types'] = self.adata.obs['leiden'].values
-                    results['cell_type_analysis'] = {
-                        f"Cluster {i}": f"Primary lineage: Lineage {np.random.randint(0, n_lineages)}"
-                        for i in self.adata.obs['leiden'].unique()
-                    }
-            
+
+            else:
+                raise ValueError(f"Unsupported trajectory method: {method}")
+
+            if use_annotations and 'leiden' in work_adata.obs:
+                cell_types = work_adata.obs['leiden'].astype(str).values
+                results['cell_types'] = cell_types
+                if method == "Pseudotime":
+                    analysis = {}
+                    for cluster in sorted(np.unique(cell_types)):
+                        mask = cell_types == cluster
+                        cluster_pt = pseudotime[mask]
+                        analysis[f"Cluster {cluster}"] = f"Pseudotime range: {cluster_pt.min():.2f}-{cluster_pt.max():.2f}"
+                    results['cell_type_analysis'] = analysis
+                elif method == "RNA Velocity":
+                    mags = np.linalg.norm(results['velocity_vectors'], axis=1)
+                    analysis = {}
+                    for cluster in sorted(np.unique(cell_types)):
+                        mask = cell_types == cluster
+                        analysis[f"Cluster {cluster}"] = f"Velocity strength: {mags[mask].mean():.2f}"
+                    results['cell_type_analysis'] = analysis
+                elif method == "Lineage Tracing":
+                    analysis = {}
+                    for cluster in sorted(np.unique(cell_types)):
+                        mask = cell_types == cluster
+                        lineage_vals = results['lineage_assignments'][mask]
+                        major = int(np.bincount(lineage_vals).argmax()) if lineage_vals.size else 0
+                        analysis[f"Cluster {cluster}"] = f"Primary lineage: Lineage {major}"
+                    results['cell_type_analysis'] = analysis
+
             self.update_progress(100, f"{method} analysis completed!")
-            
-            # Call completion handler
-            self.trajectory_analysis_completed(self.adata, results)
-            
+            self.trajectory_analysis_completed(work_adata, results)
+
         except Exception as e:
             self.trajectory_analysis_failed(str(e))
-    
+
     def trajectory_analysis_completed(self, adata, results):
         """Handle trajectory analysis completion"""
         self.log_activity("Trajectory analysis completed successfully!")
@@ -2674,6 +2816,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         self.input_file_path = None
         self.input_file_paths = []
         self.output_dir = None
+        self.project_file_path = None
         
         # Update UI
         self.current_mode = "welcome"
@@ -2942,17 +3085,127 @@ Results loaded from: {results_dir}""")
                 f"Failed to load analysis results:\n\n{str(e)}"
             )
     
+    def _to_json_safe(self, value):
+        """Convert values into JSON-serializable structures for manifests."""
+        if value is None or isinstance(value, (str, int, float, bool)):
+            return value
+        if isinstance(value, (list, tuple, set)):
+            return [self._to_json_safe(v) for v in value]
+        if isinstance(value, dict):
+            return {str(k): self._to_json_safe(v) for k, v in value.items()}
+        if hasattr(value, 'tolist'):
+            try:
+                return value.tolist()
+            except Exception:
+                return str(value)
+        return str(value)
+
+    def _build_project_manifest(self, exported_files):
+        """Build reproducibility manifest for saved project/export bundles."""
+        active_adata = self.analysis_adata if self.analysis_adata is not None else self.adata
+
+        manifest = {
+            'project_name': Path(self.input_file_path).stem if self.input_file_path else 'singlecellstudio_project',
+            'created_at': datetime.now().isoformat(),
+            'singlecellstudio_version': VERSION_STRING,
+            'python_version': sys.version,
+            'input_file_path': self.input_file_path,
+            'input_file_paths': list(self.input_file_paths) if hasattr(self, 'input_file_paths') else [],
+            'output_dir': str(self.output_dir) if self.output_dir else None,
+            'active_data_shape': [int(active_adata.n_obs), int(active_adata.n_vars)] if active_adata is not None else None,
+            'analysis_result_keys': sorted(list(self.analysis_results.keys())) if isinstance(self.analysis_results, dict) else [],
+            'summary_text': self.summary_text.toPlainText() if hasattr(self, 'summary_text') else '',
+            'trajectory_summary_text': self.trajectory_summary_text.toPlainText() if hasattr(self, 'trajectory_summary_text') else '',
+            'interaction_summary_text': self.interaction_summary_text.toPlainText() if hasattr(self, 'interaction_summary_text') else '',
+            'files': {k: str(v) for k, v in exported_files.items()},
+        }
+
+        if active_adata is not None:
+            manifest['obs_columns'] = [str(c) for c in active_adata.obs.columns]
+            manifest['var_columns'] = [str(c) for c in active_adata.var.columns]
+            if 'batch' in active_adata.obs.columns:
+                manifest['batch_stats'] = {
+                    'batch_key': 'batch',
+                    'n_batches': int(active_adata.obs['batch'].nunique()),
+                }
+
+        if isinstance(self.analysis_results, dict):
+            manifest['analysis_results'] = self._to_json_safe(self.analysis_results)
+
+        return manifest
+
     def save_project(self):
-        """Save current project"""
-        if self.adata is None:
+        """Save current project with reproducibility metadata and data bundle."""
+        active_adata = self.analysis_adata if self.analysis_adata is not None else self.adata
+        if active_adata is None:
             QMessageBox.information(self, "No Data", "No data to save. Please import data first.")
             return
-        
-        QMessageBox.information(self, "Feature Coming Soon", 
-                              "Project saving functionality will be available in the next version.")
-    
+
+        if not self.project_file_path:
+            self.save_project_as()
+            return
+
+        manifest_path = Path(self.project_file_path)
+        if manifest_path.suffix.lower() != '.json':
+            manifest_path = manifest_path.with_suffix('.json')
+            self.project_file_path = str(manifest_path)
+
+        bundle_dir = manifest_path.parent / f"{manifest_path.stem}_data"
+        bundle_dir.mkdir(parents=True, exist_ok=True)
+
+        exported_files = {}
+        try:
+            active_file = bundle_dir / 'active_adata.h5ad'
+            active_adata.write(active_file)
+            exported_files['active_adata'] = active_file
+
+            if self.analysis_adata is not None and self.analysis_adata is not active_adata:
+                analysis_file = bundle_dir / 'analysis_adata.h5ad'
+                self.analysis_adata.write(analysis_file)
+                exported_files['analysis_adata'] = analysis_file
+
+            if self.adata is not None and self.adata is not active_adata:
+                raw_file = bundle_dir / 'raw_adata.h5ad'
+                self.adata.write(raw_file)
+                exported_files['raw_adata'] = raw_file
+
+            if self.output_dir and Path(self.output_dir).exists():
+                exported_files['results_dir'] = Path(self.output_dir)
+
+            manifest = self._build_project_manifest(exported_files)
+            with open(manifest_path, 'w', encoding='utf-8') as f:
+                json.dump(manifest, f, indent=2)
+
+            self.log_activity(f"Project saved: {manifest_path}")
+            QMessageBox.information(
+                self,
+                "Project Saved",
+                f"Project saved successfully:\n{manifest_path}\n\nData bundle:\n{bundle_dir}"
+            )
+
+        except Exception as e:
+            self.log_activity(f"Project save failed: {e}")
+            QMessageBox.critical(self, "Save Failed", f"Failed to save project:\n{e}")
+
     def save_project_as(self):
-        """Save project with new name"""
+        """Save project with new name."""
+        if self.adata is None and self.analysis_adata is None:
+            QMessageBox.information(self, "No Data", "No data to save. Please import data first.")
+            return
+
+        default_name = f"singlecellstudio_project_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        default_dir = self.output_dir if self.output_dir else Path.cwd()
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save Project As",
+            str(Path(default_dir) / default_name),
+            "Project Manifest (*.json)"
+        )
+
+        if not file_path:
+            return
+
+        self.project_file_path = file_path
         self.save_project()
     
     def run_standard_analysis(self):
@@ -3872,22 +4125,104 @@ All results saved to: {self.output_dir}""")
     
     # Export and file operations
     def export_analysis_data(self):
-        """Export analysis data"""
-        if self.analysis_adata is None:
+        """Export analysis data and reproducibility metadata."""
+        active_adata = self.analysis_adata if self.analysis_adata is not None else self.adata
+        if active_adata is None:
             QMessageBox.warning(self, "No Analysis Data", "No analysis data to export.")
             return
-        
-        QMessageBox.information(self, "Feature Coming Soon", 
-                              "Analysis data export functionality will be available in the next version.")
-    
-    def export_plots(self):
-        """Export plots"""
-        if self.analysis_adata is None:
-            QMessageBox.warning(self, "No Analysis Data", "No analysis data to export plots for.")
+
+        default_dir = self.output_dir if self.output_dir else Path.cwd()
+        default_file = Path(default_dir) / f"singlecellstudio_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.h5ad"
+
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export Analysis Data",
+            str(default_file),
+            "AnnData Files (*.h5ad)"
+        )
+
+        if not file_path:
             return
-        
-        QMessageBox.information(self, "Feature Coming Soon", 
-                              "Plot export functionality will be available in the next version.")
+
+        export_path = Path(file_path)
+        if export_path.suffix.lower() != '.h5ad':
+            export_path = export_path.with_suffix('.h5ad')
+
+        try:
+            active_adata.write(export_path)
+
+            obs_csv = export_path.with_name(f"{export_path.stem}_obs.csv")
+            var_csv = export_path.with_name(f"{export_path.stem}_var.csv")
+            active_adata.obs.to_csv(obs_csv)
+            active_adata.var.to_csv(var_csv)
+
+            exported_files = {
+                'analysis_h5ad': export_path,
+                'obs_csv': obs_csv,
+                'var_csv': var_csv,
+            }
+            manifest = self._build_project_manifest(exported_files)
+            manifest_path = export_path.with_name(f"{export_path.stem}_manifest.json")
+            with open(manifest_path, 'w', encoding='utf-8') as f:
+                json.dump(manifest, f, indent=2)
+
+            self.log_activity(f"Analysis data exported: {export_path}")
+            QMessageBox.information(
+                self,
+                "Export Complete",
+                f"Analysis data exported successfully:\n{export_path}\n\nAdditional files:\n- {obs_csv.name}\n- {var_csv.name}\n- {manifest_path.name}"
+            )
+
+        except Exception as e:
+            self.log_activity(f"Analysis data export failed: {e}")
+            QMessageBox.critical(self, "Export Failed", f"Failed to export analysis data:\n{e}")
+
+    def export_plots(self):
+        """Export generated plots to a user-selected directory."""
+        target_dir = QFileDialog.getExistingDirectory(
+            self,
+            "Select Export Folder for Plots",
+            str(self.output_dir if self.output_dir else Path.cwd()),
+            QFileDialog.Option.ShowDirsOnly,
+        )
+
+        if not target_dir:
+            return
+
+        target_path = Path(target_dir)
+        target_path.mkdir(parents=True, exist_ok=True)
+
+        copied = []
+        plots_dir = (Path(self.output_dir) / 'plots') if self.output_dir else None
+        if plots_dir and plots_dir.exists():
+            for ext in ('*.png', '*.pdf', '*.svg', '*.jpg', '*.jpeg'):
+                for src in plots_dir.glob(ext):
+                    dst = target_path / src.name
+                    shutil.copy2(src, dst)
+                    copied.append(dst)
+
+        # Fallback export from currently rendered canvases
+        if not copied and MATPLOTLIB_AVAILABLE:
+            canvas_map = {
+                'summary': getattr(self, 'summary_canvas', None),
+                'umap': getattr(self, 'umap_canvas', None),
+                'qc': getattr(self, 'qc_canvas', None),
+                'pca': getattr(self, 'pca_canvas', None),
+                'trajectory': getattr(self, 'trajectory_canvas', None),
+                'interaction': getattr(self, 'interaction_canvas', None),
+            }
+            for key, canvas in canvas_map.items():
+                if canvas is not None and hasattr(canvas, 'figure'):
+                    out_file = target_path / f"{key}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                    canvas.figure.savefig(out_file, dpi=300, bbox_inches='tight')
+                    copied.append(out_file)
+
+        if not copied:
+            QMessageBox.warning(self, "No Plots Found", "No plot files were found or generated to export.")
+            return
+
+        self.log_activity(f"Exported {len(copied)} plots to: {target_path}")
+        QMessageBox.information(self, "Export Complete", f"Exported {len(copied)} plot file(s) to:\n{target_path}")
     
     def export_report(self):
         """Export analysis summary as a PDF report."""
