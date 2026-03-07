@@ -10,7 +10,7 @@ SingleCellStudio Professional features a modern, unified interface designed for 
 
 The professional interface consists of:
 - **Menu Bar**: File, Analysis, Documentation menus with keyboard shortcuts
-- **Tab Interface**: Home, Analysis, Results tabs for workflow organization
+- **Tab Interface**: Home, QC & Cluster, Cell Annotation, Trajectory Analysis, Cell-Cell Interaction
 - **Status Bar**: Real-time memory usage and application status
 - **Progress Tracking**: Live updates during analysis execution
 
@@ -18,20 +18,21 @@ The professional interface consists of:
 
 #### File Menu
 - **New Project** - Start a fresh analysis session
-- **Import Data (Ctrl+I)** - Load single-cell data files
+- **Import Data (Ctrl+I)** - Load a single-cell data file
+- **Import Multiple Samples (Ctrl+Shift+I)** - Load and merge multiple datasets with batch labels
 - **Load Previous Results (Ctrl+L)** - Resume from saved analysis
 - **Save Project (Ctrl+S)** - Save current analysis state
 - **Save As** - Save project with new name
 - **Export** submenu:
   - Export Data - Save analysis results
   - Export Plots - Save all generated plots
-  - Export Report - Generate analysis summary
+  - Export PDF Report - Generate a PDF analysis summary
 - **Recent Files** - Quick access to recent projects
 - **🔄 Refresh Plots** - Reload plot display
 - **Exit (Ctrl+Q)** - Close application
 
 #### Analysis Menu
-- **Run Standard Pipeline (Ctrl+R)** - Execute complete analysis
+- **Run Standard Pipeline (Ctrl+R)** - Execute complete analysis (optional Harmony integration for batch-corrected multi-sample runs)
 - **Quality Control** submenu - Individual QC steps
 - **Normalization** submenu - Data normalization options
 - **Dimensionality Reduction** submenu - PCA, UMAP, t-SNE
@@ -52,8 +53,9 @@ The professional interface consists of:
 The welcome screen provides:
 - **Quick Actions Panel**:
   - Import Data button
+  - Import Multiple Samples button
   - Load Previous Results button
-  - Download Sample Data button
+  - Load Sample Data button
 - **Supported Formats Information**:
   - 10X Genomics MTX folders
   - 10X Genomics H5 files
@@ -67,12 +69,12 @@ The welcome screen provides:
   - Detailed timestamps
   - Success/error notifications
 
-### Analysis Tab
+### QC & Cluster Tab
 Optimized layout with 30% left panel, 70% right panel:
 
 #### Left Panel - Pipeline Controls
 - **Analysis Steps Overview**:
-  - 10-step pipeline visualization
+  - Pipeline visualization with optional Harmony integration step
   - Progress indicators
   - Step-by-step status
 - **Run Controls**:
@@ -84,7 +86,6 @@ Optimized layout with 30% left panel, 70% right panel:
 - **Quality Control Parameters**:
   - Minimum genes per cell (default: 200)
   - Minimum cells per gene (default: 3)
-  - Maximum mitochondrial percentage (default: 20%)
 - **Normalization Settings**:
   - Target sum for normalization (default: 10,000)
   - Number of highly variable genes (default: 2,000)
@@ -94,6 +95,8 @@ Optimized layout with 30% left panel, 70% right panel:
 - **Clustering Parameters**:
   - Resolution (default: 0.5)
   - Random state for reproducibility
+- **Integration Parameters**:
+  - Harmony integration toggle (enabled when `batch` metadata exists)
 
 ### Results Tab
 Efficient layout with 60% plots panel, 40% controls panel:
@@ -121,6 +124,7 @@ Tabbed plot viewer with automatic loading:
 ##### Export Results Section
 - **Export Data Button**: Save H5AD and CSV files
 - **Export Plots Button**: Save all plots in multiple formats
+- **Export PDF Report Button**: Generate a summary PDF from current analysis state
 - **Open Folder Button**: Access results directory
 
 ##### Interactive Plot Generation Section
@@ -144,6 +148,7 @@ Pre-configured plot combinations:
 
 ### Keyboard Shortcuts
 - **Ctrl+I**: Import Data
+- **Ctrl+Shift+I**: Import Multiple Samples
 - **Ctrl+L**: Load Previous Results
 - **Ctrl+S**: Save Project
 - **Ctrl+R**: Run Standard Analysis
@@ -172,13 +177,13 @@ Pre-configured plot combinations:
 
 ### Standard Analysis Workflow
 1. **Start**: Launch application with `python singlecellstudio.py`
-2. **Import**: File → Import Data (Ctrl+I) or Home tab quick action
-3. **Configure**: Analysis tab → Adjust parameters if needed
+2. **Import**: File → Import Data (Ctrl+I) for one sample or Import Multiple Samples (Ctrl+Shift+I) for batch workflows
+3. **Configure**: QC & Cluster tab → Adjust parameters, including optional Harmony integration
 4. **Execute**: Click "Run Standard Analysis" or use Ctrl+R
 5. **Monitor**: Watch progress bar and activity log
-6. **Review**: Results tab → Automatic plots loaded
+6. **Review**: QC & Cluster results and downstream modules (Cell Annotation, Trajectory, Cell-Cell Interaction)
 7. **Explore**: Generate custom plots with different parameters
-8. **Export**: Save data and plots for publication
+8. **Export**: Save data, plots, and PDF report for sharing
 
 ### Resume Previous Analysis
 1. **Load**: File → Load Previous Results (Ctrl+L)
