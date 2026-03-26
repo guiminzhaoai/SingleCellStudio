@@ -26,6 +26,7 @@ integrated analysis workflows where results from one step inform the next.
 
 import sys
 import logging
+import importlib.util
 from pathlib import Path
 from typing import Optional, Dict, Any
 from datetime import datetime
@@ -87,6 +88,11 @@ except ImportError:
 
 # Configure logging
 logger = logging.getLogger(__name__)
+
+
+def _is_harmonypy_available():
+    """Return True if harmonypy can be imported."""
+    return importlib.util.find_spec("harmonypy") is not None
 
 class AnalysisWorker(QThread):
     """Worker thread for running analysis pipeline"""
@@ -2132,8 +2138,12 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         layout.addWidget(params_group)
         
         self.use_harmony_check = QCheckBox("Enable Harmony integration for multi-sample data")
-        self.use_harmony_check.setChecked(True)
+        self.harmony_available = _is_harmonypy_available()
+        self.use_harmony_check.setChecked(self.harmony_available)
         self.use_harmony_check.setEnabled(False)
+        if not self.harmony_available:
+            self.use_harmony_check.setToolTip("Harmony integration requires the optional 'harmonypy' dependency.")
+            self.use_harmony_check.setText("Enable Harmony integration for multi-sample data (harmonypy not installed)")
         params_layout.addWidget(self.use_harmony_check, 6, 0, 1, 2)
 
         # Output Options
@@ -2718,13 +2728,21 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
 
         has_batch = 'batch' in self.adata.obs.columns
         if hasattr(self, 'use_harmony_check'):
-            self.use_harmony_check.setEnabled(has_batch)
+            self.use_harmony_check.setEnabled(has_batch and self.harmony_available)
             if has_batch:
                 n_batches = self.adata.obs['batch'].nunique()
-                self.use_harmony_check.setText(f"Enable Harmony integration for multi-sample data ({n_batches} batches)")
+                if self.harmony_available:
+                    self.use_harmony_check.setText(f"Enable Harmony integration for multi-sample data ({n_batches} batches)")
+                else:
+                    self.use_harmony_check.setText(
+                        f"Enable Harmony integration for multi-sample data ({n_batches} batches; harmonypy not installed)"
+                    )
             else:
                 self.use_harmony_check.setChecked(False)
-                self.use_harmony_check.setText("Enable Harmony integration for multi-sample data")
+                if self.harmony_available:
+                    self.use_harmony_check.setText("Enable Harmony integration for multi-sample data")
+                else:
+                    self.use_harmony_check.setText("Enable Harmony integration for multi-sample data (harmonypy not installed)")
 
         self.statusBar().showMessage(
             f"Data loaded: {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes"
@@ -2783,11 +2801,15 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         loader = DataLoader()
         sample_adatas = []
         sample_names = []
+        sample_name_counts = {}
 
         try:
             for idx, file_path in enumerate(file_paths, start=1):
                 current_path = Path(file_path)
-                sample_name = current_path.stem or f"sample_{idx}"
+                sample_base_name = current_path.stem or f"sample_{idx}"
+                sample_count = sample_name_counts.get(sample_base_name, 0) + 1
+                sample_name_counts[sample_base_name] = sample_count
+                sample_name = sample_base_name if sample_count == 1 else f"{sample_base_name}_{sample_count}"
                 format_type = auto_detect_format(file_path)
                 sample_adata = loader.load(file_path, format_type)
                 sample_adata.obs_names_make_unique()
@@ -2796,6 +2818,10 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
                 sample_adata.obs['sample_id'] = sample_name
                 sample_adatas.append(sample_adata)
                 sample_names.append(sample_name)
+                if sample_count > 1:
+                    self.log_activity(
+                        f"Detected duplicate sample basename '{sample_base_name}'. Assigned unique batch label '{sample_name}'."
+                    )
                 self.log_activity(f"Loaded sample '{sample_name}': {sample_adata.n_obs:,} cells × {sample_adata.n_vars:,} genes")
 
             integrated_adata = ad.concat(
@@ -2977,6 +3003,10 @@ Results loaded from: {results_dir}""")
                 'use_harmony': bool(getattr(self, 'use_harmony_check', None) and self.use_harmony_check.isChecked()),
                 'batch_key': 'batch'
             }
+
+            if pipeline_params['use_harmony'] and not self.harmony_available:
+                self.log_activity("Harmony requested but 'harmonypy' is not installed; running without Harmony.")
+                pipeline_params['use_harmony'] = False
             
             if pipeline_params['use_harmony'] and 'batch' not in self.adata.obs.columns:
                 self.log_activity("Harmony requested but no 'batch' column found; running without Harmony.")
