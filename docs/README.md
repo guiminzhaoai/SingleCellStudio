@@ -8,6 +8,8 @@ Welcome to the SingleCellStudio documentation! This directory contains comprehen
 - **[Installation Guide](INSTALLATION_GUIDE.md)** - Complete setup instructions with conda environment
 - **[Getting Started](GETTING_STARTED.md)** - Quick start guide and basic workflow
 - **[Data Loading Guide](DATA_LOADING_GUIDE.md)** - Format-specific data import instructions
+- **[Professional Interface Guide](PROFESSIONAL_INTERFACE_GUIDE.md)** - Menus, tabs, multi-sample import, Harmony toggle, and export workflows
+- **[Trajectory Analysis Guide](TRAJECTORY_ANALYSIS_GUIDE.md)** - Detailed trajectory workflow and interpretation
 
 ### 🔧 **Development Documentation**
 - **[Development Log](DEVELOPMENT_LOG.md)** - Complete development history and milestones
@@ -55,6 +57,7 @@ Project planning and tracking:
 1. **[Installation Guide](INSTALLATION_GUIDE.md)** - Set up your environment
 2. **[Getting Started](GETTING_STARTED.md)** - First analysis walkthrough
 3. **[Data Loading Guide](DATA_LOADING_GUIDE.md)** - Import your data
+4. **[Professional Interface Guide](PROFESSIONAL_INTERFACE_GUIDE.md)** - Learn the full 5-tab GUI workflow
 
 ### **Developers Start Here:**
 1. **[Development Log](DEVELOPMENT_LOG.md)** - Understand the project evolution
