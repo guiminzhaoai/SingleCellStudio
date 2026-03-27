@@ -117,7 +117,10 @@ def _is_harmonypy_available():
     return importlib.util.find_spec("harmonypy") is not None
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-8yzz8g
 
 def _strip_known_suffixes(file_name: str) -> str:
     """Strip multi-part compressed suffixes and return the base name."""
@@ -132,7 +135,10 @@ def _is_harmonypy_available():
     """Return True if harmonypy can be imported."""
     return importlib.util.find_spec("harmonypy") is not None
 
+<<<<<<< HEAD
 >>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review-4d34cv
+=======
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-8yzz8g
 class AnalysisWorker(QThread):
     """Worker thread for running analysis pipeline"""
     
@@ -3152,7 +3158,10 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
             return loader.load(temp_dir_path, DataFormat.TENX_MTX)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-8yzz8g
     def _resolve_multi_sample_target(self, selected_path: Path) -> Path:
         """Resolve selected files to a canonical load target for multi-sample import."""
         if selected_path.is_dir():
@@ -3254,7 +3263,10 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
             shutil.copy2(features_file, temp_dir_path / features_name)
             return loader.load(temp_dir_path, DataFormat.TENX_MTX)
 
+<<<<<<< HEAD
 >>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review-4d34cv
+=======
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-8yzz8g
     def load_previous_results(self):
         """Load analysis results from a previous session"""
         self.log_activity("Loading previous analysis results...")
