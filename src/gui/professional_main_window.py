@@ -105,6 +105,11 @@ def _strip_known_suffixes(file_name: str) -> str:
             return normalized_name[: -len(suffix)]
     return Path(normalized_name).stem
 
+
+def _is_harmonypy_available():
+    """Return True if harmonypy can be imported."""
+    return importlib.util.find_spec("harmonypy") is not None
+
 class AnalysisWorker(QThread):
     """Worker thread for running analysis pipeline"""
     
