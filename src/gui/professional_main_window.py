@@ -1,6 +1,5 @@
 """
 SingleCellStudio Professional Main Window
-
 Professional single-window interface combining data import and comprehensive analysis functionality
 with proper menu bars similar to commercial software like CLC Workbench.
 
@@ -1891,6 +1890,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         use_annotations = self.trajectory_use_annotations.isChecked()
 
         self.log_activity(f"Starting {method} trajectory analysis...")
+<<<<<<< HEAD
 
         try:
             import numpy as np
@@ -1902,6 +1902,16 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
             self.update_progress(10, f"Preparing data for {method} analysis...")
             work_adata = active_adata.copy()
 
+=======
+        
+        # For now, create a mock analysis
+        try:
+            import numpy as np  # Import numpy at the top for all methods
+            
+            self.update_progress(10, f"Preparing data for {method} analysis...")
+            
+            # Simulate some processing time and steps
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio
             self.update_progress(25, f"Preprocessing data for {method}...")
             if 'X_pca' not in work_adata.obsm:
                 n_comps = min(40, max(2, work_adata.n_vars - 1))
@@ -5067,4 +5077,8 @@ if __name__ == "__main__":
     window = ProfessionalMainWindow()
     window.show()
     
+<<<<<<< HEAD
     sys.exit(app.exec())
+=======
+    sys.exit(app.exec()) 
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio
