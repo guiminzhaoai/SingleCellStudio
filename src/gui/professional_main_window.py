@@ -87,6 +87,10 @@ except ImportError:
         from version import __version__, VERSION_STRING
     except ImportError:
         DataImportDialog = None
+        DataLoader = None
+        DataFormat = None
+        get_data_info = None
+        auto_detect_format = None
         __version__ = "0.2.0"
         VERSION_STRING = "0.2.0-dev"
 
@@ -112,6 +116,23 @@ def _is_harmonypy_available():
     """Return True if harmonypy can be imported."""
     return importlib.util.find_spec("harmonypy") is not None
 
+<<<<<<< HEAD
+=======
+
+def _strip_known_suffixes(file_name: str) -> str:
+    """Strip multi-part compressed suffixes and return the base name."""
+    normalized_name = file_name
+    for suffix in (".mtx.gz", ".tsv.gz", ".csv.gz", ".h5ad.gz", ".h5.gz", ".txt.gz", ".gz"):
+        if normalized_name.lower().endswith(suffix):
+            return normalized_name[: -len(suffix)]
+    return Path(normalized_name).stem
+
+
+def _is_harmonypy_available():
+    """Return True if harmonypy can be imported."""
+    return importlib.util.find_spec("harmonypy") is not None
+
+>>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review-4d34cv
 class AnalysisWorker(QThread):
     """Worker thread for running analysis pipeline"""
     
@@ -2941,6 +2962,14 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         if not ANALYSIS_AVAILABLE:
             QMessageBox.warning(self, "Import Not Available", "Analysis dependencies are required for multi-sample import.")
             return
+        if DataLoader is None or DataFormat is None or auto_detect_format is None:
+            QMessageBox.warning(
+                self,
+                "Import Not Available",
+                "Data loading modules are unavailable.\n\n"
+                "Please ensure the 'data' package is importable in this environment."
+            )
+            return
 
         file_paths, _ = QFileDialog.getOpenFileNames(
             self,
@@ -3122,6 +3151,110 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
             shutil.copy2(features_file, temp_dir_path / features_name)
             return loader.load(temp_dir_path, DataFormat.TENX_MTX)
 
+<<<<<<< HEAD
+=======
+    def _resolve_multi_sample_target(self, selected_path: Path) -> Path:
+        """Resolve selected files to a canonical load target for multi-sample import."""
+        if selected_path.is_dir():
+            return selected_path
+
+        selected_name = selected_path.name.lower()
+        if "matrix.mtx" in selected_name:
+            return selected_path
+
+        stem = _strip_known_suffixes(selected_path.name)
+        if "_barcodes" in stem:
+            candidate = selected_path.with_name(f"{stem.split('_barcodes', 1)[0]}_matrix.mtx.gz")
+            if candidate.exists():
+                self.log_activity(f"Resolved barcode file '{selected_path.name}' to matrix file '{candidate.name}'.")
+                return candidate
+            candidate = selected_path.with_name(f"{stem.split('_barcodes', 1)[0]}_matrix.mtx")
+            if candidate.exists():
+                self.log_activity(f"Resolved barcode file '{selected_path.name}' to matrix file '{candidate.name}'.")
+                return candidate
+        if "_features" in stem or "_genes" in stem:
+            token = "_features" if "_features" in stem else "_genes"
+            candidate = selected_path.with_name(f"{stem.split(token, 1)[0]}_matrix.mtx.gz")
+            if candidate.exists():
+                self.log_activity(f"Resolved feature file '{selected_path.name}' to matrix file '{candidate.name}'.")
+                return candidate
+            candidate = selected_path.with_name(f"{stem.split(token, 1)[0]}_matrix.mtx")
+            if candidate.exists():
+                self.log_activity(f"Resolved feature file '{selected_path.name}' to matrix file '{candidate.name}'.")
+                return candidate
+
+        return selected_path
+
+    def _infer_sample_base_name(self, load_target: Path, fallback_idx: int) -> str:
+        """Infer a stable sample base name from a resolved multi-sample target path."""
+        if load_target.is_dir():
+            return load_target.name or f"sample_{fallback_idx}"
+
+        stem = _strip_known_suffixes(load_target.name)
+        if "_matrix" in stem:
+            prefix = stem.split("_matrix", 1)[0]
+            return prefix or f"sample_{fallback_idx}"
+        return stem or f"sample_{fallback_idx}"
+
+    def _load_multi_sample_target(self, load_target: Path, loader: 'DataLoader'):
+        """Load a resolved multi-sample target path as AnnData."""
+        if load_target.is_dir():
+            format_type = auto_detect_format(load_target)
+            return loader.load(load_target, format_type)
+
+        load_name = load_target.name.lower()
+        if "matrix.mtx" in load_name:
+            return self._load_prefixed_mtx_triplet(load_target, loader)
+
+        format_type = auto_detect_format(load_target)
+        return loader.load(load_target, format_type)
+
+    def _load_prefixed_mtx_triplet(self, matrix_path: Path, loader: 'DataLoader'):
+        """Load a 10x-style matrix file whose barcodes/features share a sample-specific prefix."""
+        stem = _strip_known_suffixes(matrix_path.name)
+        prefix = stem.split("_matrix", 1)[0] if "_matrix" in stem else ""
+
+        suffixes = [".tsv.gz", ".tsv"]
+        barcodes_file = None
+        features_file = None
+
+        for suffix in suffixes:
+            candidate = matrix_path.with_name(f"{prefix}_barcodes{suffix}")
+            if candidate.exists():
+                barcodes_file = candidate
+                break
+
+        for suffix in suffixes:
+            candidate = matrix_path.with_name(f"{prefix}_features{suffix}")
+            if candidate.exists():
+                features_file = candidate
+                break
+            legacy_candidate = matrix_path.with_name(f"{prefix}_genes{suffix}")
+            if legacy_candidate.exists():
+                features_file = legacy_candidate
+                break
+
+        if not barcodes_file or not features_file:
+            raise FileNotFoundError(
+                f"Could not find matching 10x files for '{matrix_path.name}'. "
+                "Expected companion barcodes/features (or genes) files with the same prefix."
+            )
+
+        matrix_name = "matrix.mtx.gz" if matrix_path.name.endswith(".gz") else "matrix.mtx"
+        barcodes_name = "barcodes.tsv.gz" if barcodes_file.name.endswith(".gz") else "barcodes.tsv"
+        if "genes" in features_file.name:
+            features_name = "genes.tsv.gz" if features_file.name.endswith(".gz") else "genes.tsv"
+        else:
+            features_name = "features.tsv.gz" if features_file.name.endswith(".gz") else "features.tsv"
+
+        with tempfile.TemporaryDirectory(prefix="scs_multi_mtx_") as temp_dir:
+            temp_dir_path = Path(temp_dir)
+            shutil.copy2(matrix_path, temp_dir_path / matrix_name)
+            shutil.copy2(barcodes_file, temp_dir_path / barcodes_name)
+            shutil.copy2(features_file, temp_dir_path / features_name)
+            return loader.load(temp_dir_path, DataFormat.TENX_MTX)
+
+>>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review-4d34cv
     def load_previous_results(self):
         """Load analysis results from a previous session"""
         self.log_activity("Loading previous analysis results...")
