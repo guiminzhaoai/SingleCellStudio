@@ -1,6 +1,5 @@
 """
 SingleCellStudio Professional Main Window
-
 Professional single-window interface combining data import and comprehensive analysis functionality
 with proper menu bars similar to commercial software like CLC Workbench.
 
