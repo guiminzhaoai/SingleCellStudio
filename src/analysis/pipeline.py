@@ -623,8 +623,12 @@ def find_variable_genes(adata, n_top_genes=2000):
 def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3, 
                             target_sum=10000, n_top_genes=2000, n_pcs=40, 
                             resolution=0.5, save_checkpoints=True,
+<<<<<<< HEAD
                             progress_callback=None, use_harmony=False, batch_key="batch",
                             checkpoint_mode="key", max_cells_for_diagnostics=20000, diagnostics_random_state=42):
+=======
+                            progress_callback=None, use_harmony=False, batch_key="batch"):
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
     """
     Run a standard single-cell analysis pipeline from QC to clustering.
     
@@ -679,6 +683,7 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         logger.info(f"Running Harmony integration using batch key '{batch_column}'")
 
         try:
+<<<<<<< HEAD
             import harmonypy  # noqa: F401
         except ImportError as e:
             raise ImportError(
@@ -687,6 +692,8 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
             ) from e
 
         try:
+=======
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
             sc.external.pp.harmony_integrate(adata_obj, key=batch_column, basis='X_pca')
         except Exception as e:
             raise RuntimeError(f"Harmony integration failed: {e}") from e
@@ -696,6 +703,7 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
 
         logger.info("Harmony integration completed")
 
+<<<<<<< HEAD
     def _compute_integration_diagnostics(adata_obj, batch_column):
         """Compute simple integration diagnostics for multi-sample workflows."""
         diagnostics = {
@@ -772,6 +780,8 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         diagnostics['computed'] = True
         return diagnostics
 
+=======
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
     # --- Pipeline Steps ---
     pipeline_steps = [
         ("calculate_qc", quality_control.calculate_qc_metrics, {}),
@@ -853,10 +863,14 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
         params_used = {
             "min_genes": min_genes, "min_cells": min_cells, "target_sum": target_sum,
             "n_top_genes": n_top_genes, "n_pcs": n_pcs, "resolution": resolution,
+<<<<<<< HEAD
             "use_harmony": use_harmony, "batch_key": batch_key,
             "checkpoint_mode": checkpoint_mode,
             "max_cells_for_diagnostics": max_cells_for_diagnostics,
             "diagnostics_random_state": diagnostics_random_state
+=======
+            "use_harmony": use_harmony, "batch_key": batch_key
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
         }
         with open(metadata_dir / "parameters.json", 'w') as f:
             json.dump(params_used, f, indent=4)
@@ -894,7 +908,11 @@ def run_standard_pipeline(adata, output_dir=None, min_genes=200, min_cells=3,
     # Clean up logger
     logging.getLogger().removeHandler(file_handler)
     
+<<<<<<< HEAD
     return adata, {"output_dir": str(output_dir), "execution_log": execution_log, "steps": [step[0] for step in pipeline_steps], "integration_diagnostics": str(metadata_dir / "integration_diagnostics.json"), "run_context": str(metadata_dir / "run_context.json")}
+=======
+    return adata, {"output_dir": str(output_dir), "execution_log": execution_log, "steps": [step[0] for step in pipeline_steps]}
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
 
 
 def create_custom_pipeline(adata, steps_config, name="Custom Pipeline"):

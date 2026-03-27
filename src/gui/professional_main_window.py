@@ -2345,6 +2345,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         layout.addWidget(params_group)
         
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.use_harmony_check = QCheckBox("Enable Harmony integration for multi-sample data")
         self.harmony_available = _is_harmonypy_available()
         self.use_harmony_check.setChecked(self.harmony_available)
@@ -2363,6 +2364,12 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
             self.use_harmony_check.setText("Enable Harmony integration for multi-sample data (harmonypy not installed)")
         params_layout.addWidget(self.use_harmony_check, 6, 0, 1, 2)
 >>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review
+=======
+        self.use_harmony_check = QCheckBox("Enable Harmony integration for multi-sample data")
+        self.use_harmony_check.setChecked(True)
+        self.use_harmony_check.setEnabled(False)
+        params_layout.addWidget(self.use_harmony_check, 6, 0, 1, 2)
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
 
         # Output Options
         output_group = QGroupBox("📁 Output Options")
@@ -2946,6 +2953,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         self.update_interaction_tab_status()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         has_batch = 'batch' in self.adata.obs.columns
         if hasattr(self, 'use_harmony_check'):
             self.use_harmony_check.setEnabled(has_batch and self.harmony_available)
@@ -2982,6 +2990,17 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
                 else:
                     self.use_harmony_check.setText("Enable Harmony integration for multi-sample data (harmonypy not installed)")
 >>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review
+=======
+        has_batch = 'batch' in self.adata.obs.columns
+        if hasattr(self, 'use_harmony_check'):
+            self.use_harmony_check.setEnabled(has_batch)
+            if has_batch:
+                n_batches = self.adata.obs['batch'].nunique()
+                self.use_harmony_check.setText(f"Enable Harmony integration for multi-sample data ({n_batches} batches)")
+            else:
+                self.use_harmony_check.setChecked(False)
+                self.use_harmony_check.setText("Enable Harmony integration for multi-sample data")
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
 
         self.statusBar().showMessage(
             f"Data loaded: {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes"
@@ -3021,6 +3040,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         if not ANALYSIS_AVAILABLE:
             QMessageBox.warning(self, "Import Not Available", "Analysis dependencies are required for multi-sample import.")
             return
+<<<<<<< HEAD
         if DataLoader is None or DataFormat is None or auto_detect_format is None:
             QMessageBox.warning(
                 self,
@@ -3029,12 +3049,18 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
                 "Please ensure the 'data' package is importable in this environment."
             )
             return
+=======
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
 
         file_paths, _ = QFileDialog.getOpenFileNames(
             self,
             "Select Multiple Single-Cell Datasets",
             str(Path.home()),
+<<<<<<< HEAD
             "Single-cell files (*.h5ad *.h5 *.csv *.csv.gz *.tsv *.tsv.gz *.mtx *.mtx.gz);;All files (*)"
+=======
+            "Single-cell files (*.h5ad *.h5 *.csv *.tsv);;All files (*)"
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
         )
 
         if not file_paths:
@@ -3046,15 +3072,22 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
             return
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         loader = DataLoader()
         sample_adatas = []
         sample_names = []
         sample_name_counts = {}
         processed_targets = set()
+=======
+        loader = DataLoader()
+        sample_adatas = []
+        sample_names = []
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
 
         try:
             for idx, file_path in enumerate(file_paths, start=1):
                 current_path = Path(file_path)
+<<<<<<< HEAD
                 load_target = self._resolve_multi_sample_target(current_path)
                 target_key = str(load_target.resolve()) if load_target.exists() else str(load_target)
                 if target_key in processed_targets:
@@ -3066,12 +3099,18 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
                 sample_name_counts[sample_base_name] = sample_count
                 sample_name = sample_base_name if sample_count == 1 else f"{sample_base_name}_{sample_count}"
                 sample_adata = self._load_multi_sample_target(load_target, loader)
+=======
+                sample_name = current_path.stem or f"sample_{idx}"
+                format_type = auto_detect_format(file_path)
+                sample_adata = loader.load(file_path, format_type)
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
                 sample_adata.obs_names_make_unique()
                 sample_adata.obs_names = [f"{sample_name}_{cell}" for cell in sample_adata.obs_names]
                 sample_adata.obs['batch'] = sample_name
                 sample_adata.obs['sample_id'] = sample_name
                 sample_adatas.append(sample_adata)
                 sample_names.append(sample_name)
+<<<<<<< HEAD
                 if sample_count > 1:
                     self.log_activity(
                         f"Detected duplicate sample basename '{sample_base_name}'. Assigned unique batch label '{sample_name}'."
@@ -3115,6 +3154,9 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
                     )
                 self.log_activity(f"Loaded sample '{sample_name}': {sample_adata.n_obs:,} cells × {sample_adata.n_vars:,} genes")
 >>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review
+=======
+                self.log_activity(f"Loaded sample '{sample_name}': {sample_adata.n_obs:,} cells × {sample_adata.n_vars:,} genes")
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
 
             integrated_adata = ad.concat(
                 sample_adatas,
@@ -3137,6 +3179,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
             self.log_activity(f"Failed multi-sample import: {e}")
             QMessageBox.critical(self, "Import Failed", f"Failed to import multiple samples:\n{e}")
 
+<<<<<<< HEAD
     def _resolve_multi_sample_target(self, selected_path: Path) -> Path:
         """Resolve selected files to a canonical load target for multi-sample import."""
         if selected_path.is_dir():
@@ -3348,6 +3391,8 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
 >>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review-4d34cv
 =======
 >>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-8yzz8g
+=======
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
     def load_previous_results(self):
         """Load analysis results from a previous session"""
         self.log_activity("Loading previous analysis results...")
@@ -3625,6 +3670,7 @@ Results loaded from: {results_dir}""")
             if pipeline_params['use_harmony'] and 'batch' not in self.adata.obs.columns:
                 self.log_activity("Harmony requested but no 'batch' column found; running without Harmony.")
                 pipeline_params['use_harmony'] = False
+<<<<<<< HEAD
 =======
             pipeline_params = {
                 'min_genes': self.min_genes_spin.value(),
@@ -3659,6 +3705,8 @@ Results loaded from: {results_dir}""")
                         "The pipeline will continue without Harmony."
                     )
                     pipeline_params['use_harmony'] = False
+=======
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
 
             self.log_activity(f"Analysis parameters: {pipeline_params}")
 
@@ -5078,7 +5126,11 @@ if __name__ == "__main__":
     window.show()
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     sys.exit(app.exec())
 =======
     sys.exit(app.exec()) 
 >>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio
+=======
+    sys.exit(app.exec())
+>>>>>>> origin/codex/find-preprocessing-code-in-singlecellstudio-wx160j
