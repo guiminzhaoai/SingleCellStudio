@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.direnv/
+.envrc
+
+# Logs
+*.log
+
+# OS / Zone identifiers
+*:Zone.Identifier
+
+# Local scripts
+github_merge_helper*.py
+a.py
+
+# Data/examples (if you don't want these tracked)
+# examples/
