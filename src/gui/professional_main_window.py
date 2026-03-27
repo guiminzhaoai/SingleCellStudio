@@ -28,6 +28,9 @@ import sys
 import json
 import shutil
 import logging
+import importlib.util
+import shutil
+import tempfile
 from pathlib import Path
 from typing import Optional, Dict, Any
 from datetime import datetime
@@ -89,6 +92,25 @@ except ImportError:
 
 # Configure logging
 logger = logging.getLogger(__name__)
+
+
+def _is_harmonypy_available():
+    """Return True if harmonypy can be imported."""
+    return importlib.util.find_spec("harmonypy") is not None
+
+
+def _strip_known_suffixes(file_name: str) -> str:
+    """Strip multi-part compressed suffixes and return the base name."""
+    normalized_name = file_name
+    for suffix in (".mtx.gz", ".tsv.gz", ".csv.gz", ".h5ad.gz", ".h5.gz", ".txt.gz", ".gz"):
+        if normalized_name.lower().endswith(suffix):
+            return normalized_name[: -len(suffix)]
+    return Path(normalized_name).stem
+
+
+def _is_harmonypy_available():
+    """Return True if harmonypy can be imported."""
+    return importlib.util.find_spec("harmonypy") is not None
 
 class AnalysisWorker(QThread):
     """Worker thread for running analysis pipeline"""
@@ -3230,6 +3252,10 @@ Results loaded from: {results_dir}""")
                 'use_harmony': bool(getattr(self, 'use_harmony_check', None) and self.use_harmony_check.isChecked()),
                 'batch_key': 'batch'
             }
+
+            if pipeline_params['use_harmony'] and not self.harmony_available:
+                self.log_activity("Harmony requested but 'harmonypy' is not installed; running without Harmony.")
+                pipeline_params['use_harmony'] = False
             
             if pipeline_params['use_harmony'] and 'batch' not in self.adata.obs.columns:
                 self.log_activity("Harmony requested but no 'batch' column found; running without Harmony.")
