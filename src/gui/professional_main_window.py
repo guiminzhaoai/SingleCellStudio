@@ -2296,8 +2296,12 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         layout.addWidget(params_group)
         
         self.use_harmony_check = QCheckBox("Enable Harmony integration for multi-sample data")
-        self.use_harmony_check.setChecked(True)
+        self.harmony_available = _is_harmonypy_available()
+        self.use_harmony_check.setChecked(self.harmony_available)
         self.use_harmony_check.setEnabled(False)
+        if not self.harmony_available:
+            self.use_harmony_check.setToolTip("Harmony integration requires the optional 'harmonypy' dependency.")
+            self.use_harmony_check.setText("Enable Harmony integration for multi-sample data (harmonypy not installed)")
         params_layout.addWidget(self.use_harmony_check, 6, 0, 1, 2)
 
         # Output Options
@@ -2883,13 +2887,21 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
 
         has_batch = 'batch' in self.adata.obs.columns
         if hasattr(self, 'use_harmony_check'):
-            self.use_harmony_check.setEnabled(has_batch)
+            self.use_harmony_check.setEnabled(has_batch and self.harmony_available)
             if has_batch:
                 n_batches = self.adata.obs['batch'].nunique()
-                self.use_harmony_check.setText(f"Enable Harmony integration for multi-sample data ({n_batches} batches)")
+                if self.harmony_available:
+                    self.use_harmony_check.setText(f"Enable Harmony integration for multi-sample data ({n_batches} batches)")
+                else:
+                    self.use_harmony_check.setText(
+                        f"Enable Harmony integration for multi-sample data ({n_batches} batches; harmonypy not installed)"
+                    )
             else:
                 self.use_harmony_check.setChecked(False)
-                self.use_harmony_check.setText("Enable Harmony integration for multi-sample data")
+                if self.harmony_available:
+                    self.use_harmony_check.setText("Enable Harmony integration for multi-sample data")
+                else:
+                    self.use_harmony_check.setText("Enable Harmony integration for multi-sample data (harmonypy not installed)")
 
         self.statusBar().showMessage(
             f"Data loaded: {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes"
@@ -2934,7 +2946,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
             self,
             "Select Multiple Single-Cell Datasets",
             str(Path.home()),
-            "Single-cell files (*.h5ad *.h5 *.csv *.tsv);;All files (*)"
+            "Single-cell files (*.h5ad *.h5 *.csv *.csv.gz *.tsv *.tsv.gz *.mtx *.mtx.gz);;All files (*)"
         )
 
         if not file_paths:
@@ -2948,20 +2960,45 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         loader = DataLoader()
         sample_adatas = []
         sample_names = []
+        sample_name_counts = {}
+        processed_targets = set()
 
         try:
             for idx, file_path in enumerate(file_paths, start=1):
                 current_path = Path(file_path)
-                sample_name = current_path.stem or f"sample_{idx}"
-                format_type = auto_detect_format(file_path)
-                sample_adata = loader.load(file_path, format_type)
+                load_target = self._resolve_multi_sample_target(current_path)
+                target_key = str(load_target.resolve()) if load_target.exists() else str(load_target)
+                if target_key in processed_targets:
+                    continue
+                processed_targets.add(target_key)
+
+                sample_base_name = self._infer_sample_base_name(load_target, idx)
+                sample_count = sample_name_counts.get(sample_base_name, 0) + 1
+                sample_name_counts[sample_base_name] = sample_count
+                sample_name = sample_base_name if sample_count == 1 else f"{sample_base_name}_{sample_count}"
+                sample_adata = self._load_multi_sample_target(load_target, loader)
                 sample_adata.obs_names_make_unique()
                 sample_adata.obs_names = [f"{sample_name}_{cell}" for cell in sample_adata.obs_names]
                 sample_adata.obs['batch'] = sample_name
                 sample_adata.obs['sample_id'] = sample_name
                 sample_adatas.append(sample_adata)
                 sample_names.append(sample_name)
-                self.log_activity(f"Loaded sample '{sample_name}': {sample_adata.n_obs:,} cells × {sample_adata.n_vars:,} genes")
+                if sample_count > 1:
+                    self.log_activity(
+                        f"Detected duplicate sample basename '{sample_base_name}'. Assigned unique batch label '{sample_name}'."
+                    )
+                self.log_activity(
+                    f"Loaded sample '{sample_name}' from '{load_target.name}': {sample_adata.n_obs:,} cells × {sample_adata.n_vars:,} genes"
+                )
+
+            if len(sample_adatas) < 2:
+                QMessageBox.warning(
+                    self,
+                    "Insufficient Samples",
+                    "Fewer than two unique samples were resolved from your selection.\n"
+                    "For 10x data, select matrix.mtx(.gz) files (or folders) for each sample."
+                )
+                return
 
             integrated_adata = ad.concat(
                 sample_adatas,
@@ -2983,6 +3020,107 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         except Exception as e:
             self.log_activity(f"Failed multi-sample import: {e}")
             QMessageBox.critical(self, "Import Failed", f"Failed to import multiple samples:\n{e}")
+
+    def _resolve_multi_sample_target(self, selected_path: Path) -> Path:
+        """Resolve selected files to a canonical load target for multi-sample import."""
+        if selected_path.is_dir():
+            return selected_path
+
+        selected_name = selected_path.name.lower()
+        if "matrix.mtx" in selected_name:
+            return selected_path
+
+        stem = _strip_known_suffixes(selected_path.name)
+        if "_barcodes" in stem:
+            candidate = selected_path.with_name(f"{stem.split('_barcodes', 1)[0]}_matrix.mtx.gz")
+            if candidate.exists():
+                self.log_activity(f"Resolved barcode file '{selected_path.name}' to matrix file '{candidate.name}'.")
+                return candidate
+            candidate = selected_path.with_name(f"{stem.split('_barcodes', 1)[0]}_matrix.mtx")
+            if candidate.exists():
+                self.log_activity(f"Resolved barcode file '{selected_path.name}' to matrix file '{candidate.name}'.")
+                return candidate
+        if "_features" in stem or "_genes" in stem:
+            token = "_features" if "_features" in stem else "_genes"
+            candidate = selected_path.with_name(f"{stem.split(token, 1)[0]}_matrix.mtx.gz")
+            if candidate.exists():
+                self.log_activity(f"Resolved feature file '{selected_path.name}' to matrix file '{candidate.name}'.")
+                return candidate
+            candidate = selected_path.with_name(f"{stem.split(token, 1)[0]}_matrix.mtx")
+            if candidate.exists():
+                self.log_activity(f"Resolved feature file '{selected_path.name}' to matrix file '{candidate.name}'.")
+                return candidate
+
+        return selected_path
+
+    def _infer_sample_base_name(self, load_target: Path, fallback_idx: int) -> str:
+        """Infer a stable sample base name from a resolved multi-sample target path."""
+        if load_target.is_dir():
+            return load_target.name or f"sample_{fallback_idx}"
+
+        stem = _strip_known_suffixes(load_target.name)
+        if "_matrix" in stem:
+            prefix = stem.split("_matrix", 1)[0]
+            return prefix or f"sample_{fallback_idx}"
+        return stem or f"sample_{fallback_idx}"
+
+    def _load_multi_sample_target(self, load_target: Path, loader: 'DataLoader'):
+        """Load a resolved multi-sample target path as AnnData."""
+        if load_target.is_dir():
+            format_type = auto_detect_format(load_target)
+            return loader.load(load_target, format_type)
+
+        load_name = load_target.name.lower()
+        if "matrix.mtx" in load_name:
+            return self._load_prefixed_mtx_triplet(load_target, loader)
+
+        format_type = auto_detect_format(load_target)
+        return loader.load(load_target, format_type)
+
+    def _load_prefixed_mtx_triplet(self, matrix_path: Path, loader: 'DataLoader'):
+        """Load a 10x-style matrix file whose barcodes/features share a sample-specific prefix."""
+        stem = _strip_known_suffixes(matrix_path.name)
+        prefix = stem.split("_matrix", 1)[0] if "_matrix" in stem else ""
+
+        suffixes = [".tsv.gz", ".tsv"]
+        barcodes_file = None
+        features_file = None
+
+        for suffix in suffixes:
+            candidate = matrix_path.with_name(f"{prefix}_barcodes{suffix}")
+            if candidate.exists():
+                barcodes_file = candidate
+                break
+
+        for suffix in suffixes:
+            candidate = matrix_path.with_name(f"{prefix}_features{suffix}")
+            if candidate.exists():
+                features_file = candidate
+                break
+            legacy_candidate = matrix_path.with_name(f"{prefix}_genes{suffix}")
+            if legacy_candidate.exists():
+                features_file = legacy_candidate
+                break
+
+        if not barcodes_file or not features_file:
+            raise FileNotFoundError(
+                f"Could not find matching 10x files for '{matrix_path.name}'. "
+                "Expected companion barcodes/features (or genes) files with the same prefix."
+            )
+
+        matrix_name = "matrix.mtx.gz" if matrix_path.name.endswith(".gz") else "matrix.mtx"
+        barcodes_name = "barcodes.tsv.gz" if barcodes_file.name.endswith(".gz") else "barcodes.tsv"
+        if "genes" in features_file.name:
+            features_name = "genes.tsv.gz" if features_file.name.endswith(".gz") else "genes.tsv"
+        else:
+            features_name = "features.tsv.gz" if features_file.name.endswith(".gz") else "features.tsv"
+
+        with tempfile.TemporaryDirectory(prefix="scs_multi_mtx_") as temp_dir:
+            temp_dir_path = Path(temp_dir)
+            shutil.copy2(matrix_path, temp_dir_path / matrix_name)
+            shutil.copy2(barcodes_file, temp_dir_path / barcodes_name)
+            shutil.copy2(features_file, temp_dir_path / features_name)
+            return loader.load(temp_dir_path, DataFormat.TENX_MTX)
 
     def load_previous_results(self):
         """Load analysis results from a previous session"""
