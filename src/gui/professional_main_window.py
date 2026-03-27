@@ -24,6 +24,7 @@ Each tab is self-contained but shares data seamlessly, allowing for
 integrated analysis workflows where results from one step inform the next.
 """
 
+<<<<<<< HEAD
 import sys
 import json
 import shutil
@@ -32,6 +33,12 @@ import importlib.util
 import shutil
 import tempfile
 from pathlib import Path
+=======
+import sys
+import logging
+import importlib.util
+from pathlib import Path
+>>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review
 from typing import Optional, Dict, Any
 from datetime import datetime
 
@@ -96,6 +103,11 @@ except ImportError:
 
 # Configure logging
 logger = logging.getLogger(__name__)
+
+
+def _is_harmonypy_available():
+    """Return True if harmonypy can be imported."""
+    return importlib.util.find_spec("harmonypy") is not None
 
 
 def _is_harmonypy_available():
@@ -2322,6 +2334,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         params_group.setLayout(params_layout)
         layout.addWidget(params_group)
         
+<<<<<<< HEAD
         self.use_harmony_check = QCheckBox("Enable Harmony integration for multi-sample data")
         self.harmony_available = _is_harmonypy_available()
         self.use_harmony_check.setChecked(self.harmony_available)
@@ -2330,6 +2343,16 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
             self.use_harmony_check.setToolTip("Harmony integration requires the optional 'harmonypy' dependency.")
             self.use_harmony_check.setText("Enable Harmony integration for multi-sample data (harmonypy not installed)")
         params_layout.addWidget(self.use_harmony_check, 6, 0, 1, 2)
+=======
+        self.use_harmony_check = QCheckBox("Enable Harmony integration for multi-sample data")
+        self.harmony_available = _is_harmonypy_available()
+        self.use_harmony_check.setChecked(self.harmony_available)
+        self.use_harmony_check.setEnabled(False)
+        if not self.harmony_available:
+            self.use_harmony_check.setToolTip("Harmony integration requires the optional 'harmonypy' dependency.")
+            self.use_harmony_check.setText("Enable Harmony integration for multi-sample data (harmonypy not installed)")
+        params_layout.addWidget(self.use_harmony_check, 6, 0, 1, 2)
+>>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review
 
         # Output Options
         output_group = QGroupBox("📁 Output Options")
@@ -2912,6 +2935,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
         self.update_trajectory_tab_status()
         self.update_interaction_tab_status()
 
+<<<<<<< HEAD
         has_batch = 'batch' in self.adata.obs.columns
         if hasattr(self, 'use_harmony_check'):
             self.use_harmony_check.setEnabled(has_batch and self.harmony_available)
@@ -2929,6 +2953,25 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
                     self.use_harmony_check.setText("Enable Harmony integration for multi-sample data")
                 else:
                     self.use_harmony_check.setText("Enable Harmony integration for multi-sample data (harmonypy not installed)")
+=======
+        has_batch = 'batch' in self.adata.obs.columns
+        if hasattr(self, 'use_harmony_check'):
+            self.use_harmony_check.setEnabled(has_batch and self.harmony_available)
+            if has_batch:
+                n_batches = self.adata.obs['batch'].nunique()
+                if self.harmony_available:
+                    self.use_harmony_check.setText(f"Enable Harmony integration for multi-sample data ({n_batches} batches)")
+                else:
+                    self.use_harmony_check.setText(
+                        f"Enable Harmony integration for multi-sample data ({n_batches} batches; harmonypy not installed)"
+                    )
+            else:
+                self.use_harmony_check.setChecked(False)
+                if self.harmony_available:
+                    self.use_harmony_check.setText("Enable Harmony integration for multi-sample data")
+                else:
+                    self.use_harmony_check.setText("Enable Harmony integration for multi-sample data (harmonypy not installed)")
+>>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review
 
         self.statusBar().showMessage(
             f"Data loaded: {self.adata.n_obs:,} cells × {self.adata.n_vars:,} genes"
@@ -2992,6 +3035,7 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
             self._load_data_from_path(Path(file_paths[0]))
             return
 
+<<<<<<< HEAD
         loader = DataLoader()
         sample_adatas = []
         sample_names = []
@@ -3034,6 +3078,33 @@ Parameters: Flow threshold = {results['parameters']['flow_threshold']}
                     "For 10x data, select matrix.mtx(.gz) files (or folders) for each sample."
                 )
                 return
+=======
+        loader = DataLoader()
+        sample_adatas = []
+        sample_names = []
+        sample_name_counts = {}
+
+        try:
+            for idx, file_path in enumerate(file_paths, start=1):
+                current_path = Path(file_path)
+                sample_base_name = current_path.stem or f"sample_{idx}"
+                sample_count = sample_name_counts.get(sample_base_name, 0) + 1
+                sample_name_counts[sample_base_name] = sample_count
+                sample_name = sample_base_name if sample_count == 1 else f"{sample_base_name}_{sample_count}"
+                format_type = auto_detect_format(file_path)
+                sample_adata = loader.load(file_path, format_type)
+                sample_adata.obs_names_make_unique()
+                sample_adata.obs_names = [f"{sample_name}_{cell}" for cell in sample_adata.obs_names]
+                sample_adata.obs['batch'] = sample_name
+                sample_adata.obs['sample_id'] = sample_name
+                sample_adatas.append(sample_adata)
+                sample_names.append(sample_name)
+                if sample_count > 1:
+                    self.log_activity(
+                        f"Detected duplicate sample basename '{sample_base_name}'. Assigned unique batch label '{sample_name}'."
+                    )
+                self.log_activity(f"Loaded sample '{sample_name}': {sample_adata.n_obs:,} cells × {sample_adata.n_vars:,} genes")
+>>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review
 
             integrated_adata = ad.concat(
                 sample_adatas,
@@ -3525,6 +3596,7 @@ Results loaded from: {results_dir}""")
         
         try:
             # Collect parameters from the UI
+<<<<<<< HEAD
             pipeline_params = {
                 'min_genes': self.min_genes_spin.value(),
                 'min_cells': self.min_cells_spin.value(),
@@ -3543,6 +3615,26 @@ Results loaded from: {results_dir}""")
             if pipeline_params['use_harmony'] and 'batch' not in self.adata.obs.columns:
                 self.log_activity("Harmony requested but no 'batch' column found; running without Harmony.")
                 pipeline_params['use_harmony'] = False
+=======
+            pipeline_params = {
+                'min_genes': self.min_genes_spin.value(),
+                'min_cells': self.min_cells_spin.value(),
+                'target_sum': self.target_sum_spin.value(),
+                'n_top_genes': self.n_var_genes_spin.value(),
+                'n_pcs': self.n_pca_spin.value(),
+                'resolution': self.resolution_spin.value(),
+                'use_harmony': bool(getattr(self, 'use_harmony_check', None) and self.use_harmony_check.isChecked()),
+                'batch_key': 'batch'
+            }
+
+            if pipeline_params['use_harmony'] and not self.harmony_available:
+                self.log_activity("Harmony requested but 'harmonypy' is not installed; running without Harmony.")
+                pipeline_params['use_harmony'] = False
+            
+            if pipeline_params['use_harmony'] and 'batch' not in self.adata.obs.columns:
+                self.log_activity("Harmony requested but no 'batch' column found; running without Harmony.")
+                pipeline_params['use_harmony'] = False
+>>>>>>> origin/codex/fix-high-priority-bugs-from-codex-review
 
             if pipeline_params['use_harmony']:
                 try:
